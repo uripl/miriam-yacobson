@@ -1,0 +1,137 @@
+/* ChapterPage.css */
+.chapter-page {
+  padding-bottom: var(--spacing-3xl);
+}
+
+.chapter-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: var(--spacing-xl) 0;
+}
+
+.nav-back {
+  color: var(--primary-color);
+  font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+}
+
+.nav-back::before {
+  content: '←';
+  margin-left: var(--spacing-sm);
+}
+
+.chapter-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.chapter-number {
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+}
+
+.pagination-text {
+  font-size: var(--font-size-sm);
+}
+
+.pagination-link {
+  color: var(--primary-color);
+  font-weight: var(--font-weight-medium);
+}
+
+.chapter-content {
+  max-width: var(--max-width-lg);
+  margin: 0 auto;
+}
+
+.chapter-introduction {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.chapter-intro-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--spacing-xl);
+  align-items: center;
+}
+
+.chapter-intro-text {
+  padding-left: var(--spacing-md);
+}
+
+.chapter-intro-image img {
+  width: 100%;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.chapter-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.chapter-section p {
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-loose);
+}
+
+.image-container {
+  margin: var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.image-container img {
+  max-width: 100%;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.image-caption {
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+  text-align: center;
+}
+
+.quote-wrapper {
+  margin: var(--spacing-xl) auto;
+  max-width: 600px;
+}
+
+.chapter-gallery,
+.chapter-documents,
+.chapter-quotes {
+  margin-bottom: var(--spacing-3xl);
+}
+
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.quotes-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.chapter-navigation.bottom {
+  margin-top: var(--spacing-3xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--gray-light);
+}
+
+@media (max-width: 768px) {
+  .chapter-intro-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .chapter-intro-image {
+    order: -1;
+  }
+}
