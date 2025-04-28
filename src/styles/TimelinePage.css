@@ -1,0 +1,36 @@
+/* TimelinePage.css */
+
+.timeline-page {
+  padding-bottom: var(--spacing-3xl);
+}
+
+.timeline-page-content {
+  max-width: var(--max-width-xl);
+  margin: 0 auto;
+}
+
+.timeline-intro {
+  max-width: 800px;
+  margin: var(--spacing-xl) auto var(--spacing-2xl);
+  padding: var(--spacing-lg);
+  background-color: var(--background-dark);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.timeline-intro p {
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-loose);
+  font-size: var(--font-size-md);
+}
+
+.timeline-full {
+  padding: var(--spacing-lg) 0;
+}
+
+@media (max-width: 768px) {
+  .timeline-intro {
+    padding: var(--spacing-md);
+  }
+}
