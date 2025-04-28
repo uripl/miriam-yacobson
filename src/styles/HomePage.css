@@ -1,0 +1,264 @@
+/* HomePage.css */
+
+/* עיצוב אזור הגיבור (Hero) */
+.hero {
+  height: 80vh;
+  min-height: 500px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/images/hero-background.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  position: relative;
+}
+
+.hero-content {
+  max-width: var(--max-width-md);
+  padding: var(--spacing-lg);
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: var(--font-size-5xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--white);
+  font-weight: var(--font-weight-black);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero h2 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-lg);
+  color: var(--white);
+  font-weight: var(--font-weight-medium);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.hero h2::after {
+  display: none;
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-xl);
+  font-weight: var(--font-weight-normal);
+  max-width: 600px;
+  margin-right: auto;
+  margin-left: auto;
+  line-height: var(--line-height-loose);
+}
+
+.hero .btn-primary {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+/* עיצוב אזור המבוא */
+.intro {
+  background-color: var(--white);
+  padding: var(--spacing-3xl) 0;
+}
+
+.intro h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-2xl);
+}
+
+.intro-text {
+  flex: 3;
+}
+
+.intro-text p {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-loose);
+  margin-bottom: var(--spacing-lg);
+}
+
+.intro-image {
+  flex: 2;
+  position: relative;
+}
+
+.intro-image img {
+  width: 100%;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.image-caption {
+  text-align: center;
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+}
+
+/* עיצוב תצוגת מקדימה של ציר הזמן */
+.timeline-preview {
+  background-color: var(--background-dark);
+  padding: var(--spacing-3xl) 0;
+}
+
+.timeline-preview h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.timeline-preview-link {
+  text-align: center;
+  margin-top: var(--spacing-xl);
+}
+
+/* עיצוב תצוגת פרקי חיים */
+.chapters-preview {
+  background-color: var(--white);
+  padding: var(--spacing-3xl) 0;
+}
+
+.chapters-preview h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+/* עיצוב אזור הציטוטים */
+.quotes-section {
+  background-color: var(--primary-color);
+  padding: var(--spacing-3xl) 0;
+  color: var(--white);
+}
+
+.quotes-section h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  color: var(--white);
+}
+
+.quotes-section h2::after {
+  background-color: var(--white);
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.quotes-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xl);
+  justify-content: center;
+}
+
+/* עיצוב תצוגת גלריה מקדימה */
+.gallery-preview {
+  background-color: var(--white);
+  padding: var(--spacing-3xl) 0;
+}
+
+.gallery-preview h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.gallery-preview-link {
+  text-align: center;
+  margin-top: var(--spacing-xl);
+}
+
+/* עיצוב אזור קריאה לפעולה (CTA) */
+.cta-section {
+  background-color: var(--secondary-color);
+  padding: var(--spacing-3xl) 0;
+  text-align: center;
+}
+
+.cta-section h2 {
+  color: var(--text-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.cta-section h2::after {
+  background-color: var(--white);
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.cta-section p {
+  font-size: var(--font-size-lg);
+  max-width: 600px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: var(--spacing-xl);
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+/* תצוגות מדיה (רספונסיביות) */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: var(--font-size-4xl);
+  }
+  
+  .hero h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .intro-content {
+    flex-direction: column;
+  }
+  
+  .intro-image {
+    margin-top: var(--spacing-xl);
+    max-width: 400px;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    height: 60vh;
+  }
+  
+  .hero h1 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .hero h2 {
+    font-size: var(--font-size-lg);
+  }
+  
+  .hero-subtitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .chapters-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quotes-container {
+    flex-direction: column;
+  }
+}
