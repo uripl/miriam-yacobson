@@ -1,0 +1,106 @@
+/* GalleryPage.css */
+
+.gallery-page {
+  padding-bottom: var(--spacing-3xl);
+}
+
+.gallery-page-content {
+  max-width: var(--max-width-xl);
+  margin: 0 auto;
+}
+
+.gallery-intro {
+  max-width: 800px;
+  margin: var(--spacing-xl) auto;
+  text-align: center;
+}
+
+.gallery-intro p {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-loose);
+}
+
+.gallery-filters {
+  margin: var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.gallery-filters h2 {
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-xl);
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.filter-button {
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  border-radius: var(--border-radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+}
+
+.filter-button.active {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.filter-button:hover {
+  background-color: var(--primary-light);
+  color: var(--white);
+}
+
+.gallery-main {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.no-images-message {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background-color: var(--background-dark);
+  border-radius: var(--border-radius-lg);
+  margin: var(--spacing-xl) 0;
+}
+
+.gallery-info {
+  margin-top: var(--spacing-3xl);
+}
+
+.gallery-box {
+  background-color: var(--background-dark);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  border-right: 4px solid var(--primary-color);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.gallery-box h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.gallery-box p {
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-loose);
+}
+
+@media (max-width: 768px) {
+  .filter-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .filter-button {
+    width: 80%;
+  }
+}
