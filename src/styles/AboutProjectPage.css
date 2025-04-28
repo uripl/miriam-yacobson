@@ -1,0 +1,140 @@
+/* AboutProjectPage.css */
+
+.about-project-page {
+  padding-bottom: var(--spacing-3xl);
+}
+
+.about-project-content {
+  max-width: var(--max-width-lg);
+  margin: 0 auto;
+}
+
+.about-project-intro {
+  margin: var(--spacing-2xl) 0;
+}
+
+.about-project-intro p {
+  line-height: var(--line-height-loose);
+  margin-bottom: var(--spacing-md);
+}
+
+.project-team {
+  margin: var(--spacing-3xl) 0;
+}
+
+.team-members {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+}
+
+.team-member {
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
+}
+
+.team-member:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.team-member h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-xs);
+}
+
+.team-role {
+  color: var(--secondary-color);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-md);
+}
+
+.technical-info {
+  margin: var(--spacing-3xl) 0;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+}
+
+.tech-item {
+  background-color: var(--background-dark);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.tech-item h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.tech-item ul {
+  list-style-type: disc;
+  padding-right: var(--spacing-xl);
+}
+
+.tech-item li {
+  margin-bottom: var(--spacing-sm);
+  line-height: var(--line-height-normal);
+}
+
+.contact-section {
+  margin: var(--spacing-3xl) 0;
+  background-color: var(--primary-light);
+  color: var(--white);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+}
+
+.contact-section h2 {
+  color: var(--white);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-section h2::after {
+  background-color: var(--white);
+}
+
+.contact-section p {
+  line-height: var(--line-height-loose);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-details {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.acknowledgements {
+  margin: var(--spacing-3xl) 0;
+}
+
+.acknowledgements p {
+  line-height: var(--line-height-loose);
+  margin-bottom: var(--spacing-md);
+}
+
+.back-to-home {
+  text-align: center;
+  margin-top: var(--spacing-2xl);
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  .team-members {
+    grid-template-columns: 1fr;
+  }
+  
+  .tech-grid {
+    grid-template-columns: 1fr;
+  }
+}
