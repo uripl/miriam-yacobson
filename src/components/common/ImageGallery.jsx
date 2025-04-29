@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/ImageGallery.css';
+import '../styles/components.css';
 
 /**
  * קומפוננטת גלריית תמונות - מציגה אוסף תמונות עם אפשרות להגדלה
