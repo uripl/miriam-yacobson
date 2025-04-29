@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../../../styles/AboutPage.css';
+import '../../styles/AboutPage.css';
 
 /**
  * דף אודות מרים - מציג מידע אישי על מרים ותמונות נבחרות
