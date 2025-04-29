@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Timeline from '../common/Timeline';
-import '../../../styles/TimelinePage.css';
+import '../../styles/TimelinePage.css';
 
 /**
  * דף ציר הזמן המלא - מציג את כל אירועי החיים של מרים
