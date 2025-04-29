@@ -4,7 +4,7 @@ import ChapterCard from '../common/ChapterCard';
 import Timeline from '../common/Timeline';
 import Quote from '../common/Quote';
 import ImageGallery from '../common/ImageGallery';
-import '../styles/HomePage.css';
+import '../../styles/HomePage.css';
 
 const HomePage = () => {
   // נתוני פרקים לתצוגה בדף הבית
