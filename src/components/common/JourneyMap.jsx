@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMapGL, { Marker, NavigationControl, FlyToInterpolator } from 'react-map-gl';
 import { easeCubic } from 'd3-ease';
-import '../styles/JourneyMap.css';
+import '../styles/components.css';
 // צריך להתקין: npm install react-map-gl d3-ease mapbox-gl
 
 /**
