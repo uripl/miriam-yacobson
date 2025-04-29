@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/components.css';
+import '../../styles/components.css';
 
 /**
  * קומפוננטת ציטוט - מציגה ציטוט עם מקור ומספר עמוד אופציונלי
