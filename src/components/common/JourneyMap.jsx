@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ReactMapGL, { Marker, NavigationControl, FlyToInterpolator } from 'react-map-gl';
+import Map, { Marker, NavigationControl } from 'react-map-gl';
 import { easeCubic } from 'd3-ease';
-import '../../styles/components.css';
+import '../styles/JourneyMap.css';
 // צריך להתקין: npm install react-map-gl d3-ease mapbox-gl
 
 /**
@@ -21,6 +21,7 @@ const JourneyMap = ({ locations, className = '' }) => {
   
   const [selectedLocation, setSelectedLocation] = useState(null);
   const linesRef = useRef(null);
+  const mapRef = useRef(null);
   
   // יצירת קווי מסע בין הנקודות
   useEffect(() => {
@@ -62,19 +63,18 @@ const JourneyMap = ({ locations, className = '' }) => {
     return [pixelX, pixelY];
   };
   
-  // טיסה למיקום נבחר
+  // טיסה למיקום נבחר - משתמש בAPI החדש של react-map-gl
   const flyToLocation = (location) => {
     setSelectedLocation(location);
     
-    setViewport({
-      ...viewport,
-      latitude: location.latitude,
-      longitude: location.longitude,
-      zoom: 9,
-      transitionDuration: 1000,
-      transitionInterpolator: new FlyToInterpolator(),
-      transitionEasing: easeCubic
-    });
+    if (mapRef.current) {
+      mapRef.current.flyTo({
+        center: [location.longitude, location.latitude],
+        zoom: 9,
+        duration: 1000,
+        easing: easeCubic
+      });
+    }
   };
   
   // טיסה לתצוגה מלאה של כל המסע
@@ -98,24 +98,16 @@ const JourneyMap = ({ locations, className = '' }) => {
     minLng -= padding;
     maxLng += padding;
     
-    // חישוב מרכז המפה
-    const centerLat = (minLat + maxLat) / 2;
-    const centerLng = (minLng + maxLng) / 2;
-    
-    // חישוב זום שיתאים לכל הנקודות
-    const latZoom = Math.log2(360 / (maxLat - minLat));
-    const lngZoom = Math.log2(360 / (maxLng - minLng));
-    const zoom = Math.min(latZoom, lngZoom) - 0.5; // הקטנת הזום קצת לשוליים
-    
-    setViewport({
-      ...viewport,
-      latitude: centerLat,
-      longitude: centerLng,
-      zoom: zoom,
-      transitionDuration: 1000,
-      transitionInterpolator: new FlyToInterpolator(),
-      transitionEasing: easeCubic
-    });
+    if (mapRef.current) {
+      // השתמש ב-fitBounds במקום FlyToInterpolator
+      mapRef.current.fitBounds(
+        [
+          [minLng, minLat], // דרום-מערב
+          [maxLng, maxLat]  // צפון-מזרח
+        ],
+        { duration: 1000, easing: easeCubic }
+      );
+    }
   };
   
   return (
@@ -147,13 +139,14 @@ const JourneyMap = ({ locations, className = '' }) => {
         </div>
         
         <div className="journey-map-view">
-          <ReactMapGL
+          <Map
             {...viewport}
+            ref={mapRef}
             width="100%"
             height="100%"
             mapStyle="mapbox://styles/mapbox/light-v10"
-            onViewportChange={setViewport}
-            mapboxApiAccessToken="YOUR_MAPBOX_ACCESS_TOKEN_HERE" // יש להחליף במפתח אמיתי
+            onMove={evt => setViewport(evt.viewState)}
+            mapboxAccessToken="YOUR_MAPBOX_ACCESS_TOKEN_HERE" // יש להחליף במפתח אמיתי
           >
             {/* קווי המסע */}
             <canvas
@@ -175,8 +168,7 @@ const JourneyMap = ({ locations, className = '' }) => {
                 key={location.id}
                 latitude={location.latitude}
                 longitude={location.longitude}
-                offsetLeft={-15}
-                offsetTop={-30}
+                offset={[-15, -30]}
               >
                 <div 
                   className={`journey-map-marker ${selectedLocation?.id === location.id ? 'active' : ''}`}
@@ -194,10 +186,8 @@ const JourneyMap = ({ locations, className = '' }) => {
             ))}
             
             {/* כפתורי ניווט במפה */}
-            <div className="journey-map-controls">
-              <NavigationControl showCompass={false} />
-            </div>
-          </ReactMapGL>
+            <NavigationControl position="top-left" />
+          </Map>
         </div>
       </div>
       
