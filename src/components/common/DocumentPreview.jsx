@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/components.css';
+import '../../styles/components.css';
 
 /**
  * קומפוננטת תצוגת מסמכים - מציגה מסמכים היסטוריים עם אפשרות להגדלה
