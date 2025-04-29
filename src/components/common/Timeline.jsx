@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-import '../styles/Timeline.css';
+import '../styles/components.css';
 
 // אייקונים
 import { FaBaby, FaSchool, FaRunning, FaSadTear, FaDove, FaShip, FaHome, FaHeart, FaBook, FaTree } from 'react-icons/fa';
