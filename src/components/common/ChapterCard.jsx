@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../../styles/ChapterCard.css';
+import '../../styles/components.css';
 
 /**
  * קומפוננטת כרטיסיית פרק - מציגה כרטיסייה עם תמונה וסיכום של פרק חיים
