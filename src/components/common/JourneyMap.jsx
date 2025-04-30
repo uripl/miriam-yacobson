@@ -146,7 +146,7 @@ const JourneyMap = ({ locations, className = '' }) => {
             height="100%"
             mapStyle="mapbox://styles/mapbox/light-v10"
             onMove={evt => setViewport(evt.viewState)}
-            mapboxAccessToken="YOUR_MAPBOX_ACCESS_TOKEN_HERE" // יש להחליף במפתח אמיתי
+            mapboxAccessToken="pk.eyJ1IjoidXJpcGxlc3NlciIsImEiOiJjbWEzdzc2emwwMG5kMmtxejAzdWtya3ZqIn0.Ipxq0bDQtuY82BO883EbeA" // יש להחליף במפתח אמיתי
           >
             {/* קווי המסע */}
             <canvas
