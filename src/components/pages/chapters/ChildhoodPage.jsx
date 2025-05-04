@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import Quote from '../../common/Quote';
 import ImageGallery from '../../common/ImageGallery';
 import DocumentPreview from '../../common/DocumentPreview';
+import PlaceholderImage from '../../common/PlaceholderImage';
 import { quotes, galleryImages, historicalDocuments } from '../../../data/timelineData';
 import '../../../styles/ChapterPage.css';
-import PlaceholderImage from '../../common/PlaceholderImage';
 
 /**
  * דף פרק הילדות בגרמניה
@@ -62,9 +62,10 @@ const ChildhoodPage = () => {
                 </p>
               </div>
               <div className="chapter-intro-image">
-                <img 
+                <PlaceholderImage 
                   src="/images/historical/leipzig-view.jpg" 
                   alt="מראה העיר לייפציג, שנות ה-20" 
+                  category="childhood"
                   loading="lazy"
                 />
                 <p className="image-caption">מראה העיר לייפציג, שנות ה-20</p>
@@ -90,9 +91,10 @@ const ChildhoodPage = () => {
             </p>
             
             <div className="image-container">
-              <img 
+              <PlaceholderImage 
                 src="/images/family/leipzig-family.jpg" 
                 alt="משפחת אופנהיימר בלייפציג" 
+                category="childhood"
                 loading="lazy"
               />
               <p className="image-caption">
