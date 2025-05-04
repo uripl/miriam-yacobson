@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../styles/AboutPage.css';
+import PlaceholderImage from '../common/PlaceholderImage';
 
 /**
  * דף אודות מרים - מציג מידע אישי על מרים ותמונות נבחרות
@@ -23,13 +24,14 @@ const AboutPage = () => {
       <div className="container">
         <div className="about-content">
           <section className="about-intro">
-            <div className="about-image">
-              <img 
-                src="/images/family/miriam-portrait.jpg" 
-                alt="מרים יעקובסון" 
-                loading="lazy"
-              />
-            </div>
+              <div className="about-image">
+                <PlaceholderImage 
+                  src="/images/family/miriam-portrait.jpg" 
+                  alt="מרים יעקובסון" 
+                  category="life-in-israel"
+                  loading="lazy"
+                />
+              </div>
             <div className="about-text">
               <h2>מרים יעקובסון - סיפור חיים</h2>
               <p>
