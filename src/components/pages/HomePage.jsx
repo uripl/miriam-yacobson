@@ -5,6 +5,7 @@ import Timeline from '../common/Timeline';
 import Quote from '../common/Quote';
 import ImageGallery from '../common/ImageGallery';
 import '../../styles/HomePage.css';
+import PlaceholderImage from '../common/PlaceholderImage';
 
 const HomePage = () => {
   // נתוני פרקים לתצוגה בדף הבית
@@ -136,14 +137,15 @@ const HomePage = () => {
                 סיפורה המרגש של מרים הוא מסע של אמונה, תקווה והתגברות על הקשיים הגדולים ביותר.
               </p>
             </div>
-            <div className="intro-image">
-              <img 
-                src="/images/family/miriam-portrait.jpg" 
-                alt="מרים יעקובסון" 
-                loading="lazy" 
-              />
-              <p className="image-caption">מרים יעקובסון</p>
-            </div>
+              <div className="intro-image">
+                <PlaceholderImage 
+                  src="/images/family/miriam-portrait.jpg" 
+                  alt="מרים יעקובסון" 
+                  category="life-in-israel"
+                  loading="lazy" 
+                />
+                <p className="image-caption">מרים יעקובסון</p>
+              </div>
           </div>
         </div>
       </section>
