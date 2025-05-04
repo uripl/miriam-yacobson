@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/components.css';
+import PlaceholderImage from '../../common/PlaceholderImage';
 
 /**
  * קומפוננטת גלריית תמונות - מציגה אוסף תמונות עם אפשרות להגדלה
