@@ -254,6 +254,61 @@ export const historicalDocuments = [
     translation: 'כרטיס פליטים מספר 348248 עבור מרים אופנהיימר, המאשר את מעמדה כפליטה ואת זכאותה לסיוע.'
   },
   {
+    id: 'leipzig-certificate',
+    title: 'תעודת לידה מלייפציג',
+    imageSrc: '/images/documents/leipzig-certificate.jpg',
+    thumbnailSrc: '/images/documents/thumbs/leipzig-certificate-thumb.jpg',
+    date: '1925',
+    description: 'העתק של תעודת הלידה המקורית של מרים אופנהיימר מלייפציג',
+    source: 'ארכיון משפחת אופנהיימר',
+    archiveNumber: '',
+    translation: 'תעודת לידה מקורית המעידה על לידתה של מרים אופנהיימר בתאריך 24 באוקטובר 1925 בעיר לייפציג, גרמניה.'
+  },
+  {
+    id: 'deportation-order',
+    title: 'צו גירוש למזרח',
+    imageSrc: '/images/documents/deportation-order.jpg',
+    thumbnailSrc: '/images/documents/thumbs/deportation-order-thumb.jpg',
+    date: '1944',
+    description: 'צו הגירוש של מרים ואביה ממחנה דרנסי למזרח (אושוויץ)',
+    source: 'ארכיון ITS (שירות האיתור הבינלאומי)',
+    archiveNumber: '106434673#1',
+    translation: 'צו העברה ממחנה דרנסי למזרח (אושוויץ) הכולל את שמותיהם של מרים ואביה אברהם אופנהיימר.'
+  },
+  {
+    id: 'auschwitz-registration',
+    title: 'רישום הכניסה לאושוויץ',
+    imageSrc: '/images/documents/auschwitz-registration.jpg',
+    thumbnailSrc: '/images/documents/thumbs/auschwitz-registration-thumb.jpg',
+    date: 'אפריל 1944',
+    description: 'מסמך רישום הכניסה למחנה אושוויץ-בירקנאו',
+    source: 'ארכיון ITS (שירות האיתור הבינלאומי)',
+    archiveNumber: '106434674#1',
+    translation: 'רישום כניסה למחנה אושוויץ-בירקנאו של מרים אופנהיימר. המסמך כולל את המספר שקיבלה ואת תאריך הגעתה למחנה.'
+  },
+  {
+    id: 'neustadt-release',
+    title: 'אישור שחרור ממחנה ניישטדט',
+    imageSrc: '/images/documents/neustadt-release.jpg',
+    thumbnailSrc: '/images/documents/thumbs/neustadt-release-thumb.jpg',
+    date: '2 במאי 1945',
+    description: 'אישור השחרור הרשמי ממחנה ניישטדט על ידי הצבא הסובייטי',
+    source: 'ארכיון ITS (שירות האיתור הבינלאומי)',
+    archiveNumber: '106434676#1',
+    translation: 'מסמך שחרור רשמי המאשר את שחרורה של מרים אופנהיימר ממחנה ניישטדט-גלווה בתאריך 2 במאי 1945 על ידי הצבא הסובייטי.'
+  },
+  {
+    id: 'refugee-application',
+    title: 'בקשת מעמד פליט',
+    imageSrc: '/images/documents/refugee-application.jpg',
+    thumbnailSrc: '/images/documents/thumbs/refugee-application-thumb.jpg',
+    date: 'יוני 1945',
+    description: 'טופס בקשה למעמד פליט שהוגש לרשויות בצרפת',
+    source: 'ארכיון ITS (שירות האיתור הבינלאומי)',
+    archiveNumber: '106434677#1',
+    translation: 'בקשה רשמית למעמד פליט שהוגשה על ידי מרים אופנהיימר לאחר חזרתה לליון, צרפת ביוני 1945.'
+  },
+  {
     id: 'israel-certificate',
     title: 'אישור העלייה לישראל',
     imageSrc: '/images/documents/israel-certificate.jpg',
@@ -276,6 +331,17 @@ export const historicalDocuments = [
     translation: 'רשומת חברות עבור מרים אופנהיימר, המתעדת את תקופת שהותה בקיבוץ ואת עבודתה במטבח ובחינוך.'
   },
   {
+    id: 'search-request',
+    title: 'בקשת איתור משפחה',
+    imageSrc: '/images/documents/search-request.jpg',
+    thumbnailSrc: '/images/documents/thumbs/search-request-thumb.jpg',
+    date: '1945-1946',
+    description: 'בקשה לאיתור בני משפחה לאחר המלחמה',
+    source: 'ארכיון ITS (שירות האיתור הבינלאומי)',
+    archiveNumber: '106434678#1',
+    translation: 'טופס בקשה לאיתור בני משפחה שהוגש על ידי מרים אופנהיימר לאחר המלחמה, בניסיון לאתר קרובי משפחה ששרדו.'
+  },
+  {
     id: 'letter-1955',
     title: 'מכתב ממרים לישעי',
     imageSrc: '/images/documents/letter-1955.jpg',
@@ -296,6 +362,17 @@ export const historicalDocuments = [
     source: 'ארכיון יד ושם',
     archiveNumber: 'TR-3/1112',
     translation: 'עדות על קורותיה של מרים אופנהיימר יעקובסון במחנה אושוויץ ובצעדת המוות, כפי שהוגשה כראיה במשפט אייכמן.'
+  },
+  {
+    id: 'displacement-record',
+    title: 'תיעוד עקירה ופליטות',
+    imageSrc: '/images/documents/displacement-record.jpg',
+    thumbnailSrc: '/images/documents/thumbs/displacement-record-thumb.jpg',
+    date: '1946',
+    description: 'תיעוד רשמי של מסלול העקירה והפליטות',
+    source: 'ארכיון ITS (שירות האיתור הבינלאומי)',
+    archiveNumber: '106434684#1',
+    translation: 'מסמך המתעד את מסלול העקירה והפליטות של מרים אופנהיימר מגרמניה דרך בלגיה וצרפת ועד למחנות ההשמדה והשחרור.'
   }
 ];
 
