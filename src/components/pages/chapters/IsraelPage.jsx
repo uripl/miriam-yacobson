@@ -5,6 +5,7 @@ import ImageGallery from '../../common/ImageGallery';
 import DocumentPreview from '../../common/DocumentPreview';
 import { quotes, galleryImages, historicalDocuments } from '../../../data/timelineData';
 import '../../../styles/ChapterPage.css';
+import PlaceholderImage from '../../common/PlaceholderImage';
 
 /**
  * דף פרק החיים בארץ ישראל
