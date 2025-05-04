@@ -541,3 +541,21 @@ export default {
     dateRange: '1948-1951',
     description: 'מרים הצטרפה לקיבוץ חפץ חיים. היא עבדה במטבח, סייעה לעולי הנוער, והייתה פעילה בחיי הקיבוץ.'
   },
+  {
+    id: 'beit-chilkiya',
+    name: 'בית חלקיה, ישראל',
+    latitude: 31.7947,
+    longitude: 34.8192,
+    dateRange: '1952-2023',
+    description: 'מרים וישעי יעקובסון הקימו את ביתם בבית חלקיה. בתנאים צנועים גידלו את ילדיהם, מיכל ורפי, וראו בהקמת המשפחה את הניצחון האמיתי על הנאצים.'
+  }
+];
+
+export default {
+  journeyLocations,
+  galleryImages,
+  historicalDocuments,
+  quotes,
+  chaptersContent
+};
+
