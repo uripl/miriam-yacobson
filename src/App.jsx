@@ -1,9 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// קומפוננטות מבנה
-import Header from './components/layout/Header';
-import Footer from './components/layout/Footer';
+// קומפוננטת מבנה
 import Layout from './components/layout/Layout';
 
 // דפים
