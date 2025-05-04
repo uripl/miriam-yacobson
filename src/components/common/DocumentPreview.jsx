@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/components.css';
+import PlaceholderImage from '../../common/PlaceholderImage';
 
 /**
  * קומפוננטת תצוגת מסמכים - מציגה מסמכים היסטוריים עם אפשרות להגדלה
