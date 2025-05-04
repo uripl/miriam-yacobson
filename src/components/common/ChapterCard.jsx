@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../../styles/components.css';
+import PlaceholderImage from './PlaceholderImage';
 
 /**
  * קומפוננטת כרטיסיית פרק - מציגה כרטיסייה עם תמונה וסיכום של פרק חיים
@@ -16,7 +17,7 @@ const ChapterCard = ({ title, years, summary, imageSrc, route, className = '' })
   return (
     <div className={`chapter-card ${className}`}>
       <div className="chapter-card-image-container">
-        <img 
+         <img 
           src={imageSrc} 
           alt={title}
           className="chapter-card-image" 
