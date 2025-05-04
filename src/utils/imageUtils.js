@@ -40,11 +40,8 @@ export function getPlaceholderImage(category, width = 400, height = 300, text) {
   const color = PLACEHOLDER_COLORS[category] || PLACEHOLDER_COLORS.default;
   const displayText = text || `${PLACEHOLDER_ICONS[category] || PLACEHOLDER_ICONS.default} ${category || 'תמונה'}`;
   
-  // אפשרות 1: שימוש בשירות חיצוני
-  // return `https://via.placeholder.com/${width}x${height}/${color}/333333?text=${encodeURIComponent(displayText)}`;
-  
-  // אפשרות 2: שימוש בנתיבים מקומיים (עדיף לחלופה פנימית)
-  return `/images/placeholders/${category || 'default'}.jpg`;
+  // שימוש בשירות ייצור תמונות מקוון במקום בקבצים מקומיים
+  return `https://via.placeholder.com/${width}x${height}/${color}/333333?text=${encodeURIComponent(displayText)}`;
 }
 
 /**
