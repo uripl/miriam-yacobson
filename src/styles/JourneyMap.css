@@ -1,51 +1,64 @@
-/* JourneyMap.css */
+/* JourneyMap.css - משופר */
 
 .journey-map-container {
   width: 100%;
-  background-color: var(--background-light);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: var(--spacing-lg);
-  margin-bottom: var(--spacing-3xl);
+  background-color: #f8f8f8;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 40px;
+  overflow: hidden;
 }
 
 .journey-map-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding-bottom: 12px;
 }
 
 .journey-map-title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--text-dark);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
 }
 
 .journey-map-view-all {
   background-color: var(--primary-color);
   color: white;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: 8px 16px;
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  font-size: 14px;
 }
 
 .journey-map-view-all:hover {
-  background-color: var(--primary-color-dark);
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .journey-map-content {
   display: flex;
   flex-direction: row-reverse;
-  gap: var(--spacing-lg);
+  gap: 24px;
+  height: 650px; /* גובה קבוע למפה ולרשימה */
 }
 
+/* רשימת המיקומים */
 .journey-map-locations {
-  flex: 1;
-  max-width: 300px;
+  width: 300px;
+  flex-shrink: 0;
   overflow-y: auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .journey-map-location-list {
@@ -55,142 +68,242 @@
 }
 
 .journey-map-location-item {
-  background-color: var(--white);
-  border: 1px solid var(--border-light);
-  border-radius: var(--border-radius-sm);
-  padding: var(--spacing-sm);
-  margin-bottom: var(--spacing-sm);
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-.journey-map-location-item:hover,
+.journey-map-location-item:last-child {
+  border-bottom: none;
+}
+
+.journey-map-location-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
 .journey-map-location-item.active {
-  background-color: var(--primary-color-light);
+  background-color: rgba(var(--primary-color-rgb), 0.08);
+  border-right: 4px solid var(--primary-color);
 }
 
 .journey-map-location-number {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-md);
-  color: var(--primary-color);
-  margin-bottom: var(--spacing-xs);
+  width: 28px;
+  height: 28px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.journey-map-location-item.active .journey-map-location-number {
+  background-color: var(--primary-dark);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .journey-map-location-info {
-  font-size: var(--font-size-sm);
-  color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .journey-map-location-name {
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-dark);
 }
 
 .journey-map-location-date {
+  font-size: 13px;
   color: var(--text-light);
 }
 
-/* ✅ תיקון גודל המפה */
+/* מפה */
 .journey-map-view {
-  flex: 2;
-  position: relative;
-  height: 600px;
-  min-height: 500px;
-  border-radius: var(--border-radius-md);
+  flex-grow: 1;
+  border-radius: 8px;
   overflow: hidden;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  background-color: #e9eef2;
+  height: 100%;
 }
 
-/* ✅ ודא שהקנבס של הקווים מתוח ונמצא מאחורי הסמנים */
+/* קנבס לציור הקווים */
 .journey-map-lines {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
   pointer-events: none;
+  z-index: 1;
 }
 
-/* ✅ סמנים מעוצבים וברורים */
+/* סגנון סמנים */
 .journey-map-marker {
-  background-color: var(--white);
+  background-color: white;
+  color: var(--primary-color);
   border: 2px solid var(--primary-color);
-  border-radius: 50%;
   width: 30px;
   height: 30px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: var(--font-weight-bold);
-  color: var(--primary-color);
-  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
   position: relative;
-  z-index: 2;
+  cursor: pointer;
+}
+
+.journey-map-marker:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 .journey-map-marker.active {
   background-color: var(--primary-color);
   color: white;
-  border: 2px solid white;
-  z-index: 3;
+  border-color: white;
+  transform: scale(1.2);
+  z-index: 10;
 }
 
-/* ✅ טול־טיפ ברור מעל הנקודה */
+/* טולטיפ */
 .journey-map-marker-tooltip {
   position: absolute;
-  top: -65px;
+  bottom: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
-  background-color: var(--white);
-  padding: var(--spacing-xs);
-  border-radius: var(--border-radius-sm);
-  box-shadow: var(--shadow-sm);
-  white-space: nowrap;
-  font-size: var(--font-size-xs);
-  z-index: 4;
+  background-color: white;
+  border-radius: 6px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+  width: max-content;
+  min-width: 120px;
+  text-align: center;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.journey-map-marker-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: white;
 }
 
 .journey-map-marker-name {
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
   color: var(--text-dark);
-  margin-bottom: 2px;
+  white-space: nowrap;
 }
 
 .journey-map-marker-date {
+  font-size: 12px;
   color: var(--text-light);
 }
 
-/* ✅ תיבת התיאור */
+/* תיבת פרטים */
 .journey-map-details {
-  margin-top: var(--spacing-lg);
-  background-color: var(--background-dark);
-  padding: var(--spacing-lg);
-  border-radius: var(--border-radius-md);
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-right: 4px solid var(--primary-color);
 }
 
 .journey-map-details-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--spacing-sm);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 8px;
 }
 
 .journey-map-details-date {
-  font-size: var(--font-size-sm);
+  font-size: 14px;
   color: var(--text-light);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 
 .journey-map-details-description {
-  font-size: var(--font-size-md);
-  color: var(--text-dark);
+  line-height: 1.6;
+  font-size: 16px;
+  color: var(--text-color);
 }
 
-/* ✅ רספונסיביות */
-@media (max-width: 768px) {
+/* רספונסיביות */
+@media (max-width: 900px) {
   .journey-map-content {
-    flex-direction: column-reverse;
+    flex-direction: column;
+    height: auto;
   }
-
+  
+  .journey-map-locations {
+    width: 100%;
+    max-height: 300px;
+    margin-bottom: 20px;
+  }
+  
   .journey-map-view {
-    height: 400px;
+    height: 450px;
+  }
+  
+  .journey-map-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .journey-map-view-all {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 600px) {
+  .journey-map-container {
+    padding: 16px;
+  }
+  
+  .journey-map-view {
+    height: 350px;
+  }
+  
+  .journey-map-title {
+    font-size: 20px;
+  }
+  
+  .journey-map-marker {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .journey-map-details {
+    padding: 15px;
+  }
+  
+  .journey-map-details-title {
+    font-size: 18px;
+  }
+  
+  .journey-map-location-item {
+    padding: 12px;
   }
 }
