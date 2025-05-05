@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import JourneyMap from '../common/JourneyMap';
 import { journeyLocations } from '../../data/timelineData';
 import '../../styles/JourneyMapPage.css';
@@ -7,9 +7,42 @@ import '../../styles/JourneyMapPage.css';
  * דף מפת המסע - מציג את המסע הגיאוגרפי של מרים על מפה אינטראקטיבית
  */
 const JourneyMapPage = () => {
+  const [mapKey, setMapKey] = useState(Date.now()); // מפתח ייחודי לאילוץ רינדור מחדש של המפה
+  const [isMapboxLoaded, setIsMapboxLoaded] = useState(false);
+
   // גלילה לראש הדף בטעינה
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // וידוא טעינת ספריית Mapbox
+  useEffect(() => {
+    // בדיקה האם הספרייה נטענה
+    const checkMapboxLoaded = () => {
+      if (window.mapboxgl) {
+        console.log('Mapbox GL JS is loaded');
+        setIsMapboxLoaded(true);
+        return true;
+      }
+      return false;
+    };
+
+    // אם הספרייה לא נטענה, נסה לטעון אותה שוב
+    if (!checkMapboxLoaded()) {
+      console.log('Forcing mapbox reload');
+      
+      // כפה רינדור מחדש של המפה
+      setMapKey(Date.now());
+      
+      // נסה שוב לבדוק אם הספרייה נטענה אחרי זמן קצר
+      const timer = setTimeout(() => {
+        if (!checkMapboxLoaded()) {
+          console.warn('Mapbox still not loaded. Check your mapbox token and network.');
+        }
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   return (
@@ -32,10 +65,19 @@ const JourneyMapPage = () => {
               ניתן ללחוץ על הנקודות במפה או על השמות ברשימה כדי לקבל מידע נוסף על כל מקום 
               ולעקוב אחר ציר הזמן של המסע.
             </p>
+            
+            {!isMapboxLoaded && (
+              <div className="map-loading-message">
+                <p><strong>הערה:</strong> טעינת המפה עשויה להימשך מספר שניות. אם המפה אינה מופיעה, אנא ודא שיש לך חיבור אינטרנט תקין.</p>
+              </div>
+            )}
           </section>
 
           <section className="journey-map-full">
-            <JourneyMap locations={journeyLocations} />
+            <JourneyMap 
+              key={mapKey} 
+              locations={journeyLocations} 
+            />
           </section>
 
           <section className="journey-map-facts">
