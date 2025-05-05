@@ -27,6 +27,20 @@ const JourneyMap = ({ locations, className = '' }) => {
   
   // לבדוק אם המפה נטענה
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapLoadError, setMapLoadError] = useState(false);
+  const [isMapLoading, setIsMapLoading] = useState(true);
+
+  // הוסף טיימר להצגת שגיאה אם הטעינה לוקחת יותר מדי זמן
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isMapLoading) {
+        console.warn('Map loading timeout - might indicate a problem with Mapbox');
+        setMapLoadError(true);
+      }
+    }, 10000); // 10 שניות
+    
+    return () => clearTimeout(timer);
+  }, [isMapLoading]);
 
   // ציור הקווים בין נקודות המסע
   const drawJourneyLines = useCallback(() => {
@@ -140,6 +154,7 @@ const JourneyMap = ({ locations, className = '' }) => {
   const handleMapLoad = useCallback(() => {
     console.log('Map loaded successfully');
     setMapLoaded(true);
+    setIsMapLoading(false);
     
     // קצת השהייה לוודא שהמפה לגמרי מוכנה
     setTimeout(() => {
@@ -147,6 +162,13 @@ const JourneyMap = ({ locations, className = '' }) => {
       viewFullJourney();
     }, 300);
   }, [resizeCanvas, viewFullJourney]);
+
+  // טיפול בשגיאות מפה
+  const handleMapError = (error) => {
+    console.error('Mapbox error:', error);
+    setMapLoadError(true);
+    setIsMapLoading(false);
+  };
 
   // אתחול המצב ההתחלתי - התאמת המפה לראות את כל המסע
   useEffect(() => {
@@ -222,6 +244,44 @@ const JourneyMap = ({ locations, className = '' }) => {
     return selectedLocation && selectedLocation.id === location.id;
   };
 
+  // אם יש שגיאה בטעינת המפה, הצג הודעת שגיאה
+  if (mapLoadError) {
+    return (
+      <div className="journey-map-container journey-map-error-container">
+        <div className="journey-map-header">
+          <h3 className="journey-map-title">מסע חייה של מרים אופנהיימר יעקובסון</h3>
+        </div>
+        <div className="journey-map-error">
+          <h4>לא ניתן לטעון את המפה</h4>
+          <p>אירעה שגיאה בטעינת המפה. נא לבדוק את חיבור האינטרנט שלך או לנסות שוב מאוחר יותר.</p>
+          <p>במקרה שהבעיה ממשיכה, ייתכן שיש צורך לבדוק את הגדרות API של Mapbox.</p>
+          <button 
+            className="journey-map-retry-button"
+            onClick={() => window.location.reload()}
+          >
+            נסה שוב
+          </button>
+        </div>
+        {/* הצגת רשימת המיקומים גם במצב שגיאה */}
+        <div className="journey-map-locations-only">
+          <h4>מיקומים במסע</h4>
+          <ul className="journey-map-location-list">
+            {locations.map((location, index) => (
+              <li key={location.id} className="journey-map-location-item">
+                <div className="journey-map-location-number">{index + 1}</div>
+                <div className="journey-map-location-info">
+                  <div className="journey-map-location-name">{location.name}</div>
+                  <div className="journey-map-location-date">{location.dateRange}</div>
+                  <div className="journey-map-location-description">{location.description}</div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`journey-map-container ${className}`} dir="rtl">
       <div className="journey-map-header">
@@ -268,9 +328,10 @@ const JourneyMap = ({ locations, className = '' }) => {
             }}
             mapStyle="mapbox://styles/mapbox/light-v11"
             onMove={evt => setViewport(evt.viewState)}
-            mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+            mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN || 'pk.eyJ1IjoidXJpcGxlc3NlciIsImEiOiJjbWEzdzc2emwwMG5kMmtxejAzdWtya3ZqIn0.Ipxq0bDQtuY82BO883EbeA'}
             attributionControl={true}
             onLoad={handleMapLoad}
+            onError={handleMapError}
             style={{ width: '100%', height: '100%' }}
           >
             {/* כפתורי הזום */}
@@ -310,7 +371,7 @@ const JourneyMap = ({ locations, className = '' }) => {
           />
           
           {/* אינדיקטור טעינה */}
-          {!mapLoaded && (
+          {isMapLoading && (
             <div className="journey-map-loading">
               <div className="journey-map-loading-spinner"></div>
               <p>טוען את המפה...</p>
