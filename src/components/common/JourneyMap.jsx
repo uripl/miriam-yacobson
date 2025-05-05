@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl';
 import { easeCubic } from 'd3-ease';
 import '../../styles/JourneyMap.css';
-// צריך להתקין: npm install react-map-gl d3-ease mapbox-gl
 
 /**
  * קומפוננטת מפת מסע - מציגה את מסלול חייה של מרים על מפה אינטראקטיבית
@@ -56,7 +55,7 @@ const JourneyMap = ({ locations, className = '' }) => {
 
       ctx.stroke();
     }
-  }, [locations, viewport.zoom]); // אין צורך בתלות ב-project כי היא פונקציה רגילה
+  }, [locations, viewport]); // תיקון: להוסיף את viewport כתלות מלאה
 
   const flyToLocation = (location) => {
     setSelectedLocation(location);
