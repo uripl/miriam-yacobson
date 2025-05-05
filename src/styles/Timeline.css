@@ -34,8 +34,9 @@
   color: var(--white);
 }
 
-/* תיקון תצוגת התאריכים בציר הזמן */
-.vertical-timeline-element .vertical-timeline-element-date {
+/* תיקון תצוגת התאריכים בציר הזמן - בכל המקומות */
+.vertical-timeline-element .vertical-timeline-element-date,
+.home-page .vertical-timeline-element .vertical-timeline-element-date {
   position: absolute !important;
   right: 0 !important;
   left: auto !important;
@@ -57,13 +58,15 @@
 }
 
 /* כאשר התאריך בצד שמאל */
-.vertical-timeline-element:nth-child(odd) .vertical-timeline-element-date {
+.vertical-timeline-element:nth-child(odd) .vertical-timeline-element-date,
+.home-page .vertical-timeline-element:nth-child(odd) .vertical-timeline-element-date {
   left: 0 !important;
   right: auto !important;
 }
 
-/* מרווח נוסף לתיבות התוכן */
-.vertical-timeline-element-content {
+/* מרווח נוסף לתיבות התוכן - בכל המקומות */
+.vertical-timeline-element-content,
+.home-page .vertical-timeline-element-content {
   padding-top: 20px !important;
 }
 
@@ -144,8 +147,9 @@
     visibility: visible !important;
   }
   
-  /* תיקון תצוגת התאריכים במובייל */
-  .vertical-timeline-element .vertical-timeline-element-date {
+  /* תיקון תצוגת התאריכים במובייל - בכל המקומות */
+  .vertical-timeline-element .vertical-timeline-element-date,
+  .home-page .vertical-timeline-element .vertical-timeline-element-date {
     right: 0 !important;
     left: auto !important;
     top: -22px !important;
@@ -169,7 +173,8 @@
     max-width: 300px;
   }
   
-  .vertical-timeline-element .vertical-timeline-element-date {
+  .vertical-timeline-element .vertical-timeline-element-date,
+  .home-page .vertical-timeline-element .vertical-timeline-element-date {
     font-size: 9px !important;
     padding: 2px 6px !important;
     max-width: 70px !important;
