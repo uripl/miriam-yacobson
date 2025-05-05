@@ -27,28 +27,6 @@ const JourneyMap = ({ locations, className = '' }) => {
   const canvasRef = useRef(null);
   const mapContainerRef = useRef(null);
 
-  // התאמת גודל הקנבס לגודל המפה
-  const resizeCanvas = useCallback(() => {
-    const canvas = canvasRef.current;
-    const container = mapContainerRef.current;
-    
-    if (!canvas || !container) return;
-
-    const { width, height } = container.getBoundingClientRect();
-    const scale = window.devicePixelRatio || 1;
-    
-    canvas.width = width * scale;
-    canvas.height = height * scale;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    
-    const ctx = canvas.getContext('2d');
-    ctx.scale(scale, scale);
-    
-    // ציור מחדש של הקווים לאחר שינוי גודל
-    drawJourneyLines();
-  }, []);
-
   // ציור הקווים בין נקודות המסע
   const drawJourneyLines = useCallback(() => {
     const canvas = canvasRef.current;
@@ -82,6 +60,28 @@ const JourneyMap = ({ locations, className = '' }) => {
     
     ctx.stroke();
   }, [locations]);
+
+  // התאמת גודל הקנבס לגודל המפה
+  const resizeCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    const container = mapContainerRef.current;
+    
+    if (!canvas || !container) return;
+
+    const { width, height } = container.getBoundingClientRect();
+    const scale = window.devicePixelRatio || 1;
+    
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+    
+    // ציור מחדש של הקווים לאחר שינוי גודל
+    drawJourneyLines();
+  }, [drawJourneyLines]); // כעת drawJourneyLines הוא תלות
 
   // הצגת כל המסע על המפה - ללא שימוש ב-LngLatBounds
   const viewFullJourney = useCallback(() => {
