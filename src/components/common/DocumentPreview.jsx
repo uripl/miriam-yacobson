@@ -23,16 +23,32 @@ const DocumentPreview = ({ document, className = '' }) => {
     document.body.style.overflow = 'auto'; // החזרת הגלילה
   };
 
+  // בדיקה אם התמונה קיימת
+  const imageExists = (src) => src && typeof src === 'string' && src.length > 0;
+  const thumbnailSrc = document.thumbnailSrc || document.imageSrc;
+  const hasThumbnail = imageExists(thumbnailSrc);
+  const hasFullImage = imageExists(document.imageSrc);
+
   return (
     <div className={`document-container ${className}`}>
       <div className="document-preview" onClick={openDocument}>
         <div className="document-image-container">
-          <img 
-            src={document.thumbnailSrc || document.imageSrc} 
-            alt={document.title} 
-            className="document-thumbnail"
-            loading="lazy"
-          />
+          {hasThumbnail ? (
+            <img 
+              src={thumbnailSrc} 
+              alt={document.title} 
+              className="document-thumbnail"
+              loading="lazy"
+            />
+          ) : (
+            <PlaceholderImage
+              alt={document.title} 
+              category="documents"
+              className="document-thumbnail"
+              width="120px"
+              height="160px"
+            />
+          )}
           <div className="document-overlay">
             <span className="document-expand-icon">+</span>
           </div>
@@ -53,11 +69,21 @@ const DocumentPreview = ({ document, className = '' }) => {
             <button className="document-close-button" onClick={closeDocument}>×</button>
             
             <div className="document-modal-image-container">
-              <img 
-                src={document.imageSrc} 
-                alt={document.title} 
-                className="document-modal-image"
-              />
+              {hasFullImage ? (
+                <img 
+                  src={document.imageSrc} 
+                  alt={document.title} 
+                  className="document-modal-image"
+                />
+              ) : (
+                <PlaceholderImage
+                  alt={document.title} 
+                  category="documents"
+                  className="document-modal-image"
+                  width="80%"
+                  height="500px"
+                />
+              )}
             </div>
             
             <div className="document-modal-info">
