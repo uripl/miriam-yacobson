@@ -180,3 +180,46 @@
     max-width: 70px !important;
   }
 }
+/* תיקון לקובץ Timeline.css - להוסיף בסוף הקובץ */
+
+/* תיקון מיקום האייקונים בתוך העיגולים */
+.vertical-timeline-element-icon svg,
+.vertical-timeline-element-icon .fa,
+.vertical-timeline-element-icon .fa-solid,
+.vertical-timeline-element-icon .fa-regular,
+.vertical-timeline-element-icon .fa-brands {
+  position: absolute !important;
+  top: 50% !important;
+  right: 50% !important;
+  transform: translate(50%, -50%) !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: block !important;
+  margin: 0 !important;
+  font-size: 24px !important;
+}
+
+/* תיקון גודל העיגולים עצמם */
+.vertical-timeline-element-icon {
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  box-shadow: 0 0 0 4px var(--white), inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* תיקון גם לציר זמן בדף הבית */
+.timeline-preview .vertical-timeline-element-icon svg,
+.timeline-preview .vertical-timeline-element-icon .fa,
+.timeline-preview .vertical-timeline-element-icon .fa-solid,
+.timeline-preview .vertical-timeline-element-icon .fa-regular,
+.timeline-preview .vertical-timeline-element-icon .fa-brands {
+  position: absolute !important;
+  top: 50% !important;
+  right: 50% !important;
+  transform: translate(50%, -50%) !important;
+  width: 24px !important;
+  height: 24px !important;
+}
