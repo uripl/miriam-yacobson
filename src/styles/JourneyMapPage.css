@@ -1,4 +1,4 @@
-/* JourneyMapPage.css - מעודכן */
+/* JourneyMapPage.css - מעודכן ומתוקן */
 
 .journey-map-page {
   padding-bottom: var(--spacing-3xl);
@@ -44,6 +44,8 @@
 /* התאמה של המפה לעמוד */
 .journey-map-full {
   margin: var(--spacing-2xl) 0;
+  height: auto !important; /* חשוב להבטיח את גובה המכל */
+  position: relative;
 }
 
 /* מרווח נוסף לקומפוננטה ללא שולי מסגרת נוספים */
@@ -123,10 +125,33 @@
   line-height: 1.4;
 }
 
-/* נסיון למנוע התנגשויות של סגנונות */
-.journey-map-page .journey-map-container {
-  /* וודא שאין סגנונות מתנגשים עם הקומפוננטה */
-  box-sizing: border-box;
+/* הודעת הטעינה - תוספת חדשה */
+.map-loading-message {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: #f8f8f8;
+  border: 1px dashed #ddd;
+  border-radius: var(--border-radius-md);
+}
+
+.map-load-error {
+  background-color: #fff9c4;
+  border: 1px solid #fbc02d;
+}
+
+.map-retry-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: var(--spacing-sm);
+  font-weight: 500;
+}
+
+.map-retry-button:hover {
+  background-color: var(--primary-dark);
 }
 
 /* רספונסיביות */
@@ -144,6 +169,11 @@
   .journey-map-intro p {
     font-size: var(--font-size-base);
   }
+  
+  /* וודא שהמפה נשארת בגודל הגיוני גם במסכים קטנים */
+  .journey-map-full {
+    max-height: 800px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -159,5 +189,11 @@
     max-width: 250px;
     margin-right: auto;
     margin-left: auto;
+  }
+  
+  /* התאמות נוספות למובייל */
+  .journey-map-full {
+    margin-right: -10px;
+    margin-left: -10px;
   }
 }
