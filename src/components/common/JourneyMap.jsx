@@ -17,34 +17,41 @@ const JourneyMap = ({ locations, className = '' }) => {
   const mapRef = useRef(null);
   const canvasContainerRef = useRef(null);
 
-  // Resize canvas when container resizes
+  const resizeCanvas = () => {
+    const canvas = linesRef.current;
+    const container = canvasContainerRef.current;
+    if (!canvas || !container) return;
+
+    const scale = window.devicePixelRatio || 1;
+    canvas.width = container.offsetWidth * scale;
+    canvas.height = container.offsetHeight * scale;
+    canvas.style.width = `${container.offsetWidth}px`;
+    canvas.style.height = `${container.offsetHeight}px`;
+
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform
+      ctx.scale(scale, scale);
+    }
+  };
+
   useEffect(() => {
-    const resizeCanvas = () => {
-      if (linesRef.current && canvasContainerRef.current) {
-        const canvas = linesRef.current;
-        const container = canvasContainerRef.current;
-        canvas.width = container.offsetWidth;
-        canvas.height = container.offsetHeight;
-        drawJourneyLines();
-      }
-    };
+    resizeCanvas();
 
     const observer = new ResizeObserver(resizeCanvas);
     if (canvasContainerRef.current) {
       observer.observe(canvasContainerRef.current);
     }
 
-    resizeCanvas();
-
     return () => observer.disconnect();
-  }, [locations]);
+  }, []);
 
   const drawJourneyLines = () => {
     const canvas = linesRef.current;
     const ctx = canvas?.getContext('2d');
     const map = mapRef.current;
 
-    if (!ctx || !map || locations.length < 2) return;
+    if (!ctx || !map || !map.isStyleLoaded() || locations.length < 2) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#ff4d00';
@@ -63,6 +70,14 @@ const JourneyMap = ({ locations, className = '' }) => {
 
     ctx.stroke();
   };
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const map = mapRef.current;
+
+    map.on('render', drawJourneyLines);
+    return () => map.off('render', drawJourneyLines);
+  }, [locations]);
 
   useEffect(() => {
     drawJourneyLines();
@@ -84,7 +99,6 @@ const JourneyMap = ({ locations, className = '' }) => {
     setSelectedLocation(null);
 
     let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
-
     locations.forEach(loc => {
       minLat = Math.min(minLat, loc.latitude);
       maxLat = Math.max(maxLat, loc.latitude);
@@ -177,10 +191,10 @@ const JourneyMap = ({ locations, className = '' }) => {
             className="journey-map-lines"
             style={{
               position: 'absolute',
-              width: '100%',
-              height: '100%',
               top: 0,
               left: 0,
+              width: '100%',
+              height: '100%',
               pointerEvents: 'none'
             }}
           />
