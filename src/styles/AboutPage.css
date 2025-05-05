@@ -1,5 +1,4 @@
 /* AboutPage.css */
-
 .about-page {
   padding-bottom: var(--spacing-3xl);
 }
@@ -51,13 +50,14 @@
   position: relative;
   margin-bottom: var(--spacing-xl);
   padding-right: var(--spacing-xl);
+  padding-top: 35px; /* מרווח גדול יותר בחלק העליון */
 }
 
 .timeline-item::before {
   content: '';
   position: absolute;
   right: -10px;
-  top: 5px;
+  top: 40px; /* להזיז את הנקודה למטה מתחת לתאריך */
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -72,6 +72,10 @@
   color: var(--primary-color);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-lg);
+  background-color: var(--white); /* רקע לבן לוודא שהטקסט נראה */
+  padding: 0 var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  z-index: 2; /* מבטיח שהתאריך מופיע מעל הטקסט */
 }
 
 .timeline-content {
@@ -81,6 +85,7 @@
 .timeline-content h3 {
   margin-bottom: var(--spacing-xs);
   color: var(--primary-color);
+  margin-top: 5px; /* מרווח קטן מעל הכותרת */
 }
 
 .timeline-content p {
@@ -160,10 +165,20 @@
     position: relative;
     right: auto;
     margin-bottom: var(--spacing-xs);
+    display: block; /* לוודא שהתאריך מוצג כבלוק */
+    text-align: right;
+    padding-bottom: 5px; /* מרווח קטן מתחת לתאריך */
+    border-bottom: 1px dashed var(--gray-light); /* קו מפריד דק */
+    margin-bottom: 15px; /* מרווח גדול יותר מתחת לתאריך */
   }
   
   .timeline-item {
     padding-right: var(--spacing-md);
+    padding-top: 0; /* ביטול המרווח העליון במובייל */
+  }
+  
+  .timeline-item::before {
+    top: 20px; /* התאמת מיקום הנקודה במובייל */
   }
   
   .cta-buttons {
