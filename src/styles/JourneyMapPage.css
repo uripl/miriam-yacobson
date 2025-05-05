@@ -1,4 +1,4 @@
-/* JourneyMapPage.css */
+/* JourneyMapPage.css - מעודכן */
 
 .journey-map-page {
   padding-bottom: var(--spacing-3xl);
@@ -13,23 +13,45 @@
   max-width: 800px;
   margin: var(--spacing-xl) auto var(--spacing-2xl);
   padding: var(--spacing-lg);
-  background-color: var(--background-dark);
+  background-color: #f8f8f8;
   border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   text-align: center;
+  position: relative;
+  border-right: 4px solid var(--primary-color);
+  border-left: 4px solid var(--primary-color);
+}
+
+.journey-map-intro::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  bottom: 15px;
+  left: 15px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius-md);
+  pointer-events: none;
 }
 
 .journey-map-intro p {
   margin-bottom: var(--spacing-md);
   line-height: var(--line-height-loose);
   font-size: var(--font-size-md);
+  position: relative;
 }
 
+/* התאמה של המפה לעמוד */
 .journey-map-full {
   margin: var(--spacing-2xl) 0;
-  height: 700px;
 }
 
+/* מרווח נוסף לקומפוננטה ללא שולי מסגרת נוספים */
+.journey-map-full .journey-map-container {
+  margin: 0;
+}
+
+/* העובדות מתחת למפה */
 .journey-map-facts {
   margin: var(--spacing-3xl) 0 var(--spacing-xl);
   text-align: center;
@@ -37,6 +59,18 @@
 
 .journey-map-facts h2 {
   margin-bottom: var(--spacing-xl);
+  position: relative;
+}
+
+.journey-map-facts h2::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  right: 50%;
+  transform: translateX(50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--secondary-color);
 }
 
 .facts-grid {
@@ -51,14 +85,28 @@
   background-color: var(--white);
   padding: var(--spacing-lg);
   border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
   text-align: center;
-  transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.fact-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary-color);
+  opacity: 0.1;
+  border-radius: 0 var(--border-radius-md) 0 50%;
 }
 
 .fact-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .fact-number {
@@ -66,25 +114,50 @@
   font-weight: var(--font-weight-bold);
   color: var(--primary-color);
   margin-bottom: var(--spacing-xs);
+  line-height: 1.2;
 }
 
 .fact-text {
   color: var(--text-light);
   font-size: var(--font-size-sm);
+  line-height: 1.4;
 }
 
+/* נסיון למנוע התנגשויות של סגנונות */
+.journey-map-page .journey-map-container {
+  /* וודא שאין סגנונות מתנגשים עם הקומפוננטה */
+  box-sizing: border-box;
+}
+
+/* רספונסיביות */
 @media (max-width: 768px) {
   .facts-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  .journey-map-full {
-    height: 500px;
+  .journey-map-intro {
+    padding: var(--spacing-md);
+    margin-right: var(--spacing-md);
+    margin-left: var(--spacing-md);
+  }
+  
+  .journey-map-intro p {
+    font-size: var(--font-size-base);
   }
 }
 
 @media (max-width: 480px) {
   .facts-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .journey-map-intro::before {
+    display: none;
+  }
+  
+  .fact-card {
+    max-width: 250px;
+    margin-right: auto;
+    margin-left: auto;
   }
 }
