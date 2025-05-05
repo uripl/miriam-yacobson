@@ -1,126 +1,182 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl';
-import { easeCubic } from 'd3-ease';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../styles/JourneyMap.css';
 
+/**
+ * קומפוננטת מפת מסע - מציגה את המסע הגיאוגרפי של מרים על מפה אינטראקטיבית
+ * @param {Object} props
+ * @param {Array} props.locations - מערך של מיקומים במסע
+ * @param {string} [props.className] - קלאס נוסף אופציונלי
+ */
 const JourneyMap = ({ locations, className = '' }) => {
+  // מצב התצוגה הראשוני של המפה
   const [viewport, setViewport] = useState({
-    latitude: 50.0,
+    latitude: 48.0,
     longitude: 10.0,
     zoom: 4,
     bearing: 0,
     pitch: 0
   });
 
+  // מיקום נבחר להצגת פרטים
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const linesRef = useRef(null);
+  
+  // רפרנסים לאלמנטים במפה
   const mapRef = useRef(null);
-  const canvasContainerRef = useRef(null);
+  const canvasRef = useRef(null);
+  const mapContainerRef = useRef(null);
 
+  // התאמת גודל הקנבס לגודל המפה
   const resizeCanvas = () => {
-    const canvas = linesRef.current;
-    const container = canvasContainerRef.current;
+    const canvas = canvasRef.current;
+    const container = mapContainerRef.current;
+    
     if (!canvas || !container) return;
 
+    const { width, height } = container.getBoundingClientRect();
     const scale = window.devicePixelRatio || 1;
-    canvas.width = container.offsetWidth * scale;
-    canvas.height = container.offsetHeight * scale;
-    canvas.style.width = `${container.offsetWidth}px`;
-    canvas.style.height = `${container.offsetHeight}px`;
-
+    
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    
     const ctx = canvas.getContext('2d');
-    if (ctx) {
-      ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform
-      ctx.scale(scale, scale);
-    }
+    ctx.scale(scale, scale);
+    
+    // ציור מחדש של הקווים לאחר שינוי גודל
+    drawJourneyLines();
   };
 
-  useEffect(() => {
-    resizeCanvas();
-
-    const observer = new ResizeObserver(resizeCanvas);
-    if (canvasContainerRef.current) {
-      observer.observe(canvasContainerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
+  // ציור הקווים בין נקודות המסע
   const drawJourneyLines = () => {
-    const canvas = linesRef.current;
-    const ctx = canvas?.getContext('2d');
-    const map = mapRef.current;
-
-    if (!ctx || !map || !map.isStyleLoaded() || locations.length < 2) return;
-
+    const canvas = canvasRef.current;
+    const map = mapRef.current?.getMap();
+    
+    if (!canvas || !map || !map.loaded() || locations.length < 2) return;
+    
+    const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = '#ff4d00';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 3]);
+    
+    // הגדרות סגנון הקו
+    ctx.strokeStyle = '#e67e22'; // כתום חם
+    ctx.lineWidth = 3;
+    ctx.setLineDash([8, 4]);
     ctx.beginPath();
-
-    locations.forEach((loc, index) => {
-      const { x, y } = map.project([loc.longitude, loc.latitude]);
-      if (index === 0) {
-        ctx.moveTo(x, y);
+    
+    // ציור קו בין כל הנקודות על המפה
+    let firstPoint = true;
+    locations.forEach(location => {
+      if (!location.latitude || !location.longitude) return;
+      
+      const point = map.project([location.longitude, location.latitude]);
+      
+      if (firstPoint) {
+        ctx.moveTo(point.x, point.y);
+        firstPoint = false;
       } else {
-        ctx.lineTo(x, y);
+        ctx.lineTo(point.x, point.y);
       }
     });
-
+    
     ctx.stroke();
   };
 
+  // אתחול המצב ההתחלתי - התאמת המפה לראות את כל המסע
+  useEffect(() => {
+    // הצגת כל המסע בתצוגה הראשונית
+    if (locations.length > 0) {
+      setTimeout(() => {
+        viewFullJourney();
+      }, 500);
+    }
+    
+    // הוספת האזנה לשינויי גודל
+    const handleResize = () => {
+      resizeCanvas();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // מעקב אחרי שינויים במפה וציור הקווים
   useEffect(() => {
     if (!mapRef.current) return;
-    const map = mapRef.current;
-
-    map.on('render', drawJourneyLines);
-    return () => map.off('render', drawJourneyLines);
-  }, [locations]);
-
-  useEffect(() => {
-    drawJourneyLines();
-  }, [viewport, selectedLocation]);
-
-  const flyToLocation = (location) => {
-    setSelectedLocation(location);
-    if (mapRef.current) {
-      mapRef.current.flyTo({
-        center: [location.longitude, location.latitude],
-        zoom: 9,
-        duration: 1000,
-        easing: easeCubic
+    
+    const map = mapRef.current.getMap();
+    
+    // ציור הקווים בכל פעם שהמפה משתנה
+    const onRender = () => {
+      drawJourneyLines();
+    };
+    
+    if (map.loaded()) {
+      // אם המפה כבר נטענה
+      resizeCanvas();
+      map.on('render', onRender);
+    } else {
+      // אם המפה עדיין לא נטענה במלואה
+      map.once('load', () => {
+        resizeCanvas();
+        map.on('render', onRender);
       });
     }
+    
+    return () => {
+      if (map.loaded()) {
+        map.off('render', onRender);
+      }
+    };
+  }, [locations, selectedLocation, viewport]);
+
+  // מעבר למיקום ספציפי במפה
+  const flyToLocation = (location) => {
+    if (!mapRef.current) return;
+
+    setSelectedLocation(location);
+    
+    const map = mapRef.current.getMap();
+    
+    map.flyTo({
+      center: [location.longitude, location.latitude],
+      zoom: 8,
+      duration: 1500,
+      essential: true
+    });
   };
 
+  // הצגת כל המסע על המפה
   const viewFullJourney = () => {
+    if (!mapRef.current || !locations.length) return;
+    
     setSelectedLocation(null);
-
-    let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
-    locations.forEach(loc => {
-      minLat = Math.min(minLat, loc.latitude);
-      maxLat = Math.max(maxLat, loc.latitude);
-      minLng = Math.min(minLng, loc.longitude);
-      maxLng = Math.max(maxLng, loc.longitude);
+    
+    // מציאת הגבולות של כל המיקומים
+    const bounds = new mapboxgl.LngLatBounds();
+    
+    locations.forEach(location => {
+      if (location.latitude && location.longitude) {
+        bounds.extend([location.longitude, location.latitude]);
+      }
     });
+    
+    // הוספת מרווח (padding) מסביב לגבולות
+    const map = mapRef.current.getMap();
+    
+    map.fitBounds(bounds, {
+      padding: { top: 50, bottom: 50, left: 50, right: 50 },
+      duration: 1500
+    });
+  };
 
-    const padding = 2;
-    minLat -= padding;
-    maxLat += padding;
-    minLng -= padding;
-    maxLng += padding;
-
-    if (mapRef.current) {
-      mapRef.current.fitBounds(
-        [
-          [minLng, minLat],
-          [maxLng, maxLat]
-        ],
-        { duration: 1000, easing: easeCubic }
-      );
-    }
+  // בדיקה האם מיקום הוא הנבחר הנוכחי
+  const isLocationSelected = (location) => {
+    return selectedLocation && selectedLocation.id === location.id;
   };
 
   return (
@@ -133,12 +189,13 @@ const JourneyMap = ({ locations, className = '' }) => {
       </div>
 
       <div className="journey-map-content">
+        {/* רשימת המיקומים לניווט מהיר */}
         <div className="journey-map-locations">
           <ul className="journey-map-location-list">
             {locations.map((location, index) => (
               <li
                 key={location.id}
-                className={`journey-map-location-item ${selectedLocation?.id === location.id ? 'active' : ''}`}
+                className={`journey-map-location-item ${isLocationSelected(location) ? 'active' : ''}`}
                 onClick={() => flyToLocation(location)}
               >
                 <div className="journey-map-location-number">{index + 1}</div>
@@ -151,31 +208,40 @@ const JourneyMap = ({ locations, className = '' }) => {
           </ul>
         </div>
 
-        <div className="journey-map-view" ref={canvasContainerRef}>
+        {/* מכיל המפה - חשוב לקבוע גודל קבוע */}
+        <div className="journey-map-view" ref={mapContainerRef}>
+          {/* המפה עצמה */}
           <Map
             {...viewport}
             ref={mapRef}
-            width="100%"
-            height="100%"
-            mapStyle="mapbox://styles/mapbox/light-v10"
+            mapStyle="mapbox://styles/mapbox/light-v11"
             onMove={evt => setViewport(evt.viewState)}
             mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+            attributionControl={true}
+            reuseMaps
+            antialias={true}
+            style={{ width: '100%', height: '100%' }}
           >
+            {/* כפתורי הזום */}
             <NavigationControl position="top-left" />
 
+            {/* סמנים עבור כל מיקום */}
             {locations.map((location, index) => (
               <Marker
                 key={location.id}
                 latitude={location.latitude}
                 longitude={location.longitude}
-                offset={[-15, -30]}
+                anchor="center"
+                onClick={(e) => {
+                  e.originalEvent.stopPropagation();
+                  flyToLocation(location);
+                }}
               >
-                <div
-                  className={`journey-map-marker ${selectedLocation?.id === location.id ? 'active' : ''}`}
-                  onClick={() => flyToLocation(location)}
-                >
-                  <div className="journey-map-marker-number">{index + 1}</div>
-                  {selectedLocation?.id === location.id && (
+                <div className={`journey-map-marker ${isLocationSelected(location) ? 'active' : ''}`}>
+                  {index + 1}
+                  
+                  {/* טולטיפ שמופיע רק למיקום הנבחר */}
+                  {isLocationSelected(location) && (
                     <div className="journey-map-marker-tooltip">
                       <div className="journey-map-marker-name">{location.name}</div>
                       <div className="journey-map-marker-date">{location.dateRange}</div>
@@ -186,21 +252,15 @@ const JourneyMap = ({ locations, className = '' }) => {
             ))}
           </Map>
 
+          {/* קנבס לציור הקווים בין הנקודות */}
           <canvas
-            ref={linesRef}
+            ref={canvasRef}
             className="journey-map-lines"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              pointerEvents: 'none'
-            }}
           />
         </div>
       </div>
 
+      {/* תיבת פרטים למיקום הנבחר */}
       {selectedLocation && (
         <div className="journey-map-details">
           <h4 className="journey-map-details-title">{selectedLocation.name}</h4>
