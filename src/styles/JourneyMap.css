@@ -53,9 +53,10 @@
 
 .journey-map-content {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row; /* שינוי מ-row-reverse לפריסה רגילה, עמודה מימין ומפה משמאל */
   gap: 24px;
   height: 650px; /* גובה קבוע למפה ולרשימה */
+  direction: rtl; /* שימוש בdirection במקום flex-direction כדי לשמור על סדר העמודות נכון */
 }
 
 /* רשימת המיקומים */
@@ -153,6 +154,9 @@
   background-color: #e9eef2;
   height: 100%; /* חשוב: וודא שגובה 100% */
   min-height: 500px;  /* מינימום גובה שמבטיח שהמפה תראה */
+  margin-right: 0; /* וודא שאין מרווח לא רצוי */
+  direction: ltr; /* חשוב: שימור כיוון ltr למפה עצמה */
+  min-width: 60%; /* וודא שהמפה תופסת לפחות 60% מהמקום */
 }
 
 /* תיקון חשוב להצגת המפה */
@@ -164,6 +168,20 @@
   width: 100% !important;
   height: 100% !important;
   border: none !important;
+  z-index: 1; /* הוספת z-index כדי לוודא שהמפה מוצגת כראוי */
+}
+
+/* תיקונים לפקדי Mapbox */
+.mapboxgl-control-container {
+  z-index: 10 !important;
+  position: relative;
+}
+
+.mapboxgl-ctrl-top-left, 
+.mapboxgl-ctrl-top-right, 
+.mapboxgl-ctrl-bottom-left, 
+.mapboxgl-ctrl-bottom-right {
+  z-index: 15 !important;
 }
 
 /* וודא שהקנבס מתוח על המפה בצורה נכונה */
@@ -373,16 +391,20 @@
   .journey-map-content {
     flex-direction: column;
     height: auto;
+    direction: rtl; /* שמירה על כיוון RTL גם ב-mobile */
   }
   
   .journey-map-locations {
     width: 100%;
     max-height: 300px;
     margin-bottom: 20px;
+    order: 1; /* מיקום הרשימה מעל המפה */
   }
   
   .journey-map-view {
     height: 450px;
+    order: 2; /* מיקום המפה מתחת לרשימה */
+    min-width: 100%; /* מלוא הרוחב במובייל */
   }
   
   .journey-map-header {
