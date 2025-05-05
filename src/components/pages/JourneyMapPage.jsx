@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import JourneyMap from '../common/JourneyMap';
+import SimpleJourneyMap from '../common/SimpleJourneyMap';
 import { journeyLocations } from '../../data/timelineData';
 import '../../styles/JourneyMapPage.css';
 
@@ -106,10 +107,18 @@ const JourneyMapPage = () => {
           </section>
 
           <section className="journey-map-full">
-            <JourneyMap 
-              key={mapKey} 
-              locations={journeyLocations} 
-            />
+            {/* הוספת גיבוי למפה פשוטה במקרה שהמפה המורכבת נכשלת */}
+            {isMapboxLoaded ? (
+              <JourneyMap 
+                key={mapKey} 
+                locations={journeyLocations} 
+              />
+            ) : (
+              <SimpleJourneyMap 
+                key={mapKey} 
+                locations={journeyLocations} 
+              />
+            )}
           </section>
 
           <section className="journey-map-facts">

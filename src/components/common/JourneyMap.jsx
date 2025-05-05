@@ -1,10 +1,26 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
 // prevent mapboxgl from checking if WebGL is available during SSR
 // necessary for React 18 strict mode
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../styles/JourneyMap.css';
+
+// עקיפת הבעיה של Worker שדורשת ב-Mapbox
+if (typeof window !== 'undefined') {
+  // מניעת שגיאת "no protocol specified" עם worker-loader
+  mapboxgl.workerClass = class {
+    constructor() {
+      this.self = {
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        postMessage: () => {}
+      };
+    }
+    terminate() {}
+    postMessage() {}
+  };
+}
 
 // עקיפת ההגבלות של mapbox בתוך React
 // This prevents the "Failed to initialize WebGL" error in some browsers
@@ -42,19 +58,17 @@ const JourneyMap = ({ locations, className = '' }) => {
 
   // הגדרת מפתח ה-API של Mapbox בעת טעינת הקומפוננטה
   useEffect(() => {
-    // בדיקה אם זו פעם ראשונה שהקומפוננטה נטענת או ריענון בגלל StrictMode
-    if (!window.MAPBOX_INITIALIZED) {
-      // ודא שהמפתח קיים ומוגדר
-      const token = process.env.REACT_APP_MAPBOX_TOKEN;
-      if (token) {
-        // הגדר את מפתח ה-API רק פעם אחת
-        mapboxgl.accessToken = token;
-        console.log('Mapbox token set successfully');
-        window.MAPBOX_INITIALIZED = true;
-      } else {
-        console.error('Mapbox token is missing or invalid');
-        setMapLoadError(true);
-      }
+    console.log('Setting up Mapbox token');
+    
+    // הגדרה ישירה של המפתח ללא תלות בסביבה
+    const token = "pk.eyJ1IjoidXJpcGxlc3NlciIsImEiOiJjbWEzdzc2emwwMG5kMmtxejAzdWtya3ZqIn0.Ipxq0bDQtuY82BO883EbeA";
+    if (token) {
+      // תמיד הגדר את המפתח, גם אם הוא כבר הוגדר (לא מזיק)
+      mapboxgl.accessToken = token;
+      console.log('Mapbox token set directly:', token.substring(0, 10) + '...');
+    } else {
+      console.error('Mapbox token is missing or invalid');
+      setMapLoadError(true);
     }
 
     // הוסף טיימר להצגת שגיאה אם הטעינה לוקחת יותר מדי זמן
@@ -366,19 +380,12 @@ const JourneyMap = ({ locations, className = '' }) => {
             }}
             mapStyle="mapbox://styles/mapbox/light-v11"
             onMove={evt => setViewport(evt.viewState)}
-            mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+            mapboxAccessToken="pk.eyJ1IjoidXJpcGxlc3NlciIsImEiOiJjbWEzdzc2emwwMG5kMmtxejAzdWtya3ZqIn0.Ipxq0bDQtuY82BO883EbeA"
             reuseMaps
             attributionControl={true}
             onLoad={handleMapLoad}
             onError={handleMapError}
             style={{ width: '100%', height: '100%' }}
-            transformRequest={(url, resourceType) => {
-              // לוג של בקשות משאבים (עוזר לאבחון)
-              if (resourceType === 'Tile' && process.env.NODE_ENV === 'development') {
-                console.log('Mapbox resource request:', resourceType, url);
-              }
-              return { url };
-            }}
           >
             {/* כפתורי הזום */}
             <NavigationControl position="top-left" />
