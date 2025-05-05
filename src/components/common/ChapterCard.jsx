@@ -14,15 +14,28 @@ import PlaceholderImage from './PlaceholderImage';
  * @param {string} [props.className] - קלאס נוסף אופציונלי
  */
 const ChapterCard = ({ title, years, summary, imageSrc, route, className = '' }) => {
+  // בדיקה אם התמונה קיימת
+  const imageExists = imageSrc && typeof imageSrc === 'string' && imageSrc.length > 0;
+  
   return (
     <div className={`chapter-card ${className}`}>
       <div className="chapter-card-image-container">
-         <img 
-          src={imageSrc} 
-          alt={title}
-          className="chapter-card-image" 
-          loading="lazy"
-        />
+        {imageExists ? (
+          <img 
+            src={imageSrc} 
+            alt={title}
+            className="chapter-card-image" 
+            loading="lazy"
+          />
+        ) : (
+          <PlaceholderImage 
+            alt={title}
+            category="default"
+            className="chapter-card-image"
+            width="100%"
+            height="200px"
+          />
+        )}
         <div className="chapter-card-years">{years}</div>
       </div>
       <div className="chapter-card-content">
