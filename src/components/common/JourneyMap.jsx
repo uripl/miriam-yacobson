@@ -3,12 +3,6 @@ import Map, { Marker, NavigationControl } from 'react-map-gl';
 import { easeCubic } from 'd3-ease';
 import '../../styles/JourneyMap.css';
 
-/**
- * קומפוננטת מפת מסע - מציגה את מסלול חייה של מרים על מפה אינטראקטיבית
- * @param {Object} props
- * @param {Array} props.locations - מערך מיקומים להצגה במפה
- * @param {string} [props.className] - קלאס נוסף אופציונלי
- */
 const JourneyMap = ({ locations, className = '' }) => {
   const [viewport, setViewport] = useState({
     latitude: 50.0,
@@ -21,41 +15,58 @@ const JourneyMap = ({ locations, className = '' }) => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const linesRef = useRef(null);
   const mapRef = useRef(null);
+  const canvasContainerRef = useRef(null);
 
-  // פונקציה להמרת קואורדינטות גיאוגרפיות לפיקסלים על המפה
-  const project = (longitude, latitude) => {
-    const scale = Math.pow(2, viewport.zoom);
-    const worldSize = 512 * scale;
-    const mercatorX = (longitude + 180) / 360;
-    const mercatorY = Math.log(Math.tan((90 + latitude) * Math.PI / 360)) / Math.PI;
-    const pixelX = mercatorX * worldSize;
-    const pixelY = (0.5 - mercatorY) * worldSize;
-    return [pixelX, pixelY];
+  // Resize canvas when container resizes
+  useEffect(() => {
+    const resizeCanvas = () => {
+      if (linesRef.current && canvasContainerRef.current) {
+        const canvas = linesRef.current;
+        const container = canvasContainerRef.current;
+        canvas.width = container.offsetWidth;
+        canvas.height = container.offsetHeight;
+        drawJourneyLines();
+      }
+    };
+
+    const observer = new ResizeObserver(resizeCanvas);
+    if (canvasContainerRef.current) {
+      observer.observe(canvasContainerRef.current);
+    }
+
+    resizeCanvas();
+
+    return () => observer.disconnect();
+  }, [locations]);
+
+  const drawJourneyLines = () => {
+    const canvas = linesRef.current;
+    const ctx = canvas?.getContext('2d');
+    const map = mapRef.current;
+
+    if (!ctx || !map || locations.length < 2) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#ff4d00';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 3]);
+    ctx.beginPath();
+
+    locations.forEach((loc, index) => {
+      const { x, y } = map.project([loc.longitude, loc.latitude]);
+      if (index === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    });
+
+    ctx.stroke();
   };
 
-  // יצירת קווי מסע בין הנקודות
   useEffect(() => {
-    if (locations.length > 1 && linesRef.current) {
-      const ctx = linesRef.current.getContext('2d');
-      ctx.clearRect(0, 0, linesRef.current.width, linesRef.current.height);
-
-      ctx.strokeStyle = '#ff4d00';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([5, 3]);
-      ctx.beginPath();
-
-      locations.forEach((location, index) => {
-        const [x, y] = project(location.longitude, location.latitude);
-        if (index === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-      });
-
-      ctx.stroke();
-    }
-  }, [locations, viewport, project]); // תיקון: להוסיף את viewport כתלות מלאה
+    drawJourneyLines();
+  }, [viewport, selectedLocation]);
 
   const flyToLocation = (location) => {
     setSelectedLocation(location);
@@ -126,7 +137,7 @@ const JourneyMap = ({ locations, className = '' }) => {
           </ul>
         </div>
 
-        <div className="journey-map-view">
+        <div className="journey-map-view" ref={canvasContainerRef}>
           <Map
             {...viewport}
             ref={mapRef}
@@ -136,18 +147,7 @@ const JourneyMap = ({ locations, className = '' }) => {
             onMove={evt => setViewport(evt.viewState)}
             mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           >
-            <canvas
-              ref={linesRef}
-              className="journey-map-lines"
-              width={500}
-              height={500}
-              style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                pointerEvents: 'none'
-              }}
-            />
+            <NavigationControl position="top-left" />
 
             {locations.map((location, index) => (
               <Marker
@@ -170,9 +170,20 @@ const JourneyMap = ({ locations, className = '' }) => {
                 </div>
               </Marker>
             ))}
-
-            <NavigationControl position="top-left" />
           </Map>
+
+          <canvas
+            ref={linesRef}
+            className="journey-map-lines"
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: 0,
+              left: 0,
+              pointerEvents: 'none'
+            }}
+          />
         </div>
       </div>
 
