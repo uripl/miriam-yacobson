@@ -1,90 +1,170 @@
 /* JourneyMap.css */
 
-.journey-map-page {
-  padding-bottom: var(--spacing-3xl);
+.journey-map-container {
+  width: 100%;
+  background-color: var(--background-light);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-3xl);
+}
+
+.journey-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.journey-map-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-dark);
+}
+
+.journey-map-view-all {
+  background-color: var(--primary-color);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.journey-map-view-all:hover {
+  background-color: var(--primary-color-dark);
 }
 
 .journey-map-content {
-  max-width: var(--max-width-xl);
-  margin: 0 auto;
-}
-
-.journey-map-intro {
-  max-width: 800px;
-  margin: var(--spacing-xl) auto var(--spacing-2xl);
-  padding: var(--spacing-lg);
-  background-color: var(--background-dark);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-sm);
-  text-align: center;
-}
-
-.journey-map-intro p {
-  margin-bottom: var(--spacing-md);
-  line-height: var(--line-height-loose);
-  font-size: var(--font-size-md);
-}
-
-.journey-map-full {
-  margin: var(--spacing-2xl) 0;
-  height: 700px;
-}
-
-.journey-map-facts {
-  margin: var(--spacing-3xl) 0 var(--spacing-xl);
-  text-align: center;
-}
-
-.journey-map-facts h2 {
-  margin-bottom: var(--spacing-xl);
-}
-
-.facts-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-direction: row-reverse;
   gap: var(--spacing-lg);
-  max-width: 900px;
-  margin: 0 auto;
 }
 
-.fact-card {
+.journey-map-locations {
+  flex: 1;
+  max-width: 300px;
+  overflow-y: auto;
+}
+
+.journey-map-location-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.journey-map-location-item {
   background-color: var(--white);
-  padding: var(--spacing-lg);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-sm);
-  text-align: center;
-  transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.fact-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
+.journey-map-location-item:hover,
+.journey-map-location-item.active {
+  background-color: var(--primary-color-light);
 }
 
-.fact-number {
-  font-size: var(--font-size-3xl);
+.journey-map-location-number {
   font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
   color: var(--primary-color);
   margin-bottom: var(--spacing-xs);
 }
 
-.fact-text {
-  color: var(--text-light);
+.journey-map-location-info {
   font-size: var(--font-size-sm);
+  color: var(--text-dark);
 }
 
+.journey-map-location-name {
+  font-weight: var(--font-weight-semibold);
+}
+
+.journey-map-location-date {
+  color: var(--text-light);
+}
+
+.journey-map-view {
+  flex: 2;
+  position: relative;
+  height: 600px;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.journey-map-lines {
+  z-index: 1;
+}
+
+.journey-map-marker {
+  background-color: var(--white);
+  border: 2px solid var(--primary-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-color);
+  cursor: pointer;
+  position: relative;
+}
+
+.journey-map-marker.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.journey-map-marker-tooltip {
+  position: absolute;
+  top: -60px;
+  left: -50px;
+  background-color: var(--white);
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  font-size: var(--font-size-xs);
+  z-index: 2;
+}
+
+.journey-map-details {
+  margin-top: var(--spacing-lg);
+  background-color: var(--background-dark);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+}
+
+.journey-map-details-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+}
+
+.journey-map-details-date {
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+  margin-bottom: var(--spacing-sm);
+}
+
+.journey-map-details-description {
+  font-size: var(--font-size-md);
+  color: var(--text-dark);
+}
+
+/* רספונסיביות */
 @media (max-width: 768px) {
-  .facts-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .journey-map-content {
+    flex-direction: column-reverse;
   }
-  
-  .journey-map-full {
-    height: 500px;
-  }
-}
 
-@media (max-width: 480px) {
-  .facts-grid {
-    grid-template-columns: 1fr;
+  .journey-map-view {
+    height: 400px;
   }
 }
