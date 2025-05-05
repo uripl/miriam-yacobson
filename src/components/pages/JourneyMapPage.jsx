@@ -9,6 +9,7 @@ import '../../styles/JourneyMapPage.css';
 const JourneyMapPage = () => {
   const [mapKey, setMapKey] = useState(Date.now()); // מפתח ייחודי לאילוץ רינדור מחדש של המפה
   const [isMapboxLoaded, setIsMapboxLoaded] = useState(false);
+  const [mapLoadRetries, setMapLoadRetries] = useState(0);
 
   // גלילה לראש הדף בטעינה
   useEffect(() => {
@@ -28,22 +29,29 @@ const JourneyMapPage = () => {
     };
 
     // אם הספרייה לא נטענה, נסה לטעון אותה שוב
-    if (!checkMapboxLoaded()) {
-      console.log('Forcing mapbox reload');
+    if (!checkMapboxLoaded() && mapLoadRetries < 3) {
+      console.log(`Forcing mapbox reload (attempt ${mapLoadRetries + 1})`);
       
       // כפה רינדור מחדש של המפה
       setMapKey(Date.now());
+      setMapLoadRetries(prev => prev + 1);
       
       // נסה שוב לבדוק אם הספרייה נטענה אחרי זמן קצר
       const timer = setTimeout(() => {
         if (!checkMapboxLoaded()) {
-          console.warn('Mapbox still not loaded. Check your mapbox token and network.');
+          console.warn('Mapbox still not loaded after retry. This may indicate a problem with the Mapbox library or network.');
         }
       }, 3000);
       
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [mapLoadRetries]);
+
+  // פונקציה לניסיון מחדש במקרה של כישלון טעינה
+  const handleRetryMapLoad = () => {
+    setMapKey(Date.now());
+    setMapLoadRetries(0);
+  };
 
   return (
     <div className="journey-map-page">
@@ -66,9 +74,15 @@ const JourneyMapPage = () => {
               ולעקוב אחר ציר הזמן של המסע.
             </p>
             
-            {!isMapboxLoaded && (
-              <div className="map-loading-message">
-                <p><strong>הערה:</strong> טעינת המפה עשויה להימשך מספר שניות. אם המפה אינה מופיעה, אנא ודא שיש לך חיבור אינטרנט תקין.</p>
+            {!isMapboxLoaded && mapLoadRetries >= 3 && (
+              <div className="map-loading-message map-load-error">
+                <p><strong>הערה:</strong> נראה שיש בעיה בטעינת המפה. אם המפה אינה מופיעה, ייתכן שיש בעיה בחיבור האינטרנט או בטעינת ספריית Mapbox.</p>
+                <button 
+                  className="map-retry-button"
+                  onClick={handleRetryMapLoad}
+                >
+                  נסה שוב
+                </button>
               </div>
             )}
           </section>
