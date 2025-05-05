@@ -55,7 +55,7 @@ const JourneyMap = ({ locations, className = '' }) => {
 
       ctx.stroke();
     }
-  }, [locations, viewport]); // תיקון: להוסיף את viewport כתלות מלאה
+  }, [locations, viewport, project]); // תיקון: להוסיף את viewport כתלות מלאה
 
   const flyToLocation = (location) => {
     setSelectedLocation(location);
