@@ -1,4 +1,4 @@
-/* JourneyMap.css - משופר עם טיפול במפה חסרה ואינדיקטור טעינה */
+/* JourneyMap.css - משופר לטיפול בבעיות תצוגה */
 
 .journey-map-container {
   width: 100%;
@@ -66,6 +66,7 @@
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  height: 100%; /* חשוב: וודא שגובה 100% */
 }
 
 .journey-map-location-list {
@@ -80,6 +81,9 @@
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  display: flex; /* שימוש ב-flex בתוך כל פריט */
+  flex-direction: column; /* סידור אנכי */
+  gap: 8px; /* מרווח בין האלמנטים */
 }
 
 .journey-map-location-item:last-child {
@@ -118,6 +122,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex-grow: 1;
 }
 
 .journey-map-location-name {
@@ -131,7 +136,14 @@
   color: var(--text-light, #666666);
 }
 
-/* מפה - תיקון עיקרי */
+.journey-map-location-description {
+  font-size: 13px;
+  color: var(--text-light, #666666);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* מפה - תיקון חשוב */
 .journey-map-view {
   flex-grow: 1;
   border-radius: 8px;
@@ -139,15 +151,15 @@
   position: relative;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   background-color: #e9eef2;
-  height: 100%;
+  height: 100%; /* חשוב: וודא שגובה 100% */
   min-height: 500px;  /* מינימום גובה שמבטיח שהמפה תראה */
 }
 
 /* תיקון חשוב להצגת המפה */
 .mapboxgl-map {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
   width: 100% !important;
   height: 100% !important;
 }
@@ -201,7 +213,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* סגנון סמנים */
+/* סגנון סמנים - תיקון עם z-index משופר */
 .journey-map-marker {
   background-color: white;
   color: var(--primary-color, #2e5077);
@@ -218,12 +230,13 @@
   transition: all 0.2s ease;
   position: relative;
   cursor: pointer;
-  z-index: 2;  /* וודא שהסמנים מעל לקנבס */
+  z-index: 5;  /* ערך גבוה יותר מהקנבס */
 }
 
 .journey-map-marker:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  z-index: 6;
 }
 
 .journey-map-marker.active {
@@ -231,10 +244,10 @@
   color: white;
   border-color: white;
   transform: scale(1.2);
-  z-index: 10;
+  z-index: 10; /* הערך הגבוה ביותר לסמן הפעיל */
 }
 
-/* טולטיפ */
+/* טולטיפ - תיקון מיקום */
 .journey-map-marker-tooltip {
   position: absolute;
   bottom: calc(100% + 10px);
@@ -247,7 +260,7 @@
   width: max-content;
   min-width: 120px;
   text-align: center;
-  z-index: 100;
+  z-index: 100; /* ערך גבוה יותר מהסמנים */
   pointer-events: none;
 }
 
@@ -302,6 +315,55 @@
   line-height: 1.6;
   font-size: 16px;
   color: var(--text-color, #333333);
+}
+
+/* הודעת שגיאה - תוספת חדשה */
+.journey-map-error-container {
+  min-height: 500px;
+}
+
+.journey-map-error {
+  background-color: #ffeded;
+  border: 1px solid #ffcdd2;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.journey-map-error h4 {
+  color: #d32f2f;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.journey-map-error p {
+  margin-bottom: 12px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.journey-map-retry-button {
+  background-color: var(--primary-color, #2e5077);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+/* מצב שגיאה - תצוגת המיקומים בלבד */
+.journey-map-locations-only {
+  margin-top: 20px;
+}
+
+.journey-map-locations-only h4 {
+  margin-bottom: 12px;
+  color: var(--primary-color, #2e5077);
+  font-size: 18px;
+  text-align: center;
 }
 
 /* רספונסיביות */
