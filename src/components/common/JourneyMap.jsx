@@ -83,31 +83,44 @@ const JourneyMap = ({ locations, className = '' }) => {
     ctx.stroke();
   }, [locations]);
 
-  // הצגת כל המסע על המפה
+  // הצגת כל המסע על המפה - ללא שימוש ב-LngLatBounds
   const viewFullJourney = useCallback(() => {
     if (!mapRef.current || !locations.length) return;
     
     setSelectedLocation(null);
     
-    // מציאת הגבולות של כל המיקומים
-    const map = mapRef.current.getMap();
+    // מציאת הגבולות של כל המיקומים בצורה ידנית
+    let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
     
+    locations.forEach(location => {
+      if (location.latitude && location.longitude) {
+        minLat = Math.min(minLat, location.latitude);
+        maxLat = Math.max(maxLat, location.latitude);
+        minLng = Math.min(minLng, location.longitude);
+        maxLng = Math.max(maxLng, location.longitude);
+      }
+    });
+    
+    // הוספת מרווח שוליים
+    const padding = 0.5;
+    minLat -= padding;
+    maxLat += padding;
+    minLng -= padding;
+    maxLng += padding;
+    
+    // התאמת המפה לגבולות שחישבנו
+    const map = mapRef.current.getMap();
     if (map) {
-      // יצירת אובייקט גבולות חדש
-      const bounds = new window.mapboxgl.LngLatBounds();
-      
-      // הוספת כל המיקומים לגבולות
-      locations.forEach(location => {
-        if (location.latitude && location.longitude) {
-          bounds.extend([location.longitude, location.latitude]);
+      map.fitBounds(
+        [
+          [minLng, minLat], // דרום-מערב
+          [maxLng, maxLat]  // צפון-מזרח
+        ],
+        {
+          padding: { top: 50, bottom: 50, left: 50, right: 50 },
+          duration: 1500
         }
-      });
-      
-      // התאמת המפה לגבולות שנוצרו
-      map.fitBounds(bounds, {
-        padding: { top: 50, bottom: 50, left: 50, right: 50 },
-        duration: 1500
-      });
+      );
     }
   }, [locations]);
 
@@ -118,7 +131,7 @@ const JourneyMap = ({ locations, className = '' }) => {
       // מחכים רגע שהמפה תיטען לגמרי
       const timer = setTimeout(() => {
         viewFullJourney();
-      }, 500);
+      }, 1000);
       
       return () => clearTimeout(timer);
     }
@@ -227,7 +240,6 @@ const JourneyMap = ({ locations, className = '' }) => {
             onMove={evt => setViewport(evt.viewState)}
             mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
             attributionControl={true}
-            reuseMaps
             style={{ width: '100%', height: '100%' }}
           >
             {/* כפתורי הזום */}
