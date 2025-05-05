@@ -1,5 +1,4 @@
 /* Timeline.css */
-
 .timeline-container {
   padding: var(--spacing-md) 0;
   margin-bottom: var(--spacing-xl);
@@ -40,12 +39,22 @@
   color: var(--primary-color) !important;
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-sm);
+  position: absolute !important;
+  top: 10px !important;
+  right: 15px !important;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 3px 8px !important;
+  border-radius: var(--border-radius-sm);
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .timeline-title {
   font-size: var(--font-size-lg);
   color: var(--primary-color);
   margin-bottom: var(--spacing-xs) !important;
+  margin-top: 25px !important;
+  clear: both;
 }
 
 .timeline-location {
@@ -109,6 +118,10 @@
   background: var(--primary-light);
 }
 
+.vertical-timeline-element-content {
+  padding-top: 35px !important; /* מרווח גדול יותר בחלק העליון */
+}
+
 /* רספונסיביות */
 @media (max-width: 768px) {
   .timeline-categories {
@@ -119,5 +132,11 @@
   .category-button {
     width: 80%;
     max-width: 300px;
+  }
+  
+  .timeline-date {
+    right: 10px !important;
+    top: 8px !important;
+    font-size: var(--font-size-xs) !important;
   }
 }
