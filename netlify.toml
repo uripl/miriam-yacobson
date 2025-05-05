@@ -1,1 +1,8 @@
+# Netlify configuration
+[build]
+  command = "CI=false npm run build"
+  publish = "build"
 
+[build.environment]
+  CI = "false"
+  REACT_APP_MAPBOX_TOKEN = "pk.eyJ1IjoidXJpcGxlc3NlciIsImEiOiJjbWEzdzc2emwwMG5kMmtxejAzdWtya3ZqIn0.Ipxq0bDQtuY82BO883EbeA"
