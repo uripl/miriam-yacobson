@@ -14,9 +14,7 @@ const JourneyMap = ({ locations, className = '' }) => {
   const [viewport, setViewport] = useState({
     latitude: 48.0,
     longitude: 10.0,
-    zoom: 4,
-    bearing: 0,
-    pitch: 0
+    zoom: 4
   });
 
   // מיקום נבחר להצגת פרטים
@@ -26,15 +24,20 @@ const JourneyMap = ({ locations, className = '' }) => {
   const mapRef = useRef(null);
   const canvasRef = useRef(null);
   const mapContainerRef = useRef(null);
+  
+  // לבדוק אם המפה נטענה
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   // ציור הקווים בין נקודות המסע
   const drawJourneyLines = useCallback(() => {
     const canvas = canvasRef.current;
     const map = mapRef.current?.getMap();
     
-    if (!canvas || !map || !map.loaded() || locations.length < 2) return;
+    if (!canvas || !map || !mapLoaded || locations.length < 2) return;
     
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // הגדרות סגנון הקו
@@ -48,18 +51,22 @@ const JourneyMap = ({ locations, className = '' }) => {
     locations.forEach(location => {
       if (!location.latitude || !location.longitude) return;
       
-      const point = map.project([location.longitude, location.latitude]);
-      
-      if (firstPoint) {
-        ctx.moveTo(point.x, point.y);
-        firstPoint = false;
-      } else {
-        ctx.lineTo(point.x, point.y);
+      try {
+        const point = map.project([location.longitude, location.latitude]);
+        
+        if (firstPoint) {
+          ctx.moveTo(point.x, point.y);
+          firstPoint = false;
+        } else {
+          ctx.lineTo(point.x, point.y);
+        }
+      } catch (err) {
+        console.error('Error projecting coordinates:', err);
       }
     });
     
     ctx.stroke();
-  }, [locations]);
+  }, [locations, mapLoaded]);
 
   // התאמת גודל הקנבס לגודל המפה
   const resizeCanvas = useCallback(() => {
@@ -77,15 +84,17 @@ const JourneyMap = ({ locations, className = '' }) => {
     canvas.style.height = `${height}px`;
     
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
     ctx.scale(scale, scale);
     
     // ציור מחדש של הקווים לאחר שינוי גודל
     drawJourneyLines();
-  }, [drawJourneyLines]); // כעת drawJourneyLines הוא תלות
+  }, [drawJourneyLines]);
 
   // הצגת כל המסע על המפה - ללא שימוש ב-LngLatBounds
   const viewFullJourney = useCallback(() => {
-    if (!mapRef.current || !locations.length) return;
+    if (!mapRef.current || !locations.length || !mapLoaded) return;
     
     setSelectedLocation(null);
     
@@ -109,8 +118,9 @@ const JourneyMap = ({ locations, className = '' }) => {
     maxLng += padding;
     
     // התאמת המפה לגבולות שחישבנו
-    const map = mapRef.current.getMap();
-    if (map) {
+    try {
+      const map = mapRef.current.getMap();
+      
       map.fitBounds(
         [
           [minLng, minLat], // דרום-מערב
@@ -118,29 +128,45 @@ const JourneyMap = ({ locations, className = '' }) => {
         ],
         {
           padding: { top: 50, bottom: 50, left: 50, right: 50 },
-          duration: 1500
+          duration: 1000
         }
       );
+    } catch (err) {
+      console.error('Error fitting bounds:', err);
     }
-  }, [locations]);
+  }, [locations, mapLoaded]);
+
+  // טיפול באירוע טעינת המפה
+  const handleMapLoad = useCallback(() => {
+    console.log('Map loaded successfully');
+    setMapLoaded(true);
+    
+    // קצת השהייה לוודא שהמפה לגמרי מוכנה
+    setTimeout(() => {
+      resizeCanvas();
+      viewFullJourney();
+    }, 300);
+  }, [resizeCanvas, viewFullJourney]);
 
   // אתחול המצב ההתחלתי - התאמת המפה לראות את כל המסע
   useEffect(() => {
-    // הצגת כל המסע בתצוגה הראשונית
-    if (locations.length > 0) {
-      // מחכים רגע שהמפה תיטען לגמרי
+    // הצגת כל המסע בתצוגה הראשונית כאשר המפה נטענה
+    if (mapLoaded && locations.length > 0) {
+      // קצת השהייה כדי לוודא שהמפה מוכנה
       const timer = setTimeout(() => {
         viewFullJourney();
-      }, 1000);
+      }, 500);
       
       return () => clearTimeout(timer);
     }
-  }, [locations.length, viewFullJourney]);
+  }, [mapLoaded, locations.length, viewFullJourney]);
 
   // אתחול האזנה לשינויי גודל
   useEffect(() => {
     const handleResize = () => {
-      resizeCanvas();
+      if (mapLoaded) {
+        resizeCanvas();
+      }
     };
     
     window.addEventListener('resize', handleResize);
@@ -148,52 +174,47 @@ const JourneyMap = ({ locations, className = '' }) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [resizeCanvas]);
+  }, [resizeCanvas, mapLoaded]);
 
   // מעקב אחרי שינויים במפה וציור הקווים
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !mapLoaded) return;
     
-    const map = mapRef.current.getMap();
-    
-    // ציור הקווים בכל פעם שהמפה משתנה
-    const onRender = () => {
-      drawJourneyLines();
-    };
-    
-    if (map && map.loaded()) {
-      // אם המפה כבר נטענה
-      resizeCanvas();
+    try {
+      const map = mapRef.current.getMap();
+      
+      // ציור הקווים בכל פעם שהמפה משתנה
+      const onRender = () => {
+        drawJourneyLines();
+      };
+      
       map.on('render', onRender);
-    } else if (map) {
-      // אם המפה עדיין לא נטענה במלואה
-      map.once('load', () => {
-        resizeCanvas();
-        map.on('render', onRender);
-      });
-    }
-    
-    return () => {
-      if (map && map.loaded()) {
+      
+      return () => {
         map.off('render', onRender);
-      }
-    };
-  }, [drawJourneyLines, resizeCanvas, selectedLocation, viewport]);
+      };
+    } catch (err) {
+      console.error('Error setting up map render listener:', err);
+    }
+  }, [drawJourneyLines, mapLoaded]);
 
   // מעבר למיקום ספציפי במפה
   const flyToLocation = (location) => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !mapLoaded) return;
 
     setSelectedLocation(location);
     
-    const map = mapRef.current.getMap();
-    
-    map.flyTo({
-      center: [location.longitude, location.latitude],
-      zoom: 8,
-      duration: 1500,
-      essential: true
-    });
+    try {
+      const map = mapRef.current.getMap();
+      
+      map.flyTo({
+        center: [location.longitude, location.latitude],
+        zoom: 8,
+        duration: 1000
+      });
+    } catch (err) {
+      console.error('Error flying to location:', err);
+    }
   };
 
   // בדיקה האם מיקום הוא הנבחר הנוכחי
@@ -205,7 +226,11 @@ const JourneyMap = ({ locations, className = '' }) => {
     <div className={`journey-map-container ${className}`} dir="rtl">
       <div className="journey-map-header">
         <h3 className="journey-map-title">מסע חייה של מרים אופנהיימר יעקובסון</h3>
-        <button className="journey-map-view-all" onClick={viewFullJourney}>
+        <button 
+          className="journey-map-view-all" 
+          onClick={viewFullJourney}
+          disabled={!mapLoaded}
+        >
           הצג את כל המסע
         </button>
       </div>
@@ -236,10 +261,16 @@ const JourneyMap = ({ locations, className = '' }) => {
           <Map
             {...viewport}
             ref={mapRef}
+            initialViewState={{
+              latitude: 48.0,
+              longitude: 10.0,
+              zoom: 4
+            }}
             mapStyle="mapbox://styles/mapbox/light-v11"
             onMove={evt => setViewport(evt.viewState)}
             mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
             attributionControl={true}
+            onLoad={handleMapLoad}
             style={{ width: '100%', height: '100%' }}
           >
             {/* כפתורי הזום */}
@@ -277,6 +308,14 @@ const JourneyMap = ({ locations, className = '' }) => {
             ref={canvasRef}
             className="journey-map-lines"
           />
+          
+          {/* אינדיקטור טעינה */}
+          {!mapLoaded && (
+            <div className="journey-map-loading">
+              <div className="journey-map-loading-spinner"></div>
+              <p>טוען את המפה...</p>
+            </div>
+          )}
         </div>
       </div>
 
