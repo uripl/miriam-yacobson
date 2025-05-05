@@ -1,7 +1,16 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
+// prevent mapboxgl from checking if WebGL is available during SSR
+// necessary for React 18 strict mode
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../styles/JourneyMap.css';
+
+// עקיפת ההגבלות של mapbox בתוך React
+// This prevents the "Failed to initialize WebGL" error in some browsers
+if (!mapboxgl.supported && typeof window !== 'undefined' && window.navigator) {
+  mapboxgl.supported = () => true;
+}
 
 /**
  * קומפוננטת מפת מסע - מציגה את המסע הגיאוגרפי של מרים על מפה אינטראקטיבית
@@ -29,15 +38,32 @@ const JourneyMap = ({ locations, className = '' }) => {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapLoadError, setMapLoadError] = useState(false);
   const [isMapLoading, setIsMapLoading] = useState(true);
+  const [mapInstance, setMapInstance] = useState(null);
 
-  // הוסף טיימר להצגת שגיאה אם הטעינה לוקחת יותר מדי זמן
+  // הגדרת מפתח ה-API של Mapbox בעת טעינת הקומפוננטה
   useEffect(() => {
+    // בדיקה אם זו פעם ראשונה שהקומפוננטה נטענת או ריענון בגלל StrictMode
+    if (!window.MAPBOX_INITIALIZED) {
+      // ודא שהמפתח קיים ומוגדר
+      const token = process.env.REACT_APP_MAPBOX_TOKEN;
+      if (token) {
+        // הגדר את מפתח ה-API רק פעם אחת
+        mapboxgl.accessToken = token;
+        console.log('Mapbox token set successfully');
+        window.MAPBOX_INITIALIZED = true;
+      } else {
+        console.error('Mapbox token is missing or invalid');
+        setMapLoadError(true);
+      }
+    }
+
+    // הוסף טיימר להצגת שגיאה אם הטעינה לוקחת יותר מדי זמן
     const timer = setTimeout(() => {
       if (isMapLoading) {
         console.warn('Map loading timeout - might indicate a problem with Mapbox');
         setMapLoadError(true);
       }
-    }, 10000); // 10 שניות
+    }, 15000); // הגדלת זמן ההמתנה ל-15 שניות
     
     return () => clearTimeout(timer);
   }, [isMapLoading]);
@@ -151,16 +177,21 @@ const JourneyMap = ({ locations, className = '' }) => {
   }, [locations, mapLoaded]);
 
   // טיפול באירוע טעינת המפה
-  const handleMapLoad = useCallback(() => {
+  const handleMapLoad = useCallback((evt) => {
     console.log('Map loaded successfully');
     setMapLoaded(true);
     setIsMapLoading(false);
+    
+    // שמירת אובייקט המפה לשימוש עתידי
+    if (evt && evt.target) {
+      setMapInstance(evt.target);
+    }
     
     // קצת השהייה לוודא שהמפה לגמרי מוכנה
     setTimeout(() => {
       resizeCanvas();
       viewFullJourney();
-    }, 300);
+    }, 500);
   }, [resizeCanvas, viewFullJourney]);
 
   // טיפול בשגיאות מפה
@@ -168,6 +199,13 @@ const JourneyMap = ({ locations, className = '' }) => {
     console.error('Mapbox error:', error);
     setMapLoadError(true);
     setIsMapLoading(false);
+    
+    // נסה לאבחן את הבעיה
+    if (error.message && error.message.includes('API key')) {
+      console.error('Mapbox API key error. Please check your token.');
+    } else if (error.message && error.message.includes('network')) {
+      console.error('Network error loading Mapbox resources.');
+    }
   };
 
   // אתחול המצב ההתחלתי - התאמת המפה לראות את כל המסע
@@ -328,11 +366,19 @@ const JourneyMap = ({ locations, className = '' }) => {
             }}
             mapStyle="mapbox://styles/mapbox/light-v11"
             onMove={evt => setViewport(evt.viewState)}
-            mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN || 'pk.eyJ1IjoidXJpcGxlc3NlciIsImEiOiJjbWEzdzc2emwwMG5kMmtxejAzdWtya3ZqIn0.Ipxq0bDQtuY82BO883EbeA'}
+            mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+            reuseMaps
             attributionControl={true}
             onLoad={handleMapLoad}
             onError={handleMapError}
             style={{ width: '100%', height: '100%' }}
+            transformRequest={(url, resourceType) => {
+              // לוג של בקשות משאבים (עוזר לאבחון)
+              if (resourceType === 'Tile' && process.env.NODE_ENV === 'development') {
+                console.log('Mapbox resource request:', resourceType, url);
+              }
+              return { url };
+            }}
           >
             {/* כפתורי הזום */}
             <NavigationControl position="top-left" />

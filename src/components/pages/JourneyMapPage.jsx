@@ -28,22 +28,40 @@ const JourneyMapPage = () => {
       return false;
     };
 
+    // בדיקה ראשונית
+    checkMapboxLoaded();
+
     // אם הספרייה לא נטענה, נסה לטעון אותה שוב
-    if (!checkMapboxLoaded() && mapLoadRetries < 3) {
+    if (!window.mapboxgl && mapLoadRetries < 5) {  // הגדלנו את מספר הניסיונות המקסימלי
       console.log(`Forcing mapbox reload (attempt ${mapLoadRetries + 1})`);
       
-      // כפה רינדור מחדש של המפה
-      setMapKey(Date.now());
-      setMapLoadRetries(prev => prev + 1);
-      
-      // נסה שוב לבדוק אם הספרייה נטענה אחרי זמן קצר
-      const timer = setTimeout(() => {
-        if (!checkMapboxLoaded()) {
-          console.warn('Mapbox still not loaded after retry. This may indicate a problem with the Mapbox library or network.');
-        }
-      }, 3000);
-      
-      return () => clearTimeout(timer);
+      // ניסיון לטעון את הספרייה באופן דינמי
+      try {
+        // כפה רינדור מחדש של המפה
+        setMapKey(Date.now());
+        setMapLoadRetries(prev => prev + 1);
+
+        // בדוק שוב אחרי השהיה
+        const timer = setTimeout(() => {
+          if (!checkMapboxLoaded()) {
+            console.warn('Mapbox still not loaded after retry. Attempting to load it dynamically.');
+            
+            // ניסיון לאלץ טעינה של הסקריפט הדרוש
+            const script = document.createElement('script');
+            script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+            script.async = true;
+            script.onload = () => {
+              console.log('Mapbox script loaded dynamically');
+              checkMapboxLoaded();
+            };
+            document.head.appendChild(script);
+          }
+        }, 3000);
+        
+        return () => clearTimeout(timer);
+      } catch(e) {
+        console.error('Error during Mapbox reload attempt:', e);
+      }
     }
   }, [mapLoadRetries]);
 
