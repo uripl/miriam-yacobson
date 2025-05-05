@@ -4,7 +4,7 @@
 .hero {
   height: 80vh;
   min-height: 500px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../../images/hero-background.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../../public/images/hero-background.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
