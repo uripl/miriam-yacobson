@@ -240,6 +240,15 @@ const Timeline = ({ simplified = false }) => {
   
   // בתצוגה מקוצרת, נציג רק את האירועים המרכזיים
   const simplifiedEvents = simplified ? filteredEvents.filter((_, index) => index % 3 === 0 || index === filteredEvents.length - 1) : filteredEvents;
+
+    // סגנון אייקון מותאם לתיקון מיקום
+  const iconStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%'
+  };
   
   return (
     <div className="timeline-container" dir="rtl">
