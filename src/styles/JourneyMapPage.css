@@ -1,4 +1,4 @@
-/* JourneyMapPage.css - מעודכן ומתוקן */
+/* JourneyMapPage.css - מתוקן ומשופר */
 
 .journey-map-page {
   padding-bottom: var(--spacing-3xl);
@@ -44,18 +44,23 @@
 /* התאמה של המפה לעמוד */
 .journey-map-full {
   margin: var(--spacing-2xl) 0;
-  height: 700px !important; /* גובה קבוע למפה */
+  height: 700px; /* גובה קבוע למפה */
   position: relative;
+  z-index: 10; /* ערך z-index גבוה כדי להבטיח שהמפה תופיע מעל אלמנטים אחרים */
+  display: block;
   overflow: visible;
-  z-index: 1; /* ערך z-index חיובי */
+  width: 100%;
 }
 
 /* מרווח נוסף לקומפוננטה ללא שולי מסגרת נוספים */
 .journey-map-full .journey-map-container {
   margin: 0;
   height: 100%;
+  width: 100%;
   position: relative;
-  z-index: 2; /* ערך z-index גבוה יותר */
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
 }
 
 /* העובדות מתחת למפה */
@@ -130,33 +135,32 @@
   line-height: 1.4;
 }
 
-/* הודעת הטעינה - תוספת חדשה */
-.map-loading-message {
-  margin-top: var(--spacing-md);
-  padding: var(--spacing-md);
-  background-color: #f8f8f8;
-  border: 1px dashed #ddd;
-  border-radius: var(--border-radius-md);
+/* וודא שהמפה נוצרת ומוצגת כראוי */
+.journey-map-page .mapboxgl-map {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 8px !important;
+  z-index: 5 !important;
 }
 
-.map-load-error {
-  background-color: #fff9c4;
-  border: 1px solid #fbc02d;
+/* וודא שפקדי מפבוקס מוצגים מעל המפה */
+.journey-map-page .mapboxgl-control-container {
+  z-index: 20 !important;
+  position: relative !important;
 }
 
-.map-retry-button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: var(--spacing-sm);
-  font-weight: 500;
-}
-
-.map-retry-button:hover {
-  background-color: var(--primary-dark);
+/* תיקון לקנבס של המפה */
+.journey-map-page .journey-map-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
 }
 
 /* רספונסיביות */
@@ -177,7 +181,7 @@
   
   /* וודא שהמפה נשארת בגודל הגיוני גם במסכים קטנים */
   .journey-map-full {
-    height: 600px !important;
+    height: 500px;
   }
 }
 
@@ -198,7 +202,6 @@
   
   /* התאמות נוספות למובייל */
   .journey-map-full {
-    margin-right: -10px;
-    margin-left: -10px;
+    height: 400px;
   }
 }

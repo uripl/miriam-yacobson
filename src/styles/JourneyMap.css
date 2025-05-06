@@ -156,18 +156,17 @@
   overflow: visible;
   position: relative;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  background-color: #e9eef2;
+  background-color: #f0f5f9;
   height: 100%; /* חשוב: וודא שגובה 100% */
   min-height: 500px;  /* מינימום גובה שמבטיח שהמפה תראה */
   margin-right: 0; /* וודא שאין מרווח לא רצוי */
   direction: ltr; /* חשוב: שימור כיוון ltr למפה עצמה */
   min-width: 60%; /* וודא שהמפה תופסת לפחות 60% מהמקום */
-  z-index: 20;  /* ערך z-index גבוה מאוד */
+  z-index: 20;  /* ערך z-index גבוה */
 }
 
 /* תיקון חשוב להצגת המפה */
-.mapboxgl-map,
-.google-map-iframe {
+.mapboxgl-map {
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
@@ -177,6 +176,23 @@
   z-index: 25 !important; /* ערך z-index גבוה מאוד לוודא שהמפה תמיד מוצגת */
   border: 2px solid #e9eef2 !important;
   border-radius: 8px !important;
+  overflow: visible !important; /* חשוב למנוע גלישה של תוכן */
+}
+
+/* וודא שהמפה והפריימוורק react-map-gl נראים כמו שצריך */
+.mapboxgl-canvas-container {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+.mapboxgl-canvas {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* תיקונים לפקדי Mapbox */
@@ -394,66 +410,118 @@
   text-align: center;
 }
 
-/* רספונסיביות */
+/* רספונסיביות - משופר */
 @media (max-width: 900px) {
   .journey-map-content {
     flex-direction: column;
     height: auto;
+    gap: 16px;
     direction: rtl; /* שמירה על כיוון RTL גם ב-mobile */
   }
   
   .journey-map-locations {
     width: 100%;
-    max-height: 300px;
-    margin-bottom: 20px;
+    max-height: 250px;
     order: 1; /* מיקום הרשימה מעל המפה */
+    flex-shrink: 0;
   }
   
   .journey-map-view {
     height: 450px;
     order: 2; /* מיקום המפה מתחת לרשימה */
-    min-width: 100%; /* מלוא הרוחב במובייל */
+    width: 100%;
+    min-width: 100%;
   }
   
   .journey-map-header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
   }
   
-  .journey-map-view-all {
-    align-self: flex-end;
+  /* שיפור בתיבת הפרטים למיקום בגרסת מובייל */
+  .journey-map-details {
+    margin-top: 16px;
+    padding: 16px;
+    border-right-width: 3px;
+  }
+  
+  /* שיפור הביצועים במובייל - ביטול אנימציות שעלולות להיות כבדות */
+  .journey-map-marker:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .journey-map-marker.active {
+    transform: scale(1.1);
+  }
+  
+  .fact-card:hover {
+    transform: none;
   }
 }
 
 @media (max-width: 600px) {
   .journey-map-container {
-    padding: 16px;
+    padding: 12px;
+    margin-bottom: 24px;
   }
   
   .journey-map-view {
     height: 350px;
+    min-height: 350px;
   }
   
   .journey-map-title {
-    font-size: 20px;
+    font-size: 18px;
   }
   
   .journey-map-marker {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .journey-map-marker-tooltip {
+    min-width: 100px;
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .journey-map-details {
+    padding: 12px;
+  }
+  
+  .journey-map-details-title {
+    font-size: 16px;
+  }
+  
+  .journey-map-details-description {
+    font-size: 14px;
+  }
+  
+  .journey-map-location-item {
+    padding: 10px;
+  }
+  
+  .journey-map-location-name {
+    font-size: 14px;
+  }
+  
+  .journey-map-location-date {
+    font-size: 12px;
+  }
+  
+  .journey-map-location-number {
     width: 24px;
     height: 24px;
     font-size: 12px;
   }
   
-  .journey-map-details {
-    padding: 15px;
-  }
-  
-  .journey-map-details-title {
-    font-size: 18px;
-  }
-  
-  .journey-map-location-item {
-    padding: 12px;
+  .journey-map-view-all {
+    font-size: 12px;
+    padding: 6px 12px;
   }
 }

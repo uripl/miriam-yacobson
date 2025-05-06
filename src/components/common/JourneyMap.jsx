@@ -6,24 +6,45 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../styles/JourneyMap.css';
 
-// עקיפת הבעיה של Worker שדורשת ב-Mapbox
+// וודא שMapboxGL פועל כראוי
 if (typeof window !== 'undefined') {
-  // מניעת שגיאת "no protocol specified" עם worker-loader
+  // הגדרת Worker כדי למנוע שגיאות
+  const workerURL = window.URL.createObjectURL(new Blob([`
+    self.onmessage = function(e) {
+      self.postMessage({ action: 'workerProcessed', payload: e.data });
+    };
+  `], { type: 'application/javascript' }));
+  
+  // כאשר מידע מגיע מהעובד
   mapboxgl.workerClass = class {
     constructor() {
+      this.worker = new Worker(workerURL);
       this.self = {
         addEventListener: () => {},
         removeEventListener: () => {},
-        postMessage: () => {}
+        postMessage: (data) => {
+          this.worker.postMessage(data);
+        }
+      };
+      
+      this.worker.onmessage = (e) => {
+        if (this.onmessage) {
+          this.onmessage(e);
+        }
       };
     }
-    terminate() {}
-    postMessage() {}
+    
+    terminate() {
+      this.worker.terminate();
+    }
+    
+    postMessage(data) {
+      this.worker.postMessage(data);
+    }
   };
 }
 
-// עקיפת ההגבלות של mapbox בתוך React
-// This prevents the "Failed to initialize WebGL" error in some browsers
+// וודא שMapbox יעבוד גם במקרים בהם אין תמיכה מלאה בWebGL
 if (!mapboxgl.supported && typeof window !== 'undefined' && window.navigator) {
   mapboxgl.supported = () => true;
 }
@@ -82,7 +103,7 @@ const JourneyMap = ({ locations, className = '' }) => {
     return () => clearTimeout(timer);
   }, [isMapLoading]);
 
-  // ציור הקווים בין נקודות המסע
+  // ציור הקווים בין נקודות המסע - משופר
   const drawJourneyLines = useCallback(() => {
     const canvas = canvasRef.current;
     const map = mapRef.current?.getMap();
@@ -92,27 +113,47 @@ const JourneyMap = ({ locations, className = '' }) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
+    // מחיקת כל הקנבס לפני ציור מחדש
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // הגדרות סגנון הקו
+    // הגדרות סגנון הקו המשופר
     ctx.strokeStyle = '#e67e22'; // כתום חם
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 3.5;  // קו מעט עבה יותר לראות טוב
     ctx.setLineDash([8, 4]);
+    ctx.lineCap = 'round';  // קצוות עגולים לשיפור המראה
+    ctx.lineJoin = 'round';  // פינות עגולות
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';  // הוספת צל קל
+    ctx.shadowBlur = 3;
     ctx.beginPath();
+    
+    // מסננים קואורדינטות לא חוקיות ומסדרים לפי סדר
+    const validLocations = locations
+      .filter(location => location.latitude && location.longitude)
+      .sort((a, b) => {
+        // אם יש שדה סדר, השתמש בו
+        if (a.order !== undefined && b.order !== undefined) {
+          return a.order - b.order;
+        }
+        return 0;  // אחרת השאר סדר מקורי
+      });
     
     // ציור קו בין כל הנקודות על המפה
     let firstPoint = true;
-    locations.forEach(location => {
-      if (!location.latitude || !location.longitude) return;
-      
+    validLocations.forEach(location => {
       try {
         const point = map.project([location.longitude, location.latitude]);
         
-        if (firstPoint) {
-          ctx.moveTo(point.x, point.y);
-          firstPoint = false;
-        } else {
-          ctx.lineTo(point.x, point.y);
+        // וודא שהנקודה בתחום ראיה סביר
+        if (point && !isNaN(point.x) && !isNaN(point.y) &&
+           point.x > -1000 && point.x < canvas.width + 1000 &&
+           point.y > -1000 && point.y < canvas.height + 1000) {
+          
+          if (firstPoint) {
+            ctx.moveTo(point.x, point.y);
+            firstPoint = false;
+          } else {
+            ctx.lineTo(point.x, point.y);
+          }
         }
       } catch (err) {
         console.error('Error projecting coordinates:', err);
@@ -120,30 +161,66 @@ const JourneyMap = ({ locations, className = '' }) => {
     });
     
     ctx.stroke();
+    
+    // הוסף אפקט הבהוב לנקודה האחרונה
+    try {
+      const lastLocation = validLocations[validLocations.length - 1];
+      if (lastLocation) {
+        const point = map.project([lastLocation.longitude, lastLocation.latitude]);
+        if (point && !isNaN(point.x) && !isNaN(point.y)) {
+          // ציור נקודת הסיום עם הבהוב
+          ctx.fillStyle = '#e67e22';
+          ctx.shadowColor = 'rgba(230, 126, 34, 0.6)';
+          ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, 6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    } catch (err) {
+      console.error('Error highlighting endpoint:', err);
+    }
   }, [locations, mapLoaded]);
 
-  // התאמת גודל הקנבס לגודל המפה
+  // התאמת גודל הקנבס לגודל המפה - משופר
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     const container = mapContainerRef.current;
     
     if (!canvas || !container) return;
 
+    // קבל את המידות האמיתיות של מכל המפה
     const { width, height } = container.getBoundingClientRect();
+    
+    // חשב את יחס הרזולוציה של המסך לטיפול ברזולוציות גבוהות
     const scale = window.devicePixelRatio || 1;
     
-    canvas.width = width * scale;
-    canvas.height = height * scale;
+    // וודא שהקנבס בגודל תואם לפיקסלים של המסך
+    canvas.width = Math.round(width * scale);
+    canvas.height = Math.round(height * scale);
+    
+    // הגדר את גודל הקנבס ב-CSS להתאים למכל
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
+    
+    // וודא שהקנבס מותאם למיקום המדויק
+    canvas.style.position = 'absolute';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.pointerEvents = 'none'; 
+    canvas.style.zIndex = '10';
     
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
+    // אפס את הקונטקסט
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    
+    // התאם לרזולוציית המסך
     ctx.scale(scale, scale);
     
     // ציור מחדש של הקווים לאחר שינוי גודל
-    drawJourneyLines();
+    setTimeout(() => drawJourneyLines(), 50); // קצת השהייה לתת למפה להסתדר
   }, [drawJourneyLines]);
 
   // הצגת כל המסע על המפה - ללא שימוש ב-LngLatBounds
@@ -342,6 +419,7 @@ const JourneyMap = ({ locations, className = '' }) => {
           className="journey-map-view-all" 
           onClick={viewFullJourney}
           disabled={!mapLoaded}
+          aria-label="הצג את כל נקודות המסע על המפה"
         >
           הצג את כל המסע
         </button>
@@ -356,6 +434,13 @@ const JourneyMap = ({ locations, className = '' }) => {
                 key={location.id}
                 className={`journey-map-location-item ${isLocationSelected(location) ? 'active' : ''}`}
                 onClick={() => flyToLocation(location)}
+                tabIndex={0}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    flyToLocation(location);
+                  }
+                }}
+                aria-label={`${location.name}, ${location.dateRange}`}
               >
                 <div className="journey-map-location-number">{index + 1}</div>
                 <div className="journey-map-location-info">
@@ -371,7 +456,6 @@ const JourneyMap = ({ locations, className = '' }) => {
         <div className="journey-map-view" ref={mapContainerRef}>
           {/* המפה עצמה */}
           <Map
-            {...viewport}
             ref={mapRef}
             initialViewState={{
               latitude: 48.0,
@@ -402,7 +486,16 @@ const JourneyMap = ({ locations, className = '' }) => {
                   flyToLocation(location);
                 }}
               >
-                <div className={`journey-map-marker ${isLocationSelected(location) ? 'active' : ''}`}>
+                <div 
+                  className={`journey-map-marker ${isLocationSelected(location) ? 'active' : ''}`}
+                  tabIndex={0}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      flyToLocation(location);
+                    }
+                  }}
+                  aria-label={`מיקום ${index + 1}: ${location.name}`}
+                >
                   {index + 1}
                   
                   {/* טולטיפ שמופיע רק למיקום הנבחר */}
@@ -421,6 +514,7 @@ const JourneyMap = ({ locations, className = '' }) => {
           <canvas
             ref={canvasRef}
             className="journey-map-lines"
+            aria-hidden="true"
           />
           
           {/* אינדיקטור טעינה */}

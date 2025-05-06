@@ -8,68 +8,11 @@ import '../../styles/JourneyMapPage.css';
  */
 const JourneyMapPage = () => {
   const [mapKey, setMapKey] = useState(Date.now()); // מפתח ייחודי לאילוץ רינדור מחדש של המפה
-  const [isMapboxLoaded, setIsMapboxLoaded] = useState(false);
-  const [mapLoadRetries, setMapLoadRetries] = useState(0);
 
   // גלילה לראש הדף בטעינה
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  // וידוא טעינת ספריית Mapbox
-  useEffect(() => {
-    // בדיקה האם הספרייה נטענה
-    const checkMapboxLoaded = () => {
-      if (window.mapboxgl) {
-        console.log('Mapbox GL JS is loaded');
-        setIsMapboxLoaded(true);
-        return true;
-      }
-      return false;
-    };
-
-    // בדיקה ראשונית
-    checkMapboxLoaded();
-
-    // אם הספרייה לא נטענה, נסה לטעון אותה שוב
-    if (!window.mapboxgl && mapLoadRetries < 5) {  // הגדלנו את מספר הניסיונות המקסימלי
-      console.log(`Forcing mapbox reload (attempt ${mapLoadRetries + 1})`);
-      
-      // ניסיון לטעון את הספרייה באופן דינמי
-      try {
-        // כפה רינדור מחדש של המפה
-        setMapKey(Date.now());
-        setMapLoadRetries(prev => prev + 1);
-
-        // בדוק שוב אחרי השהיה
-        const timer = setTimeout(() => {
-          if (!checkMapboxLoaded()) {
-            console.warn('Mapbox still not loaded after retry. Attempting to load it dynamically.');
-            
-            // ניסיון לאלץ טעינה של הסקריפט הדרוש
-            const script = document.createElement('script');
-            script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
-            script.async = true;
-            script.onload = () => {
-              console.log('Mapbox script loaded dynamically');
-              checkMapboxLoaded();
-            };
-            document.head.appendChild(script);
-          }
-        }, 3000);
-        
-        return () => clearTimeout(timer);
-      } catch(e) {
-        console.error('Error during Mapbox reload attempt:', e);
-      }
-    }
-  }, [mapLoadRetries]);
-
-  // פונקציה לניסיון מחדש במקרה של כישלון טעינה
-  const handleRetryMapLoad = () => {
-    setMapKey(Date.now());
-    setMapLoadRetries(0);
-  };
 
   return (
     <div className="journey-map-page">
@@ -91,12 +34,9 @@ const JourneyMapPage = () => {
               ניתן ללחוץ על הנקודות במפה או על השמות ברשימה כדי לקבל מידע נוסף על כל מקום 
               ולעקוב אחר ציר הזמן של המסע.
             </p>
-            
-{/* אין צורך להציג הודעת שגיאה - המפה טוענת בהצלחה */}
           </section>
 
           <section className="journey-map-full">
-            {/* תמיד השתמש במפת Mapbox המקורית */}
             <JourneyMap 
               key={mapKey} 
               locations={journeyLocations} 
