@@ -44,13 +44,18 @@
 /* התאמה של המפה לעמוד */
 .journey-map-full {
   margin: var(--spacing-2xl) 0;
-  height: auto !important; /* חשוב להבטיח את גובה המכל */
+  height: 700px !important; /* גובה קבוע למפה */
   position: relative;
+  overflow: visible;
+  z-index: 1; /* ערך z-index חיובי */
 }
 
 /* מרווח נוסף לקומפוננטה ללא שולי מסגרת נוספים */
 .journey-map-full .journey-map-container {
   margin: 0;
+  height: 100%;
+  position: relative;
+  z-index: 2; /* ערך z-index גבוה יותר */
 }
 
 /* העובדות מתחת למפה */
@@ -172,7 +177,7 @@
   
   /* וודא שהמפה נשארת בגודל הגיוני גם במסכים קטנים */
   .journey-map-full {
-    max-height: 800px;
+    height: 600px !important;
   }
 }
 

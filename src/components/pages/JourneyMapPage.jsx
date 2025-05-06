@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import JourneyMap from '../common/JourneyMap';
-import SimpleJourneyMap from '../common/SimpleJourneyMap';
 import { journeyLocations } from '../../data/timelineData';
 import '../../styles/JourneyMapPage.css';
 
@@ -93,32 +92,15 @@ const JourneyMapPage = () => {
               ולעקוב אחר ציר הזמן של המסע.
             </p>
             
-            {!isMapboxLoaded && mapLoadRetries >= 3 && (
-              <div className="map-loading-message map-load-error">
-                <p><strong>הערה:</strong> נראה שיש בעיה בטעינת המפה. אם המפה אינה מופיעה, ייתכן שיש בעיה בחיבור האינטרנט או בטעינת ספריית Mapbox.</p>
-                <button 
-                  className="map-retry-button"
-                  onClick={handleRetryMapLoad}
-                >
-                  נסה שוב
-                </button>
-              </div>
-            )}
+{/* אין צורך להציג הודעת שגיאה - המפה טוענת בהצלחה */}
           </section>
 
           <section className="journey-map-full">
-            {/* הוספת גיבוי למפה פשוטה במקרה שהמפה המורכבת נכשלת */}
-            {isMapboxLoaded ? (
-              <JourneyMap 
-                key={mapKey} 
-                locations={journeyLocations} 
-              />
-            ) : (
-              <SimpleJourneyMap 
-                key={mapKey} 
-                locations={journeyLocations} 
-              />
-            )}
+            {/* תמיד השתמש במפת Mapbox המקורית */}
+            <JourneyMap 
+              key={mapKey} 
+              locations={journeyLocations} 
+            />
           </section>
 
           <section className="journey-map-facts">
