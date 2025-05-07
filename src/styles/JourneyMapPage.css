@@ -253,3 +253,61 @@
     max-height: 300px !important;
   }
 }
+/* הוספת גלילה פנימית לרשימת הנקודות */
+.journey-map-container .journey-map-locations {
+  max-height: 600px !important;
+  overflow-y: auto !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 8px !important;
+}
+
+/* הסרת האלמנט השמאלי הכחול */
+.journey-map-container .journey-map-title {
+  display: none !important;
+}
+
+/* הסתרת האלמנט בצד שמאל עם הרקע הכחול */
+.journey-map-container > div:last-child {
+  display: none !important;
+}
+
+/* תיקון גובה המפה ומכל המפה */
+.journey-map-full {
+  height: 600px !important;
+}
+
+.journey-map-container {
+  height: 100% !important;
+}
+
+/* וידוא שהעובדות נשארות מתחת למפה */
+.journey-map-facts {
+  margin-top: 2rem !important;
+  clear: both !important;
+}
+
+/* סגנון פנימי לרשימת הנקודות להבטחת הגלילה */
+.journey-map-location-list {
+  overflow-y: auto !important;
+  max-height: 580px !important;
+  padding-right: 5px !important;
+}
+
+/* עיצוב פס הגלילה */
+.journey-map-location-list::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.journey-map-location-list::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border-radius: 8px !important;
+}
+
+.journey-map-location-list::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1 !important;
+  border-radius: 8px !important;
+}
+
+.journey-map-location-list::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0 !important;
+}
