@@ -212,3 +212,44 @@
   opacity: 0.9;
   font-weight: var(--font-weight-normal);
 }
+/* תיקון תצוגת המפה ורשימת המיקומים */
+.journey-map-page .journey-map-full {
+  margin: 0 !important;
+  height: 650px !important;
+}
+
+/* תיקון מכל המפה */
+.journey-map-container {
+  display: flex !important;
+  flex-direction: row-reverse !important; /* המפה מימין, הרשימה משמאל */
+  gap: 15px !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* הגדרת גודל קבוע לרשימת המיקומים */
+.journey-map-locations {
+  width: 300px !important;
+  min-width: 300px !important;
+  max-height: 650px !important;
+  overflow-y: auto !important;
+}
+
+/* הגדרת גודל למפה */
+.journey-map-view {
+  flex-grow: 1 !important;
+  height: 100% !important;
+  min-height: 600px !important;
+}
+
+/* התאמה למסכים קטנים */
+@media (max-width: 768px) {
+  .journey-map-container {
+    flex-direction: column !important;
+  }
+  
+  .journey-map-locations {
+    width: 100% !important;
+    max-height: 300px !important;
+  }
+}
