@@ -19,23 +19,16 @@ const JourneyMapPage = () => {
       <header className="page-header">
         <div className="container">
           <h1>מפת מסע החיים</h1>
-          <p className="subtitle">המסע הגיאוגרפי של מרים אופנהיימר (יעקובסון)</p>
+          <p className="subtitle">
+            המסע הגיאוגרפי של מרים אופנהיימר (יעקובסון) מלידתה בלייפציג, גרמניה ב-1925, 
+            דרך התקופה בבלגיה, צרפת, מחנות הריכוז בתקופת השואה, ועד לעלייתה לארץ ישראל ב-1948
+            <span className="subtitle-tip">ניתן ללחוץ על הנקודות במפה או על השמות ברשימה כדי לקבל מידע נוסף על כל מקום ולעקוב אחר ציר הזמן של המסע</span>
+          </p>
         </div>
       </header>
 
       <div className="container">
         <div className="journey-map-content">
-          <section className="journey-map-intro">
-            <p>
-              מפה זו מציגה את המסע הגיאוגרפי של מרים - מלידתה בלייפציג, גרמניה ב-1925, 
-              דרך התקופה בבלגיה, צרפת, מחנות הריכוז בתקופת השואה, ועד לעלייתה לארץ ישראל ב-1948.
-            </p>
-            <p>
-              ניתן ללחוץ על הנקודות במפה או על השמות ברשימה כדי לקבל מידע נוסף על כל מקום 
-              ולעקוב אחר ציר הזמן של המסע.
-            </p>
-          </section>
-
           <section className="journey-map-full">
             <JourneyMap 
               key={mapKey} 
