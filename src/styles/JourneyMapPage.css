@@ -338,3 +338,21 @@
   height: 100% !important;
   width: 100% !important;
 }
+/* התאמת גודל רשימת המיקומים לשליש מהקונטיינר */
+.journey-map-locations {
+  width: 33% !important; /* שליש מהמרחב */
+  max-width: 300px !important; /* הגדרת רוחב מקסימלי */
+  min-width: 220px !important; /* הגדרת רוחב מינימלי */
+  max-height: 600px !important;
+  overflow-y: auto !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 8px !important;
+}
+
+/* התאמת הרוחב של המפה */
+.journey-map-view {
+  flex-grow: 1 !important;
+  width: 67% !important; /* שני שליש מהמרחב (או הנותר) */
+  height: 100% !important;
+  min-height: 600px !important;
+}
