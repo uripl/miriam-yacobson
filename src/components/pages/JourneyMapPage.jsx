@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import JourneyMap from '../common/JourneyMap';
+import JourneyMap from '../common/JourneyMap'; // רק ייבוא זה
 import { journeyLocations } from '../../data/timelineData';
 import '../../styles/JourneyMapPage.css';
 
-/**
- * דף מפת המסע - מציג את המסע הגיאוגרפי של מרים על מפה אינטראקטיבית
- */
 const JourneyMapPage = () => {
-  const [mapKey, setMapKey] = useState(Date.now()); // מפתח ייחודי לאילוץ רינדור מחדש של המפה
+  const [mapKey, setMapKey] = useState(Date.now());
 
-  // גלילה לראש הדף בטעינה
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
