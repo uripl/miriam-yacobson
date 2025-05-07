@@ -205,3 +205,10 @@
     height: 400px;
   }
 }
+.subtitle-tip {
+  display: block;
+  font-size: 0.85em;
+  margin-top: 0.5rem;
+  opacity: 0.9;
+  font-weight: var(--font-weight-normal);
+}
