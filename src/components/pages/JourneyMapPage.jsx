@@ -33,31 +33,32 @@ const JourneyMapPage = () => {
             <JourneyMap 
               key={mapKey} 
               locations={journeyLocations} 
+              showLocationsList={true}
             />
           </section>
-
-          <section className="journey-map-facts">
-            <h2>עובדות על המסע</h2>
-            <div className="facts-grid">
-              <div className="fact-card">
-                <div className="fact-number">16</div>
-                <div className="fact-text">מקומות מרכזיים</div>
-              </div>
-              <div className="fact-card">
-                <div className="fact-number">7</div>
-                <div className="fact-text">מדינות</div>
-              </div>
-              <div className="fact-card">
-                <div className="fact-number">23</div>
-                <div className="fact-text">שנות נדודים</div>
-              </div>
-              <div className="fact-card">
-                <div className="fact-number">+5,000</div>
-                <div className="fact-text">ק"מ של מסע</div>
-              </div>
-            </div>
-          </section>
         </div>
+
+        <section className="journey-map-facts">
+          <h2>עובדות על המסע</h2>
+          <div className="facts-grid">
+            <div className="fact-card">
+              <div className="fact-number">16</div>
+              <div className="fact-text">מקומות מרכזיים</div>
+            </div>
+            <div className="fact-card">
+              <div className="fact-number">7</div>
+              <div className="fact-text">מדינות</div>
+            </div>
+            <div className="fact-card">
+              <div className="fact-number">23</div>
+              <div className="fact-text">שנות נדודים</div>
+            </div>
+            <div className="fact-card">
+              <div className="fact-number">+5,000</div>
+              <div className="fact-text">ק"מ של מסע</div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
