@@ -311,48 +311,32 @@
   overflow-y: auto !important;
   max-height: 580px !important;
 }
+
+
 /* התאמת גודל רשימת המיקומים לשליש מהקונטיינר */
 .journey-map-locations {
-  width: 33% !important; /* או 30% לפי הצורך */
-  max-width: 300px !important; /* הגדרת רוחב מקסימלי */
-  min-width: 220px !important; /* הגדרת רוחב מינימלי */
+  width: 30% !important; /* כשליש מהמרחב */
+  max-width: 300px !important;
+  min-width: 200px !important;
   max-height: 600px !important;
   overflow-y: auto !important;
   border: 1px solid #e0e0e0 !important;
   border-radius: 8px !important;
+  flex-shrink: 0 !important; /* למנוע כיווץ */
 }
 
 /* התאמת הרוחב של המפה */
 .journey-map-view {
-  flex-grow: 1 !important;
-  width: 67% !important; /* 100% פחות הרוחב של רשימת המיקומים */
+  flex-grow: 1 !important; /* תופס את שאר המרחב הזמין */
+  min-width: 65% !important; /* לפחות שני שליש */
   height: 100% !important;
   min-height: 600px !important;
 }
 
-/* וידוא שהמכל מציג את שני הרכיבים בצורה מאוזנת */
-.journey-map-container {
+/* וידוא שהמכל מציג את שני הרכיבים בצורה נכונה */
+.journey-map-content {
   display: flex !important;
   flex-direction: row-reverse !important; /* המפה מימין, הרשימה משמאל */
   gap: 15px !important;
-  height: 100% !important;
   width: 100% !important;
-}
-/* התאמת גודל רשימת המיקומים לשליש מהקונטיינר */
-.journey-map-locations {
-  width: 33% !important; /* שליש מהמרחב */
-  max-width: 300px !important; /* הגדרת רוחב מקסימלי */
-  min-width: 220px !important; /* הגדרת רוחב מינימלי */
-  max-height: 600px !important;
-  overflow-y: auto !important;
-  border: 1px solid #e0e0e0 !important;
-  border-radius: 8px !important;
-}
-
-/* התאמת הרוחב של המפה */
-.journey-map-view {
-  flex-grow: 1 !important;
-  width: 67% !important; /* שני שליש מהמרחב (או הנותר) */
-  height: 100% !important;
-  min-height: 600px !important;
 }
