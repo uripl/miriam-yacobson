@@ -4,12 +4,12 @@ import App from './App';
 import './styles/globals.css';
 import { mapboxWorker } from './mapbox-worker';
 
-// אתחול העובדים של Mapbox (פתרון לבעיות תאימות)
+// אתחול העובדים של Mapbox
 if (typeof window !== 'undefined') {
   mapboxWorker.initialize();
 }
 
-// הגדרת משתנה גלובלי כדי למנוע בעיות בעת אתחול המפה פעמיים בקוד React Strict Mode
+// מניעת אתחול כפול במצב Strict Mode של React
 window.MAPBOX_INITIALIZED = false;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
