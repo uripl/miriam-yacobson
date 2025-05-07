@@ -1,4 +1,4 @@
-/* JourneyMapPage.css - קובץ חדש מלא */
+/* JourneyMapPage.css - קובץ מעודכן */
 
 .journey-map-page {
   padding-bottom: var(--spacing-3xl);
@@ -38,7 +38,7 @@
 
 /* עיצוב מחדש של מכל המפה */
 .journey-map-container {
-  display: flex !important;
+  display: flex !important; /* שינוי: לא משתמשים בflow-reverse */
   height: 100% !important;
   width: 100% !important;
   border-radius: 12px;
@@ -46,24 +46,26 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* רשימת המיקומים - שליש מהמסך */
+/* רשימת המיקומים - עכשיו קטנה יותר */
 .journey-map-locations {
-  width: 25% !important; /* שליש מהרוחב */
-  max-width: 280px !important;
-  min-width: 200px !important;
+  width: 20% !important; /* צמצום הרוחב */
+  max-width: 200px !important;
+  min-width: 180px !important;
   height: 100% !important;
   overflow-y: auto !important;
   background-color: #f5f5f5 !important;
-  border-left: 1px solid #e0e0e0 !important;
+  border-right: 1px solid #e0e0e0 !important; /* שינוי: מבורדר שמאל לימין */
   padding: 10px !important;
   flex-shrink: 0 !important; /* מונע כיווץ */
+  order: 1 !important; /* גורם לרשימה להופיע בצד ימין */
 }
 
-/* תצוגת המפה - שני שליש מהמסך */
+/* תצוגת המפה - עכשיו גדולה יותר */
 .journey-map-view {
   flex-grow: 1 !important; /* תופס את שאר המרחב */
   height: 100% !important;
   position: relative !important;
+  order: 2 !important; /* גורם למפה להופיע בצד שמאל */
 }
 
 /* רשימת הנקודות במיקומים */
@@ -77,12 +79,12 @@
 .journey-map-location-item {
   display: flex !important;
   align-items: center !important;
-  padding: 10px !important;
+  padding: 8px !important; /* צמצום הפדינג */
   border-bottom: 1px solid #e0e0e0 !important;
   cursor: pointer !important;
   transition: background-color 0.2s ease !important;
   border-radius: 4px !important;
-  margin-bottom: 4px !important;
+  margin-bottom: 3px !important; /* צמצום המרווח */
 }
 
 .journey-map-location-item:hover {
@@ -99,14 +101,15 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  width: 28px !important;
-  height: 28px !important;
+  width: 24px !important; /* קטן יותר */
+  height: 24px !important; /* קטן יותר */
   background-color: var(--primary-color) !important;
   color: white !important;
   border-radius: 50% !important;
-  margin-left: 10px !important;
+  margin-left: 8px !important; /* מרווח קטן יותר */
   font-weight: bold !important;
   flex-shrink: 0 !important;
+  font-size: 0.8rem !important; /* גופן קטן יותר */
 }
 
 .journey-map-location-item.active .journey-map-location-number {
@@ -122,10 +125,11 @@
 .journey-map-location-name {
   font-weight: 600 !important;
   margin-bottom: 2px !important;
+  font-size: 0.9rem !important; /* גופן קטן יותר */
 }
 
 .journey-map-location-date {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important; /* גופן קטן יותר */
   color: #666 !important;
 }
 
@@ -138,7 +142,12 @@
   display: none !important;
 }
 
-/* עובדות מתחת למפה */
+/* הסתרת גלילה באתר המפה */
+.journey-map-container > div:last-child {
+  display: none !important;
+}
+
+/* שאר הסגנונות נשארים כשהיו */
 .journey-map-facts {
   margin: var(--spacing-3xl) 0 var(--spacing-xl);
   text-align: center;
@@ -224,12 +233,14 @@
     width: 100% !important;
     max-width: 100% !important;
     height: 200px !important;
-    border-left: none !important;
+    border-right: none !important;
     border-bottom: 1px solid #e0e0e0 !important;
+    order: 1 !important;
   }
   
   .journey-map-view {
     height: calc(100% - 200px) !important;
+    order: 2 !important;
   }
   
   .journey-map-full {
