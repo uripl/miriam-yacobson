@@ -111,60 +111,60 @@ const JourneyMap = ({ locations }) => {
   };
 
   return (
-    <div className="journey-map-container">
-      <div className="journey-map-header">
-        {/* הסרת הכותרת המיותרת */}
-        <button 
-          className="journey-map-view-all" 
-          onClick={viewFullJourney}
-        >
-          הצג את כל המסע
-        </button>
-      </div>
-  
-      <div className="journey-map-content">
-        {/* רשימת המיקומים - עכשיו עם סגנון שמציב אותה בצד */}
-        <div className="journey-map-locations">
-          <ul className="journey-map-location-list">
-            {locations.map((location, index) => (
-              <li
-                key={location.id}
-                className={`journey-map-location-item ${selectedLocation && selectedLocation.id === location.id ? 'active' : ''}`}
-                onClick={() => {
-                  setSelectedLocation(location);
-                  
-                  if (map) {
-                    map.flyTo({
-                      center: [location.longitude, location.latitude],
-                      zoom: 8,
-                      duration: 1000
-                    });
-                  }
-                }}
-              >
-                <div className="journey-map-location-number">{index + 1}</div>
-                <div className="journey-map-location-info">
-                  <div className="journey-map-location-name">{location.name}</div>
-                  <div className="journey-map-location-date">{location.dateRange}</div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-  
-        {/* מכל המפה */}
-        <div className="journey-map-view" ref={mapContainerRef}></div>
-      </div>
-  
-      {/* פרטי המיקום הנבחר */}
-      {selectedLocation && (
-        <div className="journey-map-details">
-          <h4 className="journey-map-details-title">{selectedLocation.name}</h4>
-          <p className="journey-map-details-date">{selectedLocation.dateRange}</p>
-          <p className="journey-map-details-description">{selectedLocation.description}</p>
-        </div>
-      )}
+  <div className="journey-map-container">
+    <div className="journey-map-header">
+      {/* הסרת הכותרת המיותרת */}
+      <button 
+        className="journey-map-view-all" 
+        onClick={viewFullJourney}
+      >
+        הצג את כל המסע
+      </button>
     </div>
+
+    <div className="journey-map-content">
+      {/* רשימת המיקומים - עכשיו באופן מפורש בצד ימין */}
+      <div className="journey-map-locations">
+        <ul className="journey-map-location-list">
+          {locations.map((location, index) => (
+            <li
+              key={location.id}
+              className={`journey-map-location-item ${selectedLocation && selectedLocation.id === location.id ? 'active' : ''}`}
+              onClick={() => {
+                setSelectedLocation(location);
+                
+                if (map) {
+                  map.flyTo({
+                    center: [location.longitude, location.latitude],
+                    zoom: 8,
+                    duration: 1000
+                  });
+                }
+              }}
+            >
+              <div className="journey-map-location-number">{index + 1}</div>
+              <div className="journey-map-location-info">
+                <div className="journey-map-location-name">{location.name}</div>
+                <div className="journey-map-location-date">{location.dateRange}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* מכל המפה - עכשיו לוקח את שאר השטח */}
+      <div className="journey-map-view" ref={mapContainerRef}></div>
+    </div>
+
+    {/* פרטי המיקום הנבחר */}
+    {selectedLocation && (
+      <div className="journey-map-details">
+        <h4 className="journey-map-details-title">{selectedLocation.name}</h4>
+        <p className="journey-map-details-date">{selectedLocation.dateRange}</p>
+        <p className="journey-map-details-description">{selectedLocation.description}</p>
+      </div>
+    )}
+  </div>
 );
 
 };
