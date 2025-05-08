@@ -2,7 +2,7 @@
 
 /* מיכל המפה */
 .journey-map-container {
-  display: flex;
+  display: flex; 
   flex-direction: column;
   background-color: #fff;
   border-radius: 8px;
@@ -10,6 +10,7 @@
   overflow: hidden;
   height: 100%;
   width: 100%;
+  position: relative; /* חשוב להגדיר מיקום יחסי */
 }
 
 /* כותרת המפה */
@@ -47,9 +48,10 @@
 /* תוכן המפה */
 .journey-map-content {
   display: flex;
-  flex-direction: row;
+  flex-direction: row; /* חשוב שזה יהיה row ולא column */
   flex-grow: 1;
-  height: calc(100% - 50px); /* גובה המכל פחות גובה הכותרת */
+  height: calc(100% - 50px);
+  position: relative; /* חשוב להגדיר מיקום יחסי */
 }
 
 /* רשימת מיקומים */
@@ -57,7 +59,8 @@
   width: 250px;
   overflow-y: auto;
   background-color: #f8f8f8;
-  border-left: 1px solid #e0e0e0;
+  flex-shrink: 0; /* חשוב! מונע מהאלמנט להתכווץ */
+  order: 1; /* סדר: ראשון משמאל לימין במיכל flex */
 }
 
 .journey-map-location-list {
@@ -66,13 +69,15 @@
   margin: 0;
 }
 
-.journey-map-location-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 12px;
-  border-bottom: 1px solid #e0e0e0;
-  cursor: pointer;
-  transition: background-color 0.2s;
+.journey-map-locations {
+  width: 250px;
+  min-width: 250px; /* חשוב! מונע כיווץ מתחת לערך מינימלי */
+  overflow-y: auto;
+  background-color: #f8f8f8;
+  border-left: 1px solid #e0e0e0;
+  flex-shrink: 0; /* חשוב! מונע מהאלמנט להתכווץ */
+  position: relative; /* חשוב להגדיר מיקום יחסי */
+  z-index: 2; /* מעל המפה */
 }
 
 .journey-map-location-item:hover {
@@ -117,11 +122,12 @@
   color: #666;
 }
 
-/* תצוגת המפה */
-.journey-map-view {
-  flex-grow: 1;
+/* תצוגת המפה צריכה לתפוס את שאר השטח */
+journey-map-view {
+  flex: 1; /* מקוצר של flex-grow: 1, flex-shrink: 1, flex-basis: 0% */
   height: 100%;
   position: relative;
+  z-index: 1; /* מתחת לרשימה */
 }
 
 /* מיכל פרטי מיקום */
@@ -150,6 +156,10 @@
   font-size: 14px;
   line-height: 1.5;
   color: #333;
+}
+
+.journey-map-title {
+  display: none;
 }
 
 /* סגנון סמני המפה */
