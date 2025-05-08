@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import JourneyMap from '../common/JourneyMap'; // רק ייבוא זה
+import React, { useEffect } from 'react';
+import SimpleJourneyMap from '../common/SimpleJourneyMap'; // שים לב לשינוי כאן!
 import { journeyLocations } from '../../data/timelineData';
 import '../../styles/JourneyMapPage.css';
 
 const JourneyMapPage = () => {
-  const [mapKey, setMapKey] = useState(Date.now());
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -18,7 +16,6 @@ const JourneyMapPage = () => {
           <p className="subtitle">
             המסע הגיאוגרפי של מרים אופנהיימר (יעקובסון) מלידתה בלייפציג, גרמניה ב-1925, 
             דרך התקופה בבלגיה, צרפת, מחנות הריכוז בתקופת השואה, ועד לעלייתה לארץ ישראל ב-1948
-            <span className="subtitle-tip">ניתן ללחוץ על הנקודות במפה או על השמות ברשימה כדי לקבל מידע נוסף על כל מקום ולעקוב אחר ציר הזמן של המסע</span>
           </p>
         </div>
       </header>
@@ -26,10 +23,8 @@ const JourneyMapPage = () => {
       <div className="container">
         <div className="journey-map-content">
           <section className="journey-map-full">
-            <JourneyMap 
-              key={mapKey} 
+            <SimpleJourneyMap 
               locations={journeyLocations} 
-              showLocationsList={true}
             />
           </section>
         </div>
