@@ -15,11 +15,9 @@
 /* כותרת המפה */
 .journey-map-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
+  justify-content: flex-end; /* הכפתור בצד שמאל */
+  padding: 10px 16px;
   background-color: #2e5077;
-  color: white;
 }
 
 .journey-map-title {
@@ -47,21 +45,19 @@
 .journey-map-content {
   display: flex;
   flex-direction: row; /* חשוב מאוד! זה מה שגורם לרשימה להיות בצד */
-  flex-grow: 1;
-  height: 500px; /* גובה קבוע למפה */
+
+  height: 600px; /* גובה קבוע למפה */
 }
 
 /* רשימת מיקומים */
-.journey-map-locations {
-  width: 300px;
-  min-width: 300px; /* מונע כיווץ */
-  overflow-y: auto;
-  background-color: #f8f8f8;
+journey-map-locations {
+  width: 250px; /* רוחב קצת יותר קטן */
+  min-width: 250px; /* מניעת כיווץ */
+  flex-shrink: 0; /* מניעת כיווץ */
   border-left: 1px solid #e0e0e0;
-  flex-shrink: 0; /* מונע כיווץ */
-  direction: rtl; 
-  /* הורדנו position: relative; */
-  /* הורדנו z-index: 2; */
+  background-color: #f8f8f8;
+  overflow-y: auto;
+  order: 1; /* סדר: להציג ראשון משמאל לימין */
 }
 
 .journey-map-location-list {
@@ -116,10 +112,9 @@
 
 /* תצוגת המפה */
 .journey-map-view {
-  flex: 1; /* תופס את שאר השטח */
+  flex: 1; /* תופס את שאר המרחב */
   height: 100%;
-  position: relative;
-  /* הורדנו z-index: 1; */
+  order: 2; /* סדר: להציג שני משמאל לימין */
 }
 
 /* פרטי מיקום */
