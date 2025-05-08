@@ -113,7 +113,7 @@ const JourneyMap = ({ locations }) => {
   return (
     <div className="journey-map-container">
       <div className="journey-map-header">
-        <h3 className="journey-map-title">מסע חייה של מרים אופנהיימר יעקובסון</h3>
+        {/* הסרת הכותרת המיותרת */}
         <button 
           className="journey-map-view-all" 
           onClick={viewFullJourney}
@@ -121,9 +121,9 @@ const JourneyMap = ({ locations }) => {
           הצג את כל המסע
         </button>
       </div>
-
+  
       <div className="journey-map-content">
-        {/* רשימת המיקומים */}
+        {/* רשימת המיקומים - עכשיו עם סגנון שמציב אותה בצד */}
         <div className="journey-map-locations">
           <ul className="journey-map-location-list">
             {locations.map((location, index) => (
@@ -151,11 +151,11 @@ const JourneyMap = ({ locations }) => {
             ))}
           </ul>
         </div>
-
+  
         {/* מכל המפה */}
         <div className="journey-map-view" ref={mapContainerRef}></div>
       </div>
-
+  
       {/* פרטי המיקום הנבחר */}
       {selectedLocation && (
         <div className="journey-map-details">
@@ -165,7 +165,8 @@ const JourneyMap = ({ locations }) => {
         </div>
       )}
     </div>
-  );
+);
+
 };
 
 export default JourneyMap;
