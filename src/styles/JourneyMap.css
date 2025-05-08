@@ -47,6 +47,7 @@
 .journey-map-content {
   display: flex;
   flex-direction: row; /* חשוב מאוד! זה מה שגורם לרשימה להיות בצד */
+  flex-grow: 1;
   height: 500px; /* גובה קבוע למפה */
 }
 
@@ -58,6 +59,7 @@
   background-color: #f8f8f8;
   border-left: 1px solid #e0e0e0;
   flex-shrink: 0; /* מונע כיווץ */
+  direction: rtl; 
   /* הורדנו position: relative; */
   /* הורדנו z-index: 2; */
 }
@@ -116,7 +118,7 @@
 .journey-map-view {
   flex: 1; /* תופס את שאר השטח */
   height: 100%;
-  /* הורדנו position: relative; */
+  position: relative;
   /* הורדנו z-index: 1; */
 }
 
