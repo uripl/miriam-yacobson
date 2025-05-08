@@ -40,7 +40,7 @@ const SimpleJourneyMap = ({ locations, className = '' }) => {
   return (
     <div className={`journey-map-container ${className}`} dir="rtl">
       <div className="journey-map-header">
-        <h3 className="journey-map-title">מסע חייה של מרים אופנהיימר יעקובסון</h3>
+        {/* <h3 className="journey-map-title">מסע חייה של מרים אופנהיימר יעקובסון</h3> */}
         <button 
           className="journey-map-view-all" 
           onClick={() => setSelectedLocation(null)}
