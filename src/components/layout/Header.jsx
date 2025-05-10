@@ -66,11 +66,13 @@ const Header = () => {
                 מסמכים
               </NavLink>
             </li>
+            {/* הוסר זמנית
             <li className="nav-item">
               <NavLink to="/about-project" onClick={closeMenu}>
                 אודות הפרויקט
               </NavLink>
             </li>
+            }
           </ul>
         </nav>
       </div>
