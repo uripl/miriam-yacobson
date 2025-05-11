@@ -1,3 +1,4 @@
+// src/components/layout/Footer.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaEnvelope, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
@@ -24,13 +25,7 @@ const Footer = () => {
             <h3>ניווט מהיר</h3>
             <ul>
               <li>
-                <Link to="/">דף הבית</Link>
-              </li>
-              <li>
-                <Link to="/about">אודות מרים</Link>
-              </li>
-              <li>
-                <Link to="/timeline">ציר זמן</Link>
+                <Link to="/">ציר זמן</Link>
               </li>
               <li>
                 <Link to="/journey-map">מפת מסע</Link>
@@ -73,31 +68,18 @@ const Footer = () => {
 
           <div className="footer-column">
             <h3>צרו קשר</h3>
-            <p>לשאלות, הארות או תוספות למידע המוצג באתר, אנא צרו קשר:</p>
             <p>
               <a href="mailto:info@miriam-story.org.il">
                 <FaEnvelope /> info@miriam-story.org.il
               </a>
             </p>
-            <div className="social-links">
-              <a href="#" aria-label="פייסבוק">
-                <FaFacebook />
-              </a>
-              <a href="#" aria-label="אינסטגרם">
-                <FaInstagram />
-              </a>
-              <a href="#" aria-label="טוויטר">
-                <FaTwitter />
-              </a>
-            </div>
           </div>
         </div>
 
         <div className="footer-bottom">
           <p className="footer-copyright">
             © {currentYear} מאפילה לאורה - כל הזכויות שמורות | 
-            פרויקט הנצחה למרים אופנהיימר (יעקובסון) |
-            <Link to="/about-project"> אודות הפרויקט</Link>
+            פרויקט הנצחה למרים אופנהיימר (יעקובסון)
           </p>
         </div>
       </div>
