@@ -1,17 +1,12 @@
-  import React from 'react';
+// src/App.jsx
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // קומפוננטת מבנה
 import Layout from './components/layout/Layout';
 
-// דפים
-import HomePage from './components/pages/HomePage';
-import AboutPage from './components/pages/AboutPage';
-import TimelinePage from './components/pages/TimelinePage';
-import JourneyMapPage from './components/pages/JourneyMapPage';
-import GalleryPage from './components/pages/GalleryPage';
-import DocumentsPage from './components/pages/DocumentsPage';
-import AboutProjectPage from './components/pages/AboutProjectPage';
+// דף הבית החדש (ציר הזמן)
+import NewHomePage from './components/pages/NewHomePage';
 
 // פרקי חיים
 import ChildhoodPage from './components/pages/chapters/ChildhoodPage';
@@ -22,6 +17,11 @@ import LiberationPage from './components/pages/chapters/LiberationPage';
 import ImmigrationPage from './components/pages/chapters/ImmigrationPage';
 import IsraelPage from './components/pages/chapters/IsraelPage';
 
+// דפים נוספים שעדיין רוצים לשמור
+import JourneyMapPage from './components/pages/JourneyMapPage';
+import GalleryPage from './components/pages/GalleryPage';
+import DocumentsPage from './components/pages/DocumentsPage';
+
 // סגנונות
 import './styles/globals.css';
 
@@ -30,13 +30,12 @@ function App() {
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/timeline" element={<TimelinePage />} />
+          <Route path="/" element={<NewHomePage />} />
+          
+          {/* דפים נוספים שנשמרים */}
           <Route path="/journey-map" element={<JourneyMapPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/documents" element={<DocumentsPage />} />
-          <Route path="/about-project" element={<AboutProjectPage />} />
           
           {/* נתיבים לפרקים */}
           <Route path="/chapters/childhood" element={<ChildhoodPage />} />
@@ -48,7 +47,7 @@ function App() {
           <Route path="/chapters/israel" element={<IsraelPage />} />
           
           {/* במקרה של נתיב לא קיים */}
-          <Route path="*" element={<HomePage />} />
+          <Route path="*" element={<NewHomePage />} />
         </Routes>
       </Layout>
     </Router>
