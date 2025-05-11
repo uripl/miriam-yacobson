@@ -14,6 +14,18 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
     <title>מאפילה לאורה | מרים אופנהיימר (יעקובסון)</title>
+     <!-- הערה לדפדפנים ישנים -->
+    <script>
+      // בדיקת תמיכה ב-CSS Grid ומשתני CSS מודרניים
+      var modernBrowser = (function() {
+        return 'CSS' in window && CSS.supports('(display: grid)');
+      })();
+      
+      // הוספת קלאס לאלמנט HTML כדי לזהות דפדפן ישן
+      if (!modernBrowser) {
+        document.documentElement.className += ' legacy-browser';
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
