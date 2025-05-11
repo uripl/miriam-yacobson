@@ -1,9 +1,9 @@
-// src/components/pages/NewHomePage.jsx
+// src/components/pages/NewHomePage.jsx - עדכון המחלקה הראשית
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Timeline from '../common/Timeline';
-import '../../styles/TimelinePage.css';
-import '../../styles/NewHomePage.css'; // הוספת הסגנונות החדשים
+import '../../styles/TimelinePage.css'; // רק לייבא את זה
+// import '../../styles/NewHomePage.css'; // אפשר להשאיר את זה אם יש בו סגנונות אחרים שאנחנו רוצים
 
 const NewHomePage = () => {
   // גלילה לראש הדף בטעינה
@@ -23,8 +23,8 @@ const NewHomePage = () => {
   ];
 
   return (
-    <div className="home-timeline-page">
-      <header className="page-header home-timeline-header">
+    <div className="timeline-page"> {/* שימוש בקלאס של דף ציר הזמן המקורי */}
+      <header className="page-header">
         <div className="container">
           <h1>מאפילה לאורה - סיפור חייה של מרים אופנהיימר (יעקובסון)</h1>
           <p className="subtitle">ציר זמן - נקודות ציון מרכזיות מלייפציג 1925 ועד ישראל</p>
@@ -33,13 +33,13 @@ const NewHomePage = () => {
 
       <div className="container">
         <div className="timeline-page-content">
-          <section className="home-timeline-intro">
+          <section className="timeline-intro"> {/* שימוש בקלאס המקורי */}
             <p>
               ציר הזמן להלן מציג את נקודות הציון המרכזיות בחייה של מרים אופנהיימר (יעקובסון).
               מלידתה בגרמניה בשנת 1925, דרך התקופה הקשה של השואה, ועד לעלייתה לארץ ישראל והקמת משפחה.
             </p>
             <p>
-              ניתן לסנן את האירועים לפי תקופות חיים על ידי לחיצה על הקטגוריות השונות.
+              ניתן לסנן את האירועים לפי תקופות חיים על ידי לחיצה על הקטגוריות למטה.
               לחיצה על "קרא עוד" תוביל אתכם לפרק המתאים עם מידע מפורט יותר.
             </p>
           </section>
@@ -57,7 +57,7 @@ const NewHomePage = () => {
             ))}
           </section>
 
-          <section className="home-timeline-full">
+          <section className="timeline-full"> {/* שימוש בקלאס המקורי */}
             <Timeline simplified={false} />
           </section>
         </div>
