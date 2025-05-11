@@ -1,3 +1,4 @@
+// src/components/layout/Header.jsx
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
@@ -38,16 +39,6 @@ const Header = () => {
           <ul>
             <li className="nav-item">
               <NavLink to="/" onClick={closeMenu} end>
-                דף הבית
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/about" onClick={closeMenu}>
-                אודות מרים
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/timeline" onClick={closeMenu}>
                 ציר זמן
               </NavLink>
             </li>
@@ -66,13 +57,6 @@ const Header = () => {
                 מסמכים
               </NavLink>
             </li>
-            {/* הוסר זמנית
-            <li className="nav-item">
-              <NavLink to="/about-project" onClick={closeMenu}>
-                אודות הפרויקט
-              </NavLink>
-            </li>
-            */}
           </ul>
         </nav>
       </div>
