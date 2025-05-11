@@ -72,7 +72,7 @@ const Header = () => {
                 אודות הפרויקט
               </NavLink>
             </li>
-            }
+            */}
           </ul>
         </nav>
       </div>
