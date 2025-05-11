@@ -241,14 +241,7 @@ const Timeline = ({ simplified = false }) => {
   // בתצוגה מקוצרת, נציג רק את האירועים המרכזיים
   const simplifiedEvents = simplified ? filteredEvents.filter((_, index) => index % 3 === 0 || index === filteredEvents.length - 1) : filteredEvents;
 
-    // סגנון אייקון מותאם לתיקון מיקום
-  const iconStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%'
-  };
+    // נסיר את iconStyle כיוון שאנו משתמשים ב-CSS חיצוני
   
   return (
     <div className="timeline-container" dir="rtl">
@@ -283,7 +276,17 @@ const Timeline = ({ simplified = false }) => {
             date={event.date}
             dateClassName="timeline-date"
             iconStyle={{ background: event.color, color: '#fff' }}
-            icon={event.icon}
+            icon={
+              <div style={{ 
+                height: "100%", 
+                width: "100%", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center" 
+              }}>
+                {event.icon}
+              </div>
+            }
             contentStyle={{
               borderTop: `4px solid ${event.color}`,
               direction: 'rtl',

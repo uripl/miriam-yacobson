@@ -1,0 +1,22 @@
+/* קובץ תיקונים לספריית ציר הזמן */
+
+/* מיקום האייקונים בעיגולים במרכז */
+.vertical-timeline-element-icon svg {
+  margin: 0 !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+/* מיקום האייקונים עבור אייקונים של FA */
+.vertical-timeline-element-icon .fa,
+.vertical-timeline-element-icon .fa-solid,
+.vertical-timeline-element-icon .fa-regular,
+.vertical-timeline-element-icon .fa-brands {
+  margin: 0 !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}

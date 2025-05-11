@@ -188,15 +188,17 @@
 .vertical-timeline-element-icon .fa-solid,
 .vertical-timeline-element-icon .fa-regular,
 .vertical-timeline-element-icon .fa-brands {
+  display: block !important;
   position: absolute !important;
-  top: 50% !important;
-  right: 50% !important;
-  transform: translate(50%, -50%) !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  margin: auto !important;
   width: 24px !important;
   height: 24px !important;
-  display: block !important;
-  margin: 0 !important;
   font-size: 24px !important;
+  z-index: 5 !important;
 }
 
 /* תיקון גודל העיגולים עצמם */
@@ -210,16 +212,11 @@
   box-shadow: 0 0 0 4px var(--white), inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* תיקון גם לציר זמן בדף הבית */
+/* תיקון גם לציר זמן בדף הבית - לא בשימוש כעת כי השתמשנו בגישת עטיפה */
 .timeline-preview .vertical-timeline-element-icon svg,
 .timeline-preview .vertical-timeline-element-icon .fa,
 .timeline-preview .vertical-timeline-element-icon .fa-solid,
 .timeline-preview .vertical-timeline-element-icon .fa-regular,
 .timeline-preview .vertical-timeline-element-icon .fa-brands {
-  position: absolute !important;
-  top: 50% !important;
-  right: 50% !important;
-  transform: translate(50%, -50%) !important;
-  width: 24px !important;
-  height: 24px !important;
+  font-size: 24px !important;
 }
