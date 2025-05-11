@@ -103,10 +103,22 @@
   color: var(--text-light);
 }
 
+/* עיצוב אזור משותף של מסע ופרקי חיים */
+.journey-chapters-section {
+  padding: var(--spacing-3xl) 0;
+  background-color: var(--background-dark);
+}
+
+.journey-chapters-container {
+  display: flex;
+  gap: var(--spacing-xl);
+}
+
 /* עיצוב תצוגת מקדימה של ציר הזמן */
 .timeline-preview {
+  flex: 1;
+  padding: var(--spacing-lg);
   background-color: var(--background-dark);
-  padding: var(--spacing-3xl) 0;
 }
 
 .timeline-preview h2 {
@@ -155,8 +167,10 @@
 
 /* עיצוב תצוגת פרקי חיים */
 .chapters-preview {
+  flex: 1;
+  padding: var(--spacing-lg);
   background-color: var(--white);
-  padding: var(--spacing-3xl) 0;
+  border-radius: var(--border-radius-lg);
 }
 
 .chapters-preview h2 {
@@ -166,7 +180,7 @@
 
 .chapters-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: var(--spacing-lg);
   margin-top: var(--spacing-xl);
 }
@@ -261,24 +275,39 @@
 }
 
 /* תצוגות מדיה (רספונסיביות) */
+@media (max-width: 992px) {
+  .journey-chapters-container {
+    flex-direction: column;
+  }
+
+  .timeline-preview, .chapters-preview {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .hero h1 {
     font-size: var(--font-size-4xl);
   }
-  
+
   .hero h2 {
     font-size: var(--font-size-xl);
   }
-  
+
   .intro-content {
     flex-direction: column;
   }
-  
+
   .intro-image {
     margin-top: var(--spacing-xl);
     max-width: 400px;
   }
-  
+
+  .journey-chapters-container {
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+  }
+
   .cta-buttons {
     flex-direction: column;
     align-items: center;
@@ -296,24 +325,32 @@
   .hero {
     height: 60vh;
   }
-  
+
   .hero h1 {
     font-size: var(--font-size-3xl);
   }
-  
+
   .hero h2 {
     font-size: var(--font-size-lg);
   }
-  
+
   .hero-subtitle {
     font-size: var(--font-size-base);
   }
-  
+
   .chapters-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .quotes-container {
     flex-direction: column;
+  }
+
+  .timeline-preview {
+    padding: var(--spacing-md);
+  }
+
+  .chapters-preview {
+    padding: var(--spacing-md);
   }
 }

@@ -150,32 +150,34 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="timeline-preview">
+      <section className="journey-chapters-section">
         <div className="container">
-          <h2>מסע חיים</h2>
-          <Timeline simplified={true} />
-          <div className="timeline-preview-link">
-            <Link to="/timeline" className="btn-secondary">
-              לציר הזמן המלא
-            </Link>
-          </div>
-        </div>
-      </section>
+          <div className="journey-chapters-container">
+            <div className="timeline-preview">
+              <h2>מסע חיים</h2>
+              <Timeline simplified={true} />
+              <div className="timeline-preview-link">
+                <Link to="/timeline" className="btn-secondary">
+                  לציר הזמן המלא
+                </Link>
+              </div>
+            </div>
 
-      <section className="chapters-preview">
-        <div className="container">
-          <h2>פרקי חיים</h2>
-          <div className="chapters-grid">
-            {chapters.map((chapter) => (
-              <ChapterCard 
-                key={chapter.id}
-                title={chapter.title}
-                years={chapter.years}
-                summary={chapter.summary}
-                imageSrc={chapter.imageSrc}
-                route={chapter.route}
-              />
-            ))}
+            <div className="chapters-preview">
+              <h2>פרקי חיים</h2>
+              <div className="chapters-grid">
+                {chapters.map((chapter) => (
+                  <ChapterCard
+                    key={chapter.id}
+                    title={chapter.title}
+                    years={chapter.years}
+                    summary={chapter.summary}
+                    imageSrc={chapter.imageSrc}
+                    route={chapter.route}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
