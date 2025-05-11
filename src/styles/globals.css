@@ -404,3 +404,19 @@ section {
   box-shadow: var(--shadow-md);
   margin-bottom: var(--spacing-xl);
 }
+
+/* בקובץ src/styles/globals.css */
+
+/* תמיכה בדפדפנים ישנים */
+.legacy-browser .vertical-timeline {
+  display: block !important;
+}
+
+.legacy-browser .vertical-timeline-element {
+  margin-bottom: 30px !important;
+  position: relative !important;
+}
+
+.legacy-browser .vertical-timeline::before {
+  display: none !important;
+}
