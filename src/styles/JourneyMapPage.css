@@ -105,3 +105,40 @@
     max-width: 250px;
   }
 }
+
+/* הוסף לקובץ JourneyMapPage.css - סגנונות עם עדיפות גבוהה יותר */
+.journey-map-page .journey-map-content {
+  display: flex !important;
+  flex-direction: row !important;
+  height: 600px !important;
+}
+
+.journey-map-page .journey-map-locations {
+  width: 33.333% !important;
+  min-width: 33.333% !important;
+  flex: 0 0 33.333% !important;
+}
+
+.journey-map-page .journey-map-view {
+  width: 66.666% !important;
+  flex: 0 0 66.666% !important;
+}
+
+/* התאמות למובייל */
+@media (max-width: 768px) {
+  .journey-map-page .journey-map-content {
+    flex-direction: column !important;
+  }
+  
+  .journey-map-page .journey-map-locations {
+    width: 100% !important;
+    min-width: 100% !important;
+    flex: none !important;
+    height: 200px !important;
+  }
+  
+  .journey-map-page .journey-map-view {
+    width: 100% !important;
+    flex: 1 !important;
+  }
+}
