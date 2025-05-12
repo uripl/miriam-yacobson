@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Quote from '../../common/Quote';
 import ImageGallery from '../../common/ImageGallery';
 import DocumentPreview from '../../common/DocumentPreview';
+import PlaceholderImage from '../../common/PlaceholderImage';
+import ChapterNavBar from '../../common/ChapterNavBar';
 import { quotes, galleryImages, historicalDocuments } from '../../../data/timelineData';
 import '../../../styles/ChapterPage.css';
-import PlaceholderImage from '../../common/PlaceholderImage';
 
 /**
  * דף פרק השחרור והחזרה לליון
@@ -41,20 +41,7 @@ const LiberationPage = () => {
       </header>
 
       <div className="container">
-        <div className="chapter-navigation">
-          <Link to="/" className="nav-back">חזרה לדף הבית</Link>
-          <div className="chapter-pagination">
-            <span className="chapter-number">פרק 5 מתוך 7</span>
-            <div>
-              <span className="pagination-text">פרק קודם: </span>
-              <Link to="/chapters/holocaust" className="pagination-link">בעמק הבכא</Link>
-            </div>
-            <div>
-              <span className="pagination-text">פרק הבא: </span>
-              <Link to="/chapters/immigration" className="pagination-link">העלייה לישראל</Link>
-            </div>
-          </div>
-        </div>
+        <ChapterNavBar position="top" />
 
         <div className="chapter-content">
           <section className="chapter-introduction">
@@ -215,20 +202,7 @@ const LiberationPage = () => {
             </div>
           </section>
 
-          <div className="chapter-navigation bottom">
-            <Link to="/" className="nav-back">חזרה לדף הבית</Link>
-            <div className="chapter-pagination">
-              <span className="chapter-number">פרק 5 מתוך 7</span>
-              <div>
-                <span className="pagination-text">פרק קודם: </span>
-                <Link to="/chapters/holocaust" className="pagination-link">בעמק הבכא</Link>
-              </div>
-              <div>
-                <span className="pagination-text">פרק הבא: </span>
-                <Link to="/chapters/immigration" className="pagination-link">העלייה לישראל</Link>
-              </div>
-            </div>
-          </div>
+          <ChapterNavBar position="bottom" />
         </div>
       </div>
     </div>
