@@ -174,13 +174,19 @@ journey-map-locations {
   }
   
   .journey-map-locations {
-    width: 100%;
-    height: 200px;
-    border-left: none;
-    border-bottom: 1px solid #e0e0e0;
+     width: 33.333%; /* 1/3 מהרוחב */
+    min-width: 33.333%; /* למנוע כיווץ */
+    flex: 0 0 33.333%; /* חשוב! קובע גודל קבוע של 1/3 */
+    overflow-y: auto;
+    border-left: 1px solid #e0e0e0;
+    background-color: #f8f8f8;
+    order: 1; /* סדר: להציג ראשון משמאל לימין */
   }
   
   .journey-map-view {
-    height: calc(100% - 200px);
+    width: 66.666%; /* 2/3 מהרוחב */
+    flex: 0 0 66.666%; /* חשוב! קובע גודל קבוע של 2/3 */
+    height: 100%;
+    order: 2; /* סדר: להציג שני משמאל לימין */
   }
 }
