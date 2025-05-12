@@ -1,39 +1,37 @@
-// src/components/pages/NewHomePage.jsx - עדכון המחלקה הראשית
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Timeline from '../common/Timeline';
-import '../../styles/TimelinePage.css'; // רק לייבא את זה
-// import '../../styles/NewHomePage.css'; // אפשר להשאיר את זה אם יש בו סגנונות אחרים שאנחנו רוצים
+import '../../styles/TimelinePage.css';
+import '../../styles/HomePage.css'; // ייבוא סגנונות גיבור מדף הבית
 
 const NewHomePage = () => {
-  // גלילה לראש הדף בטעינה
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // פרקי החיים העיקריים לקיצורי דרך
-  const chapters = [
-    { id: 'childhood', name: 'ילדות בגרמניה' },
-    { id: 'belgium', name: 'בלגיה' },
-    { id: 'france', name: 'צרפת בכיבוש' },
-    { id: 'holocaust', name: 'השואה' },
-    { id: 'liberation', name: 'השחרור' },
-    { id: 'immigration', name: 'העלייה לארץ' },
-    { id: 'israel', name: 'חיים בישראל' }
-  ];
-
   return (
-    <div className="timeline-page"> {/* שימוש בקלאס של דף ציר הזמן המקורי */}
+    <div className="timeline-page">
+      {/* Hero מדף הבית המקורי */}
+      <section className="hero">
+        <div className="hero-content">
+          <h1>מאפילה לאורה</h1>
+          <h2>סיפור חייה של מרים אופנהיימר (יעקובסון)</h2>
+          <p className="hero-subtitle">
+            ממסע של סבל ואובדן בשואה אל חיים של תקווה ובניין בארץ ישראל
+          </p>
+        </div>
+      </section>
+
+      {/* כותרת ציר הזמן כעת כותרת משנית */}
       <header className="page-header">
         <div className="container">
-          <h1>מאפילה לאורה - סיפור חייה של מרים אופנהיימר (יעקובסון)</h1>
-          <p className="subtitle">ציר זמן - נקודות ציון מרכזיות מלייפציג 1925 ועד ישראל</p>
+          <h2>ציר זמן - נקודות ציון מרכזיות</h2>
+          <p className="subtitle">מלייפציג 1925 ועד ישראל</p>
         </div>
       </header>
 
       <div className="container">
         <div className="timeline-page-content">
-          <section className="timeline-intro"> {/* שימוש בקלאס המקורי */}
+          <section className="timeline-intro">
             <p>
               ציר הזמן להלן מציג את נקודות הציון המרכזיות בחייה של מרים אופנהיימר (יעקובסון).
               מלידתה בגרמניה בשנת 1925, דרך התקופה הקשה של השואה, ועד לעלייתה לארץ ישראל והקמת משפחה.
@@ -44,20 +42,7 @@ const NewHomePage = () => {
             </p>
           </section>
 
-          {/* קיצורי דרך לפרקים */}
-          <section className="chapter-shortcuts">
-            {chapters.map(chapter => (
-              <Link
-                key={chapter.id}
-                to={`/chapters/${chapter.id}`}
-                className="chapter-shortcut-button"
-              >
-                {chapter.name}
-              </Link>
-            ))}
-          </section>
-
-          <section className="timeline-full"> {/* שימוש בקלאס המקורי */}
+          <section className="timeline-full">
             <Timeline simplified={false} />
           </section>
         </div>
