@@ -10,8 +10,6 @@
   overflow: hidden;
   height: 100%;
   width: 100%;
-  margin: 0; /* וודא שאין margin שמשפיע */
-  padding: 0; /* וודא שאין padding שמשפיע */
 }
 
 /* כותרת המפה */
@@ -47,18 +45,17 @@
 .journey-map-content {
   display: flex;
   flex-direction: row; /* חשוב מאוד! זה מה שגורם לרשימה להיות בצד */
-
   height: 600px; /* גובה קבוע למפה */
 }
 
 /* רשימת מיקומים */
-journey-map-locations {
-  width: 250px; /* רוחב קצת יותר קטן */
-  min-width: 250px; /* מניעת כיווץ */
-  flex-shrink: 0; /* מניעת כיווץ */
+.journey-map-locations {
+  width: 33.333%; /* 1/3 מהרוחב */
+  min-width: 33.333%; /* למנוע כיווץ */
+  flex: 0 0 33.333%; /* חשוב! קובע גודל קבוע של 1/3 */
+  overflow-y: auto;
   border-left: 1px solid #e0e0e0;
   background-color: #f8f8f8;
-  overflow-y: auto;
   order: 1; /* סדר: להציג ראשון משמאל לימין */
 }
 
@@ -114,7 +111,8 @@ journey-map-locations {
 
 /* תצוגת המפה */
 .journey-map-view {
-  flex: 1; /* תופס את שאר המרחב */
+  width: 66.666%; /* 2/3 מהרוחב */
+  flex: 0 0 66.666%; /* חשוב! קובע גודל קבוע של 2/3 */
   height: 100%;
   order: 2; /* סדר: להציג שני משמאל לימין */
 }
@@ -174,19 +172,17 @@ journey-map-locations {
   }
   
   .journey-map-locations {
-     width: 33.333%; /* 1/3 מהרוחב */
-    min-width: 33.333%; /* למנוע כיווץ */
-    flex: 0 0 33.333%; /* חשוב! קובע גודל קבוע של 1/3 */
-    overflow-y: auto;
-    border-left: 1px solid #e0e0e0;
-    background-color: #f8f8f8;
-    order: 1; /* סדר: להציג ראשון משמאל לימין */
+    width: 100%;
+    min-width: 100%;
+    flex: none;
+    height: 200px;
+    border-left: none;
+    border-bottom: 1px solid #e0e0e0;
   }
   
   .journey-map-view {
-    width: 66.666%; /* 2/3 מהרוחב */
-    flex: 0 0 66.666%; /* חשוב! קובע גודל קבוע של 2/3 */
-    height: 100%;
-    order: 2; /* סדר: להציג שני משמאל לימין */
+    width: 100%;
+    flex: 1;
+    height: calc(100% - 200px);
   }
 }
