@@ -20,3 +20,21 @@
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
 }
+
+/* תיקונים נוספים לציר הזמן */
+
+/* תיקון מיקום התאריכים העבריים */
+.vertical-timeline-element-date .timeline-date-hebrew {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* תיקונים למיקום התאריכים במובייל */
+@media only screen and (max-width: 1169px) {
+  .vertical-timeline-element-date .timeline-date-container {
+    display: block;
+    width: 100%;
+  }
+}
