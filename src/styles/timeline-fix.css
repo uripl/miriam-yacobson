@@ -38,3 +38,30 @@
     width: 100%;
   }
 }
+
+/* הוסף לקובץ src/styles/timeline-fix.css בסוף הקובץ */
+
+/* override לכל ההגדרות הקשורות לרוחב התאריך */
+.vertical-timeline-element-date,
+.timeline-date.vertical-timeline-element-date {
+  width: auto !important;
+  max-width: 400px !important; /* רוחב גדול מאוד */
+  min-width: auto !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  position: absolute !important;
+  box-sizing: content-box !important;
+}
+
+/* Specific fix for dates on right side */
+.vertical-timeline--two-columns .vertical-timeline-element:nth-child(even) .vertical-timeline-element-date {
+  left: auto !important;
+  right: 124% !important;
+}
+
+/* Specific fix for dates on left side */
+.vertical-timeline--two-columns .vertical-timeline-element:nth-child(odd) .vertical-timeline-element-date {
+  right: auto !important;
+  left: 124% !important;
+}
