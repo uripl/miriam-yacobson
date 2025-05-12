@@ -8,6 +8,7 @@ const JourneyMap = ({ locations }) => {
   const [map, setMap] = useState(null);
   const [mapboxLib, setMapboxLib] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // אתחול המפה
   useEffect(() => {
@@ -119,6 +120,22 @@ const JourneyMap = ({ locations }) => {
     };
   }, [locations]); // תלות בlocations
 
+   useEffect(() => {
+      const checkMobileView = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+      
+      // בדיקה ראשונית
+      checkMobileView();
+      
+      // בדיקה בעת שינוי גודל המסך
+      window.addEventListener('resize', checkMobileView);
+      
+      return () => {
+        window.removeEventListener('resize', checkMobileView);
+      };
+    }, []); 
+  
   // וודא שמידות הרכיבים נשמרות גם בעת טעינה ראשונית
   useEffect(() => {
     // פונקציה להגדרת הגדלים הקבועים
@@ -242,17 +259,18 @@ const JourneyMap = ({ locations }) => {
         className="journey-map-content"
         style={{ 
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: isMobile ? 'column' : 'row',
           width: '100%',
-          height: '600px'
+          height: isMobile ? 'auto' : '600px'
         }}
       >
         {/* רשימת המיקומים - בצד ימין */}
         <div 
           className="journey-map-locations" 
           style={{ 
-            flex: '0 0 33.333%', 
-            width: '33.333%',
+            flex: isMobile ? 'none' : '0 0 33.333%', 
+            width: isMobile ? '100%' : '33.333%',
+            height: isMobile ? '200px' : 'auto',
             overflow: 'auto',
             order: 1 /* רשימה ראשונה (מימין) בגישה RTL */
           }}
@@ -289,10 +307,11 @@ const JourneyMap = ({ locations }) => {
           className="journey-map-view" 
           ref={mapContainerRef}
           style={{ 
-            flex: '0 0 66.666%', 
-            width: '66.666%',
+            flex: isMobile ? 'none' : '0 0 66.666%', 
+            width: isMobile ? '100%' : '66.666%',
+            height: isMobile ? '400px' : 'auto',
             position: 'relative',
-            order: 2 /* מפה שנייה (משמאל) בגישה RTL */
+            order: isMobile ? 2 : 2
           }}
         >
           {!mapLoaded && (
