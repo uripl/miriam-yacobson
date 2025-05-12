@@ -220,3 +220,28 @@
 .timeline-preview .vertical-timeline-element-icon .fa-brands {
   font-size: 24px !important;
 }
+
+/* הוספת הסגנונות האלה לקובץ src/styles/Timeline.css הקיים */
+
+/* סגנונות לתאריכים עבריים */
+.timeline-date-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-date-gregorian {
+  font-weight: var(--font-weight-medium);
+}
+
+.timeline-date-hebrew {
+  font-size: 0.85em;
+  opacity: 0.85;
+  margin-top: 3px;
+}
+
+/* התאמה למובייל */
+@media only screen and (max-width: 1169px) {
+  .timeline-date-hebrew {
+    font-size: 0.8em;
+  }
+}
