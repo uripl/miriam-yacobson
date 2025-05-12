@@ -39,3 +39,24 @@
   }
 }
 
+/* הוסף לקובץ src/styles/timeline-fix.css */
+
+/* פתרון לבועת התאריך שחורגת מגבולותיה */
+span.timeline-date.vertical-timeline-element-date {
+  width: auto !important;
+  white-space: nowrap !important; /* מונע שבירת שורה בתוך כל אחד מהתאריכים */
+  min-width: 70px !important;
+  max-width: none !important; /* מבטל הגבלת רוחב מקסימלי */
+}
+
+/* מוודא שהתאריך העברי והלועזי מוצגים כראוי */
+div.timeline-date-container {
+  display: flex !important;
+  flex-direction: column !important;
+  white-space: nowrap !important;
+}
+
+div.timeline-date-gregorian, 
+div.timeline-date-hebrew {
+  white-space: nowrap !important;
+}
