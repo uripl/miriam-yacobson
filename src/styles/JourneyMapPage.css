@@ -29,6 +29,7 @@
 .journey-map-full {
   margin: var(--spacing-2xl) 0;
   height: 600px; /* גובה קבוע למפה */
+  width: 100%;
   position: relative;
 }
 
