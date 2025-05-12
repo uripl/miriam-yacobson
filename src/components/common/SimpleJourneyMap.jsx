@@ -17,42 +17,91 @@ const SimpleJourneyMap = ({ locations, className = '' }) => {
   
   // מעבר למיקום ספציפי במפה
   const flyToLocation = (location) => {
-    // שמור את העיצוב הנוכחי לפני השינוי
-    const currentViewEl = document.querySelector('.journey-map-view');
-    const currentLocationsEl = document.querySelector('.journey-map-locations');
-    
-    if (currentViewEl && currentLocationsEl) {
-      // זכור את המידות הנוכחיות
-      const viewWidth = currentViewEl.offsetWidth;
-      const locationsWidth = currentLocationsEl.offsetWidth;
-      
-      // קבע סגנון קבוע - זה ימנע שינויים כשמחליפים נקודה
-      currentViewEl.style.width = `${viewWidth}px`;
-      currentLocationsEl.style.width = `${locationsWidth}px`;
-    }
-    
-    // עכשיו הגדר את המיקום הנבחר
     setSelectedLocation(location);
   };
   
   // וודא שמידות הרכיבים נשמרות גם בעת טעינה ראשונית
   useEffect(() => {
-    // נותן לדפדפן זמן לרנדר את הרכיבים לפני הגדרת גדלים
-    const timer = setTimeout(() => {
-      const viewEl = document.querySelector('.journey-map-view');
-      const locationsEl = document.querySelector('.journey-map-locations');
+    // פונקציה להגדרת הגדלים הקבועים
+    const setFixedSizes = () => {
+      // קונטיינר ראשי
+      const containerEl = document.querySelector('.journey-map-container');
+      if (containerEl) {
+        containerEl.style.width = '100%';
+        containerEl.style.maxWidth = '100%';
+      }
       
-      if (viewEl && locationsEl) {
-        // הגדרת סגנונות באתחול - זה ימנע שינויים בהמשך
+      // קונטיינר התוכן
+      const contentEl = document.querySelector('.journey-map-content');
+      if (contentEl) {
+        contentEl.style.width = '100%';
+        contentEl.style.display = 'flex';
+        contentEl.style.flexDirection = 'row';
+      }
+      
+      // אזור המפה
+      const viewEl = document.querySelector('.journey-map-view');
+      if (viewEl) {
         viewEl.style.flex = '0 0 66.666%';
         viewEl.style.width = '66.666%';
+      }
+      
+      // אזור הרשימה
+      const locationsEl = document.querySelector('.journey-map-locations');
+      if (locationsEl) {
         locationsEl.style.flex = '0 0 33.333%';
         locationsEl.style.width = '33.333%';
       }
-    }, 100);
+    };
+    
+    // קריאה ראשונית לפונקציה
+    setFixedSizes();
+    
+    // קריאה נוספת אחרי זמן קצר (למקרה שהתצוגה לא התייצבה לגמרי)
+    const timer = setTimeout(setFixedSizes, 100);
+    
+    // Observer לניטור שינויים במידות האלמנטים
+    if (typeof ResizeObserver !== 'undefined') {
+      const container = document.querySelector('.journey-map-container');
+      if (container) {
+        const resizeObserver = new ResizeObserver(() => {
+          setFixedSizes();
+        });
+        
+        resizeObserver.observe(container);
+        
+        // ניקוי ה-observer
+        return () => {
+          resizeObserver.disconnect();
+          clearTimeout(timer);
+        };
+      }
+    }
     
     return () => clearTimeout(timer);
   }, []);
+  
+  // אירוע שינוי מיקום - יקרא גם כשמחליפים בין נקודות
+  useEffect(() => {
+    // הגדרת גדלים קבועים גם בעת שינוי מיקום
+    const contentEl = document.querySelector('.journey-map-content');
+    const viewEl = document.querySelector('.journey-map-view');
+    const locationsEl = document.querySelector('.journey-map-locations');
+    
+    if (contentEl) {
+      contentEl.style.width = '100%';
+    }
+    
+    if (viewEl) {
+      viewEl.style.flex = '0 0 66.666%';
+      viewEl.style.width = '66.666%';
+    }
+    
+    if (locationsEl) {
+      locationsEl.style.flex = '0 0 33.333%';
+      locationsEl.style.width = '33.333%';
+    }
+  }, [selectedLocation]);
   
   // בדיקה האם מיקום הוא הנבחר הנוכחי
   const isLocationSelected = (location) => {
@@ -60,7 +109,6 @@ const SimpleJourneyMap = ({ locations, className = '' }) => {
   };
   
   // מפה סטטית של מרכז אירופה וישראל
-  // אפשר להחליף ב-iframe עם המיקומים המסומנים של GoogleMaps
   const mapUrl = () => {
     // במקרה שיש מיקום נבחר, הצג אותו
     if (selectedLocation) {
@@ -72,9 +120,17 @@ const SimpleJourneyMap = ({ locations, className = '' }) => {
   };
   
   return (
-    <div className={`journey-map-container ${className}`} dir="rtl">
+    <div 
+      className={`journey-map-container ${className}`}
+      dir="rtl"
+      style={{ 
+        width: '100%', 
+        maxWidth: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
       <div className="journey-map-header">
-        {/* <h3 className="journey-map-title">מסע חייה של מרים אופנהיימר יעקובסון</h3> */}
         <button 
           className="journey-map-view-all" 
           onClick={() => setSelectedLocation(null)}
@@ -83,9 +139,24 @@ const SimpleJourneyMap = ({ locations, className = '' }) => {
         </button>
       </div>
       
-      <div className="journey-map-content">
+      <div 
+        className="journey-map-content"
+        style={{ 
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          height: '600px'
+        }}
+      >
         {/* רשימת המיקומים לניווט מהיר */}
-        <div className="journey-map-locations" style={{ flex: '0 0 33.333%', width: '33.333%' }}>
+        <div 
+          className="journey-map-locations" 
+          style={{ 
+            flex: '0 0 33.333%', 
+            width: '33.333%',
+            overflow: 'auto'
+          }}
+        >
           <ul className="journey-map-location-list">
             {locations.map((location, index) => (
               <li
@@ -104,24 +175,34 @@ const SimpleJourneyMap = ({ locations, className = '' }) => {
         </div>
         
         {/* מכיל המפה - חשוב לקבוע גודל קבוע */}
-        <div className="journey-map-view" style={{ flex: '0 0 66.666%', width: '66.666%' }}>
+        <div 
+          className="journey-map-view" 
+          style={{ 
+            flex: '0 0 66.666%', 
+            width: '66.666%',
+            position: 'relative'
+          }}
+        >
           {isMapLoading && (
-            <div className="journey-map-loading" style={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              alignItems: 'center', 
-              height: '100%', 
-              width: '100%', 
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              zIndex: 5
-            }}>
+            <div 
+              className="journey-map-loading" 
+              style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '100%', 
+                width: '100%', 
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                zIndex: 5
+              }}
+            >
               <p>טוען את המפה...</p>
             </div>
           )}
           
-          {/* מפה פשוטה מבוססת Google Maps במקום Mapbox */}
+          {/* מפה פשוטה מבוססת Google Maps */}
           <iframe
             width="100%"
             height="100%"
