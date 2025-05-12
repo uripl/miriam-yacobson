@@ -54,4 +54,27 @@ function App() {
   );
 }
 
+// בקובץ src/App.jsx - הוסף את הדרך הבאה:
+
+// ...ייבוא קיים...
+import MapboxTestPage from './components/pages/MapboxTestPage';
+
+function App() {
+  return (
+    <Router>
+      <Layout>
+        <Routes>
+          {/* ...ניתובים קיימים... */}
+          
+          {/* דף בדיקה למפה של Mapbox */}
+          <Route path="/mapbox-test" element={<MapboxTestPage />} />
+          
+          {/* ...המשך ניתובים קיימים... */}
+        </Routes>
+      </Layout>
+    </Router>
+  );
+}
+
+export default App;
 export default App;
