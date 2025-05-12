@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import SimpleJourneyMap from '../common/SimpleJourneyMap'; // שים לב לשינוי כאן!
+import JourneyMap from '../common/JourneyMap'; // שינוי חזרה ל-JourneyMap המקורי
 import { journeyLocations } from '../../data/timelineData';
 import '../../styles/JourneyMapPage.css';
 
@@ -23,7 +23,7 @@ const JourneyMapPage = () => {
       <div className="container">
         <div className="journey-map-content">
           <section className="journey-map-full">
-            <SimpleJourneyMap 
+            <JourneyMap 
               locations={journeyLocations} 
             />
           </section>
