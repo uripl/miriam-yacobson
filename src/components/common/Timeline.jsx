@@ -223,4 +223,122 @@ const Timeline = ({ simplified = false }) => {
     },
     {
       id: 'beit-chilkiya',
-      date: '1952-1960
+      date: '1952-1960',
+      hebrewDate: 'תשי״ב-תש״ך',
+      title: 'מעבר לבית חלקיה',
+      location: 'בית חלקיה, ישראל',
+      description: 'המשפחה עברה לבית חלקיה, ובנתה בה את חייה. נולדו להם שני ילדים: מיכל ורפי.',
+      icon: <FaHome />,
+      category: 'life-in-israel',
+      color: '#9900EF'
+    },
+    {
+      id: 'later-life',
+      date: '1960-2023',
+      hebrewDate: 'תש״ך-תשפ״ג',
+      title: 'המשך החיים בישראל',
+      location: 'ישראל',
+      description: 'מרים ומשפחתה המשיכו לחיות בישראל, ראו בהקמת המשפחה, הילדים והנכדים את הניצחון האמיתי על הנאצים.',
+      icon: <FaBook />,
+      category: 'life-in-israel',
+      color: '#9900EF'
+    }
+  ];
+
+  // קטגוריות תקופות חיים לסינון
+  const categories = [
+    { id: 'childhood', name: 'ילדות בגרמניה', color: '#8ED1FC' },
+    { id: 'belgium', name: 'בלגיה', color: '#7BDCB5' },
+    { id: 'france', name: 'צרפת תחת כיבוש', color: '#ABB8C3' },
+    { id: 'holocaust', name: 'השואה', color: '#F78DA7' },
+    { id: 'liberation', name: 'השחרור', color: '#0693E3' },
+    { id: 'immigration', name: 'העלייה לארץ', color: '#FCB900' },
+    { id: 'life-in-israel', name: 'חיים בישראל', color: '#9900EF' }
+  ];
+
+  // סינון אירועים לפי קטגוריה נבחרת או תצוגת כל האירועים
+  const filteredEvents = selectedEra ? timelineData.filter(event => event.category === selectedEra) : timelineData;
+  
+  // בתצוגה מקוצרת, נציג רק את האירועים המרכזיים
+  const simplifiedEvents = simplified ? filteredEvents.filter((_, index) => index % 3 === 0 || index === filteredEvents.length - 1) : filteredEvents;
+
+  return (
+    <div className="timeline-container" dir="rtl">
+      {!simplified && (
+        <div className="timeline-categories">
+          <button 
+            className={`category-button ${selectedEra === null ? 'active' : ''}`}
+            onClick={() => setSelectedEra(null)}
+          >
+            כל האירועים
+          </button>
+          {categories.map(category => (
+            <button
+              key={category.id}
+              className={`category-button ${selectedEra === category.id ? 'active' : ''}`}
+              style={{ 
+                borderColor: category.color,
+                backgroundColor: selectedEra === category.id ? category.color : 'transparent'
+              }}
+              onClick={() => setSelectedEra(category.id)}
+            >
+              {category.name}
+            </button>
+          ))}
+        </div>
+      )}
+      
+      <VerticalTimeline>
+        {simplifiedEvents.map(event => (
+          <VerticalTimelineElement
+            key={event.id}
+            date={
+              <div className="timeline-date-container">
+                <div className="timeline-date-gregorian">{event.date}</div>
+                {event.hebrewDate && <div className="timeline-date-hebrew">{event.hebrewDate}</div>}
+              </div>
+            }
+            dateClassName="timeline-date"
+            iconStyle={{ background: event.color, color: '#fff' }}
+            icon={
+              <div style={{ 
+                height: "100%", 
+                width: "100%", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center" 
+              }}>
+                {event.icon}
+              </div>
+            }
+            contentStyle={{
+              borderTop: `4px solid ${event.color}`,
+              direction: 'rtl',
+              textAlign: 'right'
+            }}
+          >
+            <h3 className="timeline-title">{event.title}</h3>
+            <h4 className="timeline-location">{event.location}</h4>
+            <p className="timeline-description">{event.description}</p>
+            
+            {!simplified && (
+              <Link to={`/chapters/${event.category}#${event.id}`} className="timeline-link">
+                קרא עוד
+              </Link>
+            )}
+          </VerticalTimelineElement>
+        ))}
+      </VerticalTimeline>
+      
+      {simplified && (
+        <div className="timeline-footer">
+          <Link to="/timeline" className="timeline-full-link">
+            לציר הזמן המלא
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Timeline;
