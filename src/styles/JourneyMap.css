@@ -186,3 +186,20 @@
     height: calc(100% - 200px);
   }
 }
+
+@media (max-width: 768px) {
+  .journey-map-view {
+    min-height: 350px !important;
+    height: 350px !important;
+  }
+  
+  /* וודא שהמכל החיצוני גדול מספיק */
+  .journey-map-container {
+    min-height: 600px !important;
+  }
+  
+  /* וודא שמכל התוכן גדול מספיק */
+  .journey-map-content {
+    min-height: 600px !important;
+  }
+}
