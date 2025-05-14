@@ -310,6 +310,7 @@ const JourneyMap = ({ locations }) => {
             flex: isMobile ? 'none' : '0 0 66.666%', 
             width: isMobile ? '100%' : '66.666%',
             height: isMobile ? '400px' : 'auto',
+            minHeight: isMobile ? '400px' : 'auto',
             position: 'relative',
             order: isMobile ? 2 : 2
           }}
