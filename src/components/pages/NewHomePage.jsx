@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Timeline from '../common/Timeline';
-import '../../styles/HomePage.css';
+import '../../styles/NewHomePage.css';
 
 const NewHomePage = () => {
   useEffect(() => {
