@@ -60,26 +60,3 @@ div.timeline-date-gregorian,
 div.timeline-date-hebrew {
   white-space: nowrap !important;
 }
-
-/* תיקונים נוספים למובייל */
-@media (max-width: 768px) {
-  .vertical-timeline-element-date {
-    font-size: 11px !important;
-    padding: 4px 8px !important;
-  }
-  
-  .timeline-date-hebrew {
-    display: none; /* הסתרת תאריך עברי במובייל */
-  }
-  
-  /* הגדלת אזור המגע בציר הזמן */
-  .vertical-timeline-element-content {
-    padding: var(--spacing-lg) !important;
-    margin-bottom: var(--spacing-xl) !important;
-  }
-  
-  /* שיפור קריאות */
-  .timeline-title {
-    font-size: var(--font-size-lg) !important;
-  }
-}

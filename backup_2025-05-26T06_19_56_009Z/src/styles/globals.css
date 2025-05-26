@@ -198,9 +198,7 @@ img {
   cursor: pointer;
   transition: all var(--transition-fast) ease;
   border: none;
-
-  min-height: 44px;
-  min-width: 44px;}
+}
 
 .btn:hover {
   text-decoration: none;

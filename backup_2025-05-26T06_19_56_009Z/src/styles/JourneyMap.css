@@ -189,7 +189,7 @@
 
 @media (max-width: 768px) {
   .journey-map-view {
-    min-height: 450px !important; /* הגדלת גובה המפה במובייל */
+    min-height: 350px !important;
     height: 350px !important;
   }
   

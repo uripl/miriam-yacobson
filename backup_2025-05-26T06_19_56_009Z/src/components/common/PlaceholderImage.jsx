@@ -45,7 +45,7 @@ const PlaceholderImage = ({
       height={height}
       className={`placeholder-image ${className}`}
       style={placeholderStyle}
-      loading="lazy" decoding="async"
+      loading="lazy"
       {...props}
     />
   );

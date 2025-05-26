@@ -27,7 +27,8 @@ const Header = () => {
           <span className="site-title">מאפילה לאורה</span>
         </Link>
 
-        <button className="mobile-menu-button" 
+        <button
+          className="mobile-menu-button"
           onClick={toggleMenu}
           aria-label={menuOpen ? "סגור תפריט" : "פתח תפריט"}
         >

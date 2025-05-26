@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Timeline from '../common/Timeline';
 import '../../styles/TimelinePage.css';
-import '../../styles/HomePage.css'; // ייבוא סגנונות גיבור מדף הבית
 
 const NewHomePage = () => {
   useEffect(() => {

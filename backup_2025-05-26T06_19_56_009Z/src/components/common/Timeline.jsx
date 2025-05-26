@@ -341,4 +341,4 @@ const Timeline = ({ simplified = false }) => {
   );
 };
 
-export default React.memo(Timeline);
+export default Timeline;
