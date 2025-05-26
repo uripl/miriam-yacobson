@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../styles/JourneyMap.css';
 
@@ -11,14 +11,9 @@ const JourneyMap = ({ locations }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   // פונקציה ליצירת קווים מעוקלים
-  const createCurvedLine = (start, end, curvature = 0.3) => {
+  const createCurvedLine = useCallback((start, end, curvature = 0.3) => {
     const midLat = (start[1] + end[1]) / 2;
     const midLng = (start[0] + end[0]) / 2;
-    
-    const distance = Math.sqrt(
-      Math.pow(end[0] - start[0], 2) + 
-      Math.pow(end[1] - start[1], 2)
-    );
     
     const offsetLat = (end[0] - start[0]) * curvature;
     const offsetLng = (end[1] - start[1]) * curvature;
@@ -41,24 +36,34 @@ const JourneyMap = ({ locations }) => {
     }
     
     return points;
+  }, []);
+
+  // צבעים לתקופות שונות
+  const journeyColors = {
+    childhood: '#4A90E2',
+    belgium: '#7ED321',
+    france: '#F5A623',
+    holocaust: '#D0021B',
+    liberation: '#9013FE',
+    immigration: '#50E3C2',
+    'life-in-israel': '#B8E986'
   };
 
-  // צבعים לתקופות שונות
-  const journeyColors = {
-    childhood: '#4A90E2',     // כחול - ילדות
-    belgium: '#7ED321',       // ירוק - בלגיה
-    france: '#F5A623',        // כתום - צרפת
-    holocaust: '#D0021B',     // אדום - השואה
-    liberation: '#9013FE',    // סגול - שחרור
-    immigration: '#50E3C2',   // טורקיז - עלייה
-    'life-in-israel': '#B8E986' // ירוק בהיר - חיים בישראל
-  };
+  // פונקציה לקבלת תקופה מהמיקום
+  const getPeriodFromLocation = useCallback((currentLoc, nextLoc) => {
+    if (currentLoc.name.includes('לייפציג')) return 'childhood';
+    if (currentLoc.name.includes('בלגיה') || nextLoc.name.includes('בלגיה')) return 'belgium';
+    if (currentLoc.name.includes('צרפת') || nextLoc.name.includes('ליון')) return 'france';
+    if (currentLoc.name.includes('אושוויץ') || nextLoc.name.includes('אושוויץ')) return 'holocaust';
+    if (currentLoc.dateRange && currentLoc.dateRange.includes('1945')) return 'liberation';
+    if (currentLoc.name.includes('ישראל') || nextLoc.name.includes('ישראל')) return 'immigration';
+    return 'childhood';
+  }, []);
 
   // פונקציה להוספת קווים משופרים
-  const addImprovedRoutes = (mapInstance) => {
+  const addImprovedRoutes = useCallback((mapInstance) => {
     if (!mapInstance || !locations || locations.length < 2) return;
 
-    // יצירת קווי מסע מעוקלים
     for (let i = 0; i < locations.length - 1; i++) {
       const currentLoc = locations[i];
       const nextLoc = locations[i + 1];
@@ -66,7 +71,6 @@ const JourneyMap = ({ locations }) => {
       const start = [currentLoc.longitude, currentLoc.latitude];
       const end = [nextLoc.longitude, nextLoc.latitude];
       
-      // חישוב עוצמת העיקול בהתאם למרחק
       const distance = Math.sqrt(
         Math.pow(end[0] - start[0], 2) + 
         Math.pow(end[1] - start[1], 2)
@@ -75,7 +79,6 @@ const JourneyMap = ({ locations }) => {
       
       const curvedCoordinates = createCurvedLine(start, end, curvature);
       
-      // הוספת מקור נתונים לקו
       mapInstance.addSource(`route-${i}`, {
         type: 'geojson',
         data: {
@@ -93,7 +96,6 @@ const JourneyMap = ({ locations }) => {
         }
       });
 
-      // הוספת שכבת הקו עם אנימציה
       mapInstance.addLayer({
         id: `route-${i}`,
         type: 'line',
@@ -116,7 +118,6 @@ const JourneyMap = ({ locations }) => {
         }
       });
 
-      // הוספת אפקט זוהר
       mapInstance.addLayer({
         id: `route-glow-${i}`,
         type: 'line',
@@ -139,7 +140,6 @@ const JourneyMap = ({ locations }) => {
         }
       });
 
-      // הוספת חיצים לכיוון
       mapInstance.addLayer({
         id: `route-arrows-${i}`,
         type: 'symbol',
@@ -159,7 +159,6 @@ const JourneyMap = ({ locations }) => {
         }
       });
 
-      // הוספת אירועי hover
       mapInstance.on('mouseenter', `route-${i}`, (e) => {
         mapInstance.getCanvas().style.cursor = 'pointer';
         
@@ -176,7 +175,6 @@ const JourneyMap = ({ locations }) => {
           `)
           .addTo(mapInstance);
           
-        // שמירת הפופאפ כדי שנוכל להסיר אותו
         mapInstance._currentPopup = popup;
       });
 
@@ -188,7 +186,6 @@ const JourneyMap = ({ locations }) => {
         }
       });
 
-      // אנימציה הדרגתית של הקווים
       setTimeout(() => {
         if (mapInstance.getLayer(`route-${i}`)) {
           mapInstance.setPaintProperty(`route-${i}`, 'line-opacity', 0);
@@ -214,21 +211,30 @@ const JourneyMap = ({ locations }) => {
         }
       }, i * 300);
     }
-  };
+  }, [locations, createCurvedLine, getPeriodFromLocation, journeyColors, mapboxLib]);
 
-  // פונקציה לקבלת תקופה מהמיקום
-  const getPeriodFromLocation = (currentLoc, nextLoc) => {
-    // לוגיקה לקביעת התקופה בהתאם לשמות המיקומים או התאריכים
-    if (currentLoc.name.includes('לייפציג')) return 'childhood';
-    if (currentLoc.name.includes('בלגיה') || nextLoc.name.includes('בלגיה')) return 'belgium';
-    if (currentLoc.name.includes('צרפת') || nextLoc.name.includes('ליון')) return 'france';
-    if (currentLoc.name.includes('אושוויץ') || nextLoc.name.includes('אושוויץ')) return 'holocaust';
-    if (currentLoc.dateRange && currentLoc.dateRange.includes('1945')) return 'liberation';
-    if (currentLoc.name.includes('ישראל') || nextLoc.name.includes('ישראל')) return 'immigration';
-    return 'childhood';
-  };
+  const viewFullJourneyInternal = useCallback((mapInstance, libInstance) => {
+    if (!mapInstance || !libInstance || locations.length === 0) return;
+    
+    const customBounds = new libInstance.LngLatBounds(
+      [0, 30],
+      [35, 55]
+    );
+    
+    locations.forEach(location => {
+      if (location.longitude < 0 || location.longitude > 35 ||
+          location.latitude < 30 || location.latitude > 55) {
+        customBounds.extend([location.longitude, location.latitude]);
+      }
+    });
+    
+    mapInstance.fitBounds(customBounds, {
+      padding: { top: 50, bottom: 50, left: 50, right: 50 },
+      duration: 1000,
+      maxZoom: 5
+    });
+  }, [locations]);
 
-  // אתחול המפה (הקוד הקיים שלך...)
   useEffect(() => {
     if (mapContainerRef.current && !map) {
       import('mapbox-gl').then(mapboxglLib => {
@@ -255,7 +261,6 @@ const JourneyMap = ({ locations }) => {
           
           newMap.addControl(new mapboxgl.NavigationControl(), 'top-left');
           
-          // הוספת סמנים (הקוד הקיים שלך...)
           locations.forEach((location, index) => {
             const el = document.createElement('div');
             el.className = 'journey-map-marker';
@@ -274,7 +279,6 @@ const JourneyMap = ({ locations }) => {
               .addTo(newMap);
           });
           
-          // הוספת הקווים המשופרים
           setTimeout(() => {
             addImprovedRoutes(newMap);
           }, 1000);
@@ -293,37 +297,8 @@ const JourneyMap = ({ locations }) => {
         map.remove();
       }
     };
-  }, [locations]);
+  }, [locations, addImprovedRoutes, viewFullJourneyInternal, map]);
 
-  // שאר הקוד הקיים שלك...
-  const viewFullJourneyInternal = (mapInstance, libInstance) => {
-    if (!mapInstance || !libInstance || locations.length === 0) return;
-    
-    const customBounds = new libInstance.LngLatBounds(
-      [0, 30],
-      [35, 55]
-    );
-    
-    locations.forEach(location => {
-      if (location.longitude < 0 || location.longitude > 35 ||
-          location.latitude < 30 || location.latitude > 55) {
-        customBounds.extend([location.longitude, location.latitude]);
-      }
-    });
-    
-    mapInstance.fitBounds(customBounds, {
-      padding: { top: 50, bottom: 50, left: 50, right: 50 },
-      duration: 1000,
-      maxZoom: 5
-    });
-  };
-
-  const viewFullJourney = () => {
-    setSelectedLocation(null);
-    viewFullJourneyInternal(map, mapboxLib);
-  };
-
-  // שאר הקוד זהה לקוד הקיים שלך...
   useEffect(() => {
     const checkMobileView = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -336,6 +311,11 @@ const JourneyMap = ({ locations }) => {
       window.removeEventListener('resize', checkMobileView);
     };
   }, []); 
+
+  const viewFullJourney = () => {
+    setSelectedLocation(null);
+    viewFullJourneyInternal(map, mapboxLib);
+  };
 
   return (
     <div 
