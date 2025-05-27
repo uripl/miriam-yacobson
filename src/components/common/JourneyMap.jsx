@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../styles/JourneyMap.css';
 
@@ -9,201 +9,104 @@ const JourneyMap = ({ locations }) => {
   const [mapboxLib, setMapboxLib] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  
-  // refs לניהול cleanup
-  const animationTimeoutsRef = useRef([]);
-  const isCleanedUpRef = useRef(false);
-  const markersRef = useRef([]);
 
-  // בדיקת מובייל
+  // אתחול המפה
   useEffect(() => {
-    const checkMobileView = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobileView();
-    window.addEventListener('resize', checkMobileView);
-    
-    return () => {
-      window.removeEventListener('resize', checkMobileView);
-    };
-  }, []);
-
-  // פונקציה לניקוי timeouts
-  const clearAllTimeouts = useCallback(() => {
-    animationTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    animationTimeoutsRef.current = [];
-  }, []);
-
-  // פונקציה לניקוי markers
-  const clearAllMarkers = useCallback(() => {
-    markersRef.current.forEach(marker => {
-      try {
-        marker.remove();
-      } catch (error) {
-        console.warn('שגיאה בהסרת marker:', error);
-      }
-    });
-    markersRef.current = [];
-  }, []);
-
-  // פונקציה פנימית להצגת כל המסע
-  const viewFullJourneyInternal = useCallback((mapInstance, libInstance) => {
-    if (!mapInstance || !libInstance || locations.length === 0 || isCleanedUpRef.current) return;
-    
-    try {
-      // גבולות מותאמים אישית שמכסים את אירופה וישראל
-      const customBounds = new libInstance.LngLatBounds(
-        [0, 30],  // דרום-מערב
-        [35, 55]  // צפון-מזרח
-      );
-      
-      // הוסף את כל המיקומים לגבולות
-      locations.forEach(location => {
-        if (location.longitude < 0 || location.longitude > 35 ||
-            location.latitude < 30 || location.latitude > 55) {
-          customBounds.extend([location.longitude, location.latitude]);
-        }
-      });
-      
-      mapInstance.fitBounds(customBounds, {
-        padding: { top: 50, bottom: 50, left: 50, right: 50 },
-        duration: 1000,
-        maxZoom: 5
-      });
-    } catch (error) {
-      console.warn('שגיאה בהצגת כל המסע:', error);
-    }
-  }, [locations]);
-
-  // אתחול המפה - גרסה מתוקנת
-  useEffect(() => {
-    let mapInstance = null;
-    
-    if (mapContainerRef.current && !map && !isCleanedUpRef.current) {
+    if (mapContainerRef.current && !map) {
       // יבוא דינמי של mapboxgl
       import('mapbox-gl').then(mapboxglLib => {
-        if (isCleanedUpRef.current) return;
-        
+        // שמור את הספרייה לשימוש אחר כך
         setMapboxLib(mapboxglLib.default);
         
         const mapboxgl = mapboxglLib.default;
+        // שימוש במפתח API מהסביבה או ערך ברירת מחדל
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || 'pk.eyJ1IjoidXJpcGxlc3NlciIsImEiOiJjbWEzdzc2emwwMG5kMmtxejAzdWtya3ZqIn0.Ipxq0bDQtuY82BO883EbeA';
         
+        // בדיקה אם WebGL נתמך
         if (!mapboxgl.supported()) {
           console.error('הדפדפן שלך לא תומך ב-Mapbox GL');
           return;
         }
         
-        mapInstance = new mapboxgl.Map({
+        const newMap = new mapboxgl.Map({
           container: mapContainerRef.current,
           style: 'mapbox://styles/mapbox/light-v11',
-          center: [25.0, 42.0],
-          zoom: 3
+          center: [25.0, 42.0], // מיקום יותר מזרחי שמכסה את אירופה וישראל
+          zoom: 3 // זום מרוחק יותר
         });
         
-        mapInstance.on('load', () => {
-          if (isCleanedUpRef.current) return;
-          
+        newMap.on('load', () => {
           setMapLoaded(true);
           console.log('מפת Mapbox נטענה בהצלחה');
           
-          try {
-            // הוספת בקרי ניווט במפה
-            mapInstance.addControl(new mapboxgl.NavigationControl(), 'top-left');
-            
-            // הוספת שכבת קווים למסע - עם בדיקות בטיחות
-            if (locations.length > 1) {
-              // בדיקה אם ה-source כבר קיים
-              if (!mapInstance.getSource('route')) {
-                mapInstance.addSource('route', {
-                  'type': 'geojson',
-                  'data': {
-                    'type': 'Feature',
-                    'properties': {},
-                    'geometry': {
-                      'type': 'LineString',
-                      'coordinates': locations.map(loc => [loc.longitude, loc.latitude])
-                    }
-                  }
-                });
-              }
-              
-              // בדיקה אם ה-layer כבר קיים
-              if (!mapInstance.getLayer('route')) {
-                mapInstance.addLayer({
-                  'id': 'route',
-                  'type': 'line',
-                  'source': 'route',
-                  'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round'
-                  },
-                  'paint': {
-                    'line-color': '#e67e22',
-                    'line-width': 3,
-                    'line-dasharray': [2, 1]
-                  }
-                });
-              }
-            }
-            
-            // הוספת סמנים למפה
-            locations.forEach((location, index) => {
-              if (isCleanedUpRef.current) return;
-              
-              const el = document.createElement('div');
-              el.className = 'journey-map-marker';
-              el.innerHTML = index + 1;
-              
-              const clickHandler = () => {
-                if (isCleanedUpRef.current) return;
-                
-                setSelectedLocation(location);
-                
-                // טיסה למיקום הנבחר
-                try {
-                  mapInstance.flyTo({
-                    center: [location.longitude, location.latitude],
-                    zoom: 8,
-                    duration: 1000
-                  });
-                } catch (error) {
-                  console.warn('שגיאה בטיסה למיקום:', error);
+          // הוספת בקרי ניווט במפה (זום וסיבוב)
+          newMap.addControl(new mapboxgl.NavigationControl(), 'top-left');
+          
+          // הוספת שכבת קווים למסע
+          if (locations.length > 1) {
+            newMap.addSource('route', {
+              'type': 'geojson',
+              'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                  'type': 'LineString',
+                  'coordinates': locations.map(loc => [loc.longitude, loc.latitude])
                 }
-              };
-              
-              el.addEventListener('click', clickHandler);
-              
-              // יצירת הסמן
-              const marker = new mapboxgl.Marker(el)
-                .setLngLat([location.longitude, location.latitude])
-                .addTo(mapInstance);
-              
-              // שמירת הסמן לניקוי עתידי
-              markersRef.current.push(marker);
+              }
             });
             
-            // הצג את כל המסע בטעינה ראשונית
-            const timeout = setTimeout(() => {
-              if (!isCleanedUpRef.current) {
-                viewFullJourneyInternal(mapInstance, mapboxgl);
+            newMap.addLayer({
+              'id': 'route',
+              'type': 'line',
+              'source': 'route',
+              'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+              },
+              'paint': {
+                'line-color': '#e67e22',
+                'line-width': 3,
+                'line-dasharray': [2, 1]
               }
-            }, 500);
-            
-            animationTimeoutsRef.current.push(timeout);
-            
-          } catch (error) {
-            console.error('שגיאה באתחול המפה:', error);
+            });
           }
+          
+          // הוספת סמנים למפה
+          locations.forEach((location, index) => {
+            // יצירת אלמנט HTML מותאם לסמן
+            const el = document.createElement('div');
+            el.className = 'journey-map-marker';
+            el.innerHTML = index + 1;
+            el.addEventListener('click', () => {
+              setSelectedLocation(location);
+              
+              // טיסה למיקום הנבחר
+              newMap.flyTo({
+                center: [location.longitude, location.latitude],
+                zoom: 8,
+                duration: 1000
+              });
+            });
+            
+            // הוספת הסמן למפה
+            new mapboxgl.Marker(el)
+              .setLngLat([location.longitude, location.latitude])
+              .addTo(newMap);
+          });
+          
+          // הצג את כל המסע בטעינה ראשונית
+          setTimeout(() => {
+            viewFullJourneyInternal(newMap, mapboxgl);
+          }, 500);
         });
         
         // טיפול בשגיאות טעינה
-        mapInstance.on('error', (e) => {
+        newMap.on('error', (e) => {
           console.error('שגיאה בטעינת מפת Mapbox:', e);
         });
         
-        setMap(mapInstance);
+        setMap(newMap);
       }).catch(err => {
         console.error('נכשל בטעינת Mapbox GL:', err);
       });
@@ -211,67 +114,126 @@ const JourneyMap = ({ locations }) => {
     
     // ניקוי בעת פירוק הקומפוננטה
     return () => {
-      isCleanedUpRef.current = true;
-      
-      // ניקוי timeouts
-      clearAllTimeouts();
-      
-      // ניקוי markers
-      clearAllMarkers();
-      
-      // ניקוי המפה
-      if (mapInstance) {
-        try {
-          // בדיקה והסרה בטוחה של השכבות
-          if (mapInstance.getLayer && typeof mapInstance.getLayer === 'function') {
-            if (mapInstance.getLayer('route')) {
-              mapInstance.removeLayer('route');
-            }
-          }
-          
-          if (mapInstance.getSource && typeof mapInstance.getSource === 'function') {
-            if (mapInstance.getSource('route')) {
-              mapInstance.removeSource('route');
-            }
-          }
-          
-          // הריסת המפה
-          if (mapInstance.remove && typeof mapInstance.remove === 'function') {
-            mapInstance.remove();
-          }
-        } catch (error) {
-          console.warn('שגיאה בניקוי המפה:', error);
-        }
+      if (map) {
+        map.remove();
       }
     };
-  }, [locations, clearAllTimeouts, clearAllMarkers, viewFullJourneyInternal]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [locations]); // תלות בlocations
 
-  // הצגת כל המסע במפה - פונקציה ציבורית
-  const viewFullJourney = useCallback(() => {
-    if (isCleanedUpRef.current) return;
+   useEffect(() => {
+      const checkMobileView = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+      
+      // בדיקה ראשונית
+      checkMobileView();
+      
+      // בדיקה בעת שינוי גודל המסך
+      window.addEventListener('resize', checkMobileView);
+      
+      return () => {
+        window.removeEventListener('resize', checkMobileView);
+      };
+    }, []); 
+  
+  // וודא שמידות הרכיבים נשמרות גם בעת טעינה ראשונית
+  useEffect(() => {
+    // פונקציה להגדרת הגדלים הקבועים
+    const setFixedSizes = () => {
+      // קונטיינר ראשי
+      const containerEl = document.querySelector('.journey-map-container');
+      if (containerEl) {
+        containerEl.style.width = '100%';
+        containerEl.style.maxWidth = '100%';
+      }
+      
+      // קונטיינר התוכן
+      const contentEl = document.querySelector('.journey-map-content');
+      if (contentEl) {
+        contentEl.style.width = '100%';
+        contentEl.style.display = 'flex';
+        contentEl.style.flexDirection = 'row';
+      }
+      
+      // אזור המפה
+      const viewEl = document.querySelector('.journey-map-view');
+      if (viewEl) {
+        viewEl.style.flex = '0 0 66.666%';
+        viewEl.style.width = '66.666%';
+      }
+      
+      // אזור הרשימה
+      const locationsEl = document.querySelector('.journey-map-locations');
+      if (locationsEl) {
+        locationsEl.style.flex = '0 0 33.333%';
+        locationsEl.style.width = '33.333%';
+      }
+    };
     
-    setSelectedLocation(null);
-    viewFullJourneyInternal(map, mapboxLib);
-  }, [map, mapboxLib, viewFullJourneyInternal]);
-
-  // פונקציה לטיפול בלחיצה על מיקום ברשימה
-  const handleLocationClick = useCallback((location) => {
-    if (isCleanedUpRef.current) return;
+    // קריאה ראשונית לפונקציה
+    setFixedSizes();
     
-    setSelectedLocation(location);
+    // קריאה נוספת אחרי זמן קצר (למקרה שהתצוגה לא התייצבה לגמרי)
+    const timer = setTimeout(setFixedSizes, 100);
     
-    if (map && typeof map.flyTo === 'function') {
-      try {
-        map.flyTo({
-          center: [location.longitude, location.latitude],
-          zoom: 8,
-          duration: 1000
+    // Observer לניטור שינויים במידות האלמנטים
+    if (typeof ResizeObserver !== 'undefined') {
+      const container = document.querySelector('.journey-map-container');
+      if (container) {
+        const resizeObserver = new ResizeObserver(() => {
+          setFixedSizes();
         });
-      } catch (error) {
-        console.warn('שגיאה בטיסה למיקום:', error);
+        
+        resizeObserver.observe(container);
+        
+        // ניקוי ה-observer
+        return () => {
+          resizeObserver.disconnect();
+          clearTimeout(timer);
+        };
       }
     }
-  }, [map]);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // פונקציה פנימית להצגת כל המסע - משותפת
+  const viewFullJourneyInternal = (mapInstance, libInstance) => {
+    if (!mapInstance || !libInstance || locations.length === 0) return;
+    
+    // אם יש מיקומים בישראל ובאירופה, צריך לוודא שרואים את כולם
+    // גבולות מותאמים אישית שמכסים את אירופה וישראל
+    const customBounds = new libInstance.LngLatBounds(
+      [0, 30],  // דרום-מערב: קצה מערב אירופה, מתחת לישראל
+      [35, 55]  // צפון-מזרח: מזרח אירופה (כולל ישראל), צפון אירופה
+    );
+    
+    // הוסף את כל המיקומים לגבולות
+    locations.forEach(location => {
+      // רק הוסף אם המיקום חורג מהגבולות שהגדרנו מראש
+      if (location.longitude < 0 || location.longitude > 35 ||
+          location.latitude < 30 || location.latitude > 55) {
+        customBounds.extend([location.longitude, location.latitude]);
+      }
+    });
+    
+    mapInstance.fitBounds(customBounds, {
+      padding: {
+        top: 50,
+        bottom: 50,
+        left: 50, 
+        right: 50
+      },
+      duration: 1000,
+      maxZoom: 5 // מגביל את רמת הזום כדי שלא יתקרב מדי
+    });
+  };
+
+  // הצגת כל המסע במפה - פונקציה ציבורית
+  const viewFullJourney = () => {
+    setSelectedLocation(null); // נקה בחירת מיקום
+    viewFullJourneyInternal(map, mapboxLib);
+  };
 
   return (
     <div 
@@ -288,7 +250,6 @@ const JourneyMap = ({ locations }) => {
         <button 
           className="journey-map-view-all" 
           onClick={viewFullJourney}
-          disabled={!mapLoaded}
         >
           הצג את כל המסע
         </button>
@@ -303,7 +264,7 @@ const JourneyMap = ({ locations }) => {
           height: isMobile ? 'auto' : '600px'
         }}
       >
-        {/* רשימת המיקומים */}
+        {/* רשימת המיקומים - בצד ימין */}
         <div 
           className="journey-map-locations" 
           style={{ 
@@ -311,17 +272,25 @@ const JourneyMap = ({ locations }) => {
             width: isMobile ? '100%' : '33.333%',
             height: isMobile ? '200px' : 'auto',
             overflow: 'auto',
-            order: 1
+            order: 1 /* רשימה ראשונה (מימין) בגישה RTL */
           }}
         >
           <ul className="journey-map-location-list">
             {locations.map((location, index) => (
               <li
-                key={location.id || `location-${index}`}
-                className={`journey-map-location-item ${
-                  selectedLocation && selectedLocation.id === location.id ? 'active' : ''
-                }`}
-                onClick={() => handleLocationClick(location)}
+                key={location.id}
+                className={`journey-map-location-item ${selectedLocation && selectedLocation.id === location.id ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedLocation(location);
+                  
+                  if (map) {
+                    map.flyTo({
+                      center: [location.longitude, location.latitude],
+                      zoom: 8,
+                      duration: 1000
+                    });
+                  }
+                }}
               >
                 <div className="journey-map-location-number">{index + 1}</div>
                 <div className="journey-map-location-info">
@@ -333,7 +302,7 @@ const JourneyMap = ({ locations }) => {
           </ul>
         </div>
 
-        {/* מכל המפה */}
+        {/* מכל המפה - בצד שמאל */}
         <div 
           className="journey-map-view" 
           ref={mapContainerRef}
@@ -343,7 +312,7 @@ const JourneyMap = ({ locations }) => {
             height: isMobile ? '400px' : 'auto',
             minHeight: isMobile ? '400px' : 'auto',
             position: 'relative',
-            order: 2
+            order: isMobile ? 2 : 2
           }}
         >
           {!mapLoaded && (
