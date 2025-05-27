@@ -244,7 +244,7 @@ const JourneyMap = ({ locations }) => {
         }
       }
     };
-  }, [locations, clearAllTimeouts, clearAllMarkers, viewFullJourneyInternal]);
+  }, [locations, clearAllTimeouts, clearAllMarkers, viewFullJourneyInternal]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // הצגת כל המסע במפה - פונקציה ציבורית
   const viewFullJourney = useCallback(() => {
