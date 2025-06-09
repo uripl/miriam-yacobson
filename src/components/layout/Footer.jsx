@@ -1,7 +1,7 @@
 // src/components/layout/Footer.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaEnvelope, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaEnvelope } from 'react-icons/fa';
 
 /**
  * קומפוננטת הכותרת התחתונה של האתר
