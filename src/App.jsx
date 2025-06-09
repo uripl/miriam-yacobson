@@ -23,7 +23,6 @@ import GalleryPage from './components/pages/GalleryPage';
 import DocumentsPage from './components/pages/DocumentsPage';
 
 // סגנונות
-import './styles/globals.css';
 
 function App() {
   return (

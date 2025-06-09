@@ -21,65 +21,35 @@
   transform: translate(-50%, -50%) !important;
 }
 
-/* תיקונים נוספים לציר הזמן */
-
-/* תיקון מיקום התאריכים העבריים */
-.vertical-timeline-element-date .timeline-date-hebrew {
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* תיקונים למיקום התאריכים במובייל */
-@media only screen and (max-width: 1169px) {
-  .vertical-timeline-element-date .timeline-date-container {
-    display: block;
-    width: 100%;
-  }
-}
-
-/* הוסף לקובץ src/styles/timeline-fix.css */
-
-/* פתרון לבועת התאריך שחורגת מגבולותיה */
-span.timeline-date.vertical-timeline-element-date {
+/* תיקון תצוגת התאריכים בציר הזמן - בועיות כחולות מעל */
+.vertical-timeline-element .vertical-timeline-element-date {
+  position: absolute !important;
+  right: 0 !important;
+  left: auto !important;
+  top: -24px !important;
+  opacity: 1 !important;
+  display: block !important;
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  padding: 3px 10px !important;
+  border-radius: 15px !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
   width: auto !important;
-  white-space: nowrap !important; /* מונע שבירת שורה בתוך כל אחד מהתאריכים */
-  min-width: 70px !important;
-  max-width: none !important; /* מבטל הגבלת רוחב מקסימלי */
+  text-align: center !important;
+  max-width: 400px !important;
+  z-index: 99 !important;
+  margin: 0 !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
 }
 
-/* מוודא שהתאריך העברי והלועזי מוצגים כראוי */
-div.timeline-date-container {
-  display: flex !important;
-  flex-direction: column !important;
-  white-space: nowrap !important;
+/* כאשר התאריך בצד שמאל */
+.vertical-timeline-element:nth-child(odd) .vertical-timeline-element-date {
+  left: 0 !important;
+  right: auto !important;
 }
 
-div.timeline-date-gregorian, 
-div.timeline-date-hebrew {
-  white-space: nowrap !important;
-}
-
-/* תיקונים נוספים למובייל */
-@media (max-width: 768px) {
-  .vertical-timeline-element-date {
-    font-size: 11px !important;
-    padding: 4px 8px !important;
-  }
-  
-  .timeline-date-hebrew {
-    display: none; /* הסתרת תאריך עברי במובייל */
-  }
-  
-  /* הגדלת אזור המגע בציר הזמן */
-  .vertical-timeline-element-content {
-    padding: var(--spacing-lg) !important;
-    margin-bottom: var(--spacing-xl) !important;
-  }
-  
-  /* שיפור קריאות */
-  .timeline-title {
-    font-size: var(--font-size-lg) !important;
-  }
+/* מרווח נוסף לתיבות התוכן */
+.vertical-timeline-element-content {
+  padding-top: 20px !important;
 }
