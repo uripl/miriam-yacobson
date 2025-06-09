@@ -42,6 +42,11 @@ const Header = () => {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink to="/chapters/childhood" onClick={closeMenu}>
+                פרקי חיים
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink to="/journey-map" onClick={closeMenu}>
                 מפת מסע
               </NavLink>
