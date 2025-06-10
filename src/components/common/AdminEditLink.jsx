@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEdit, FaSignInAlt } from 'react-icons/fa';
+import { FaEdit, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 
 const AdminEditLink = ({ collection, text = "ערוך תוכן" }) => {
   const [user, setUser] = useState(null);
@@ -21,33 +21,67 @@ const AdminEditLink = ({ collection, text = "ערוך תוכן" }) => {
     }
   };
 
+  const handleLogout = (e) => {
+    e.preventDefault();
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.logout();
+    }
+  };
+
   const adminUrl = collection ? `/admin/#/collections/${collection}` : '/admin/';
 
   return (
-    <a 
-      href={adminUrl} 
-      onClick={handleClick}
-      style={{
-        position: 'fixed',
-        bottom: '20px',
-        left: '20px',
-        backgroundColor: user ? '#2e5077' : '#5a7a9f',
-        color: 'white',
-        padding: '10px 20px',
-        borderRadius: '25px',
-        textDecoration: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-        transition: 'all 0.2s',
-        zIndex: 1000,
-        cursor: 'pointer'
-      }}
-    >
-      {user ? <FaEdit /> : <FaSignInAlt />} 
-      {user ? text : 'התחבר לעריכה'}
-    </a>
+    <>
+      <a 
+        href={adminUrl} 
+        onClick={handleClick}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '20px',
+          backgroundColor: user ? '#2e5077' : '#5a7a9f',
+          color: 'white',
+          padding: '10px 20px',
+          borderRadius: '25px',
+          textDecoration: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+          transition: 'all 0.2s',
+          zIndex: 1000,
+          cursor: 'pointer'
+        }}
+      >
+        {user ? <FaEdit /> : <FaSignInAlt />} 
+        {user ? text : 'התחבר לעריכה'}
+      </a>
+      
+      {user && (
+        <button
+          onClick={handleLogout}
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            left: '200px',
+            backgroundColor: '#af4154',
+            color: 'white',
+            padding: '10px 20px',
+            borderRadius: '25px',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+            transition: 'all 0.2s',
+            zIndex: 1000,
+            cursor: 'pointer'
+          }}
+        >
+          <FaSignOutAlt /> התנתק
+        </button>
+      )}
+    </>
   );
 };
 
