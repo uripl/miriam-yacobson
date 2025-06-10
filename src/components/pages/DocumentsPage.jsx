@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DocumentPreview from '../common/DocumentPreview';
 import { historicalDocuments } from '../../data/timelineData';
+import { loadDocuments } from '../../utils/contentLoader';
 import '../../styles/DocumentsPage.css';
 
 /**
@@ -8,21 +9,47 @@ import '../../styles/DocumentsPage.css';
  */
 const DocumentsPage = () => {
   const [activeCategory, setActiveCategory] = useState('all');
-  const [filteredDocuments, setFilteredDocuments] = useState(historicalDocuments);
+  const [filteredDocuments, setFilteredDocuments] = useState([]);
+  const [cmsDocuments, setCmsDocuments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // גלילה לראש הדף בטעינה
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // טעינת מסמכים מה-CMS
+  useEffect(() => {
+    const loadCMSDocuments = async () => {
+      try {
+        const docs = await loadDocuments();
+        setCmsDocuments(docs);
+      } catch (error) {
+        console.error('Failed to load CMS documents:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadCMSDocuments();
+  }, []);
+
   // סינון מסמכים לפי קטגוריה
   useEffect(() => {
+    // שלב את המסמכים מה-CMS עם המסמכים הקיימים
+    const allDocuments = [...historicalDocuments, ...cmsDocuments];
+    
     if (activeCategory === 'all') {
-      setFilteredDocuments(historicalDocuments);
+      setFilteredDocuments(allDocuments);
     } else {
       // הסינון הוא לפי תנאי דוגמא, בפועל אפשר לשנות לפי המבנה האמיתי של המסמכים
       setFilteredDocuments(
-        historicalDocuments.filter(doc => {
+        allDocuments.filter(doc => {
+          // בדוק אם יש קטגוריה במסמך מה-CMS
+          if (doc.category) {
+            return doc.category === activeCategory;
+          }
+          // אחרת, השתמש בלוגיקה הישנה
           if (activeCategory === 'identification') return doc.id.includes('card') || doc.id.includes('certificate');
           if (activeCategory === 'letters') return doc.id.includes('letter');
           if (activeCategory === 'testimonies') return doc.id.includes('testimony');
@@ -30,7 +57,7 @@ const DocumentsPage = () => {
         })
       );
     }
-  }, [activeCategory]);
+  }, [activeCategory, cmsDocuments]);
 
   const categories = [
     { id: 'all', name: 'כל המסמכים' },
@@ -76,7 +103,11 @@ const DocumentsPage = () => {
           </section>
 
           <section className="documents-grid">
-            {filteredDocuments.length > 0 ? (
+            {isLoading ? (
+              <div className="loading-message">
+                <p>טוען מסמכים...</p>
+              </div>
+            ) : filteredDocuments.length > 0 ? (
               <div className="documents-list">
                 {filteredDocuments.map(document => (
                   <DocumentPreview key={document.id} document={document} />
