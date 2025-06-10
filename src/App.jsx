@@ -22,6 +22,9 @@ import JourneyMapPage from './components/pages/JourneyMapPage';
 import GalleryPage from './components/pages/GalleryPage';
 import DocumentsPage from './components/pages/DocumentsPage';
 
+// כפתור עריכה למנהלים
+import AdminEditLink from './components/common/AdminEditLink';
+
 // סגנונות
 
 function App() {
@@ -48,6 +51,7 @@ function App() {
           {/* במקרה של נתיב לא קיים */}
           <Route path="*" element={<NewHomePage />} />
         </Routes>
+        <AdminEditLink />
       </Layout>
     </Router>
   );
