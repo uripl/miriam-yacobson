@@ -1,0 +1,28 @@
+backend:
+  name: proxy
+  proxy_url: https://bookish-happiness-jj4vpwr4g7qgcpq55-8081.app.github.dev/api/v1
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "documents"
+    label: "מסמכים היסטוריים"
+    folder: "src/content/documents"
+    create: true
+    extension: "json"
+    fields:
+      - {label: "כותרת", name: "title", widget: "string"}
+      - {label: "תאריך", name: "date", widget: "string"}
+      - {label: "תיאור", name: "description", widget: "text"}
+      - {label: "תמונה", name: "imageSrc", widget: "image"}
+      
+  - name: "gallery"
+    label: "תמונות גלריה"  
+    folder: "src/content/gallery"
+    create: true
+    extension: "json"
+    fields:
+      - {label: "כותרת", name: "title", widget: "string"}
+      - {label: "תמונה", name: "src", widget: "image"}
+      - {label: "תיאור", name: "alt", widget: "string"}

@@ -1,0 +1,11 @@
+{
+  "title": "מסמך דוגמה",
+  "date": "1945",
+  "description": "זהו מסמך דוגמה להמחשה",
+  "imageSrc": "/images/documents/reference-card-1.jpg",
+  "thumbnailSrc": "/images/documents/thumbs/reference-card-1-thumb.jpg",
+  "source": "ארכיון המשפחה",
+  "archiveNumber": "12345",
+  "translation": "תרגום המסמך יופיע כאן",
+  "category": "certificate"
+}
