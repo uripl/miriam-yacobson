@@ -104,3 +104,10 @@
     width: 80%;
   }
 }
+
+.loading-message {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  font-size: var(--font-size-lg);
+  color: var(--text-light);
+}

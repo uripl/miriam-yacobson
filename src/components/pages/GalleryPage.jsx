@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ImageGallery from '../common/ImageGallery';
 import { galleryImages } from '../../data/timelineData';
+import { loadGalleryImages } from '../../utils/contentLoader';
 import '../../styles/GalleryPage.css';
 
 /**
@@ -8,21 +9,42 @@ import '../../styles/GalleryPage.css';
  */
 const GalleryPage = () => {
   const [filter, setFilter] = useState('all');
-  const [filteredImages, setFilteredImages] = useState(galleryImages);
+  const [filteredImages, setFilteredImages] = useState([]);
+  const [cmsImages, setCmsImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // גלילה לראש הדף בטעינה
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // טעינת תמונות מה-CMS
+  useEffect(() => {
+    const loadCMSImages = async () => {
+      try {
+        const images = await loadGalleryImages();
+        setCmsImages(images);
+      } catch (error) {
+        console.error('Failed to load CMS images:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadCMSImages();
+  }, []);
+
   // סינון תמונות לפי תקופה
   useEffect(() => {
+    // שלב את התמונות מה-CMS עם התמונות הקיימות
+    const allImages = [...galleryImages, ...cmsImages];
+    
     if (filter === 'all') {
-      setFilteredImages(galleryImages);
+      setFilteredImages(allImages);
     } else {
-      setFilteredImages(galleryImages.filter(image => image.period === filter));
+      setFilteredImages(allImages.filter(image => image.period === filter));
     }
-  }, [filter]);
+  }, [filter, cmsImages]);
 
   // קטגוריות תקופות חיים לסינון
   const categories = [
@@ -70,7 +92,11 @@ const GalleryPage = () => {
           </section>
 
           <section className="gallery-main">
-            {filteredImages.length > 0 ? (
+            {isLoading ? (
+              <div className="loading-message">
+                <p>טוען תמונות...</p>
+              </div>
+            ) : filteredImages.length > 0 ? (
               <ImageGallery images={filteredImages} />
             ) : (
               <div className="no-images-message">
