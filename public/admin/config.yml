@@ -2,27 +2,66 @@ backend:
   name: git-gateway
   branch: main
 
+# הגדרות בסיסיות
+publish_mode: editorial_workflow
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
+locale: 'he'
+slug:
+  encoding: "unicode"
+  clean_accents: true
 
 collections:
+  # אוסף מסמכים היסטוריים
   - name: "documents"
     label: "מסמכים היסטוריים"
     folder: "src/content/documents"
     create: true
     extension: "json"
+    format: "json"
+    slug: "{{slug}}"
+    identifier_field: "title"
     fields:
-      - {label: "כותרת", name: "title", widget: "string"}
-      - {label: "תאריך", name: "date", widget: "string"}
-      - {label: "תיאור", name: "description", widget: "text"}
-      - {label: "תמונה", name: "imageSrc", widget: "image"}
-      
+      - { label: "כותרת", name: "title", widget: "string", required: true }
+      - { label: "תאריך", name: "date", widget: "string", required: true }
+      - { label: "תיאור", name: "description", widget: "text", required: true }
+      - { label: "תמונת המסמך", name: "imageSrc", widget: "image", required: true }
+      - { label: "תמונה ממוזערת", name: "thumbnailSrc", widget: "image", required: false }
+      - { label: "מקור", name: "source", widget: "string", required: false }
+      - { label: "מספר בארכיון", name: "archiveNumber", widget: "string", required: false }
+      - { label: "תרגום", name: "translation", widget: "text", required: false }
+      - label: "קטגוריה"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "תעודות זיהוי", value: "identification" }
+          - { label: "מכתבים", value: "letters" }
+          - { label: "עדויות", value: "testimonies" }
+          - { label: "אחר", value: "other" }
+
+  # אוסף תמונות לגלריה
   - name: "gallery"
-    label: "תמונות גלריה"  
+    label: "גלריית תמונות"
     folder: "src/content/gallery"
     create: true
     extension: "json"
+    format: "json"
+    slug: "{{slug}}"
+    identifier_field: "alt"
     fields:
-      - {label: "כותרת", name: "title", widget: "string"}
-      - {label: "תמונה", name: "src", widget: "image"}
-      - {label: "תיאור", name: "alt", widget: "string"}
+      - { label: "תיאור התמונה", name: "alt", widget: "string", required: true }
+      - { label: "כיתוב", name: "caption", widget: "text", required: true }
+      - { label: "תמונה", name: "image", widget: "image", required: true }
+      - label: "תקופה"
+        name: "period"
+        widget: "select"
+        options:
+          - { label: "ילדות בגרמניה", value: "childhood" }
+          - { label: "בלגיה", value: "belgium" }
+          - { label: "צרפת תחת כיבוש", value: "france" }
+          - { label: "תקופת השואה", value: "holocaust" }
+          - { label: "השחרור", value: "liberation" }
+          - { label: "העלייה לארץ", value: "immigration" }
+          - { label: "חיים בישראל", value: "life-in-israel" }
+      - { label: "שנה", name: "year", widget: "string", required: false }
+      - { label: "מיקום", name: "location", widget: "string", required: false }
