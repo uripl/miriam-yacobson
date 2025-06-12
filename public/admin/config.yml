@@ -1,24 +1,17 @@
 backend:
   name: git-gateway
   branch: main
-  accept_roles:
-    - admin
-    - editor
 
-# הגדרות בסיסיות
-publish_mode: editorial_workflow
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
+
+publish_mode: editorial_workflow
 locale: 'he'
 slug:
   encoding: "unicode"
   clean_accents: true
 
-# הוסף תמונת לוגו
-logo_url: https://miriam-yacobson.netlify.app/images/logo.png
-
 collections:
-  # אוסף מסמכים היסטוריים
   - name: "documents"
     label: "מסמכים היסטוריים"
     folder: "src/content/documents"
@@ -45,7 +38,6 @@ collections:
           - { label: "עדויות", value: "testimonies" }
           - { label: "אחר", value: "other" }
 
-  # אוסף תמונות לגלריה
   - name: "gallery"
     label: "גלריית תמונות"
     folder: "src/content/gallery"
