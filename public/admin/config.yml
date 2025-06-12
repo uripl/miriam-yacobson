@@ -1,10 +1,10 @@
 backend:
   name: git-gateway
   branch: main
+local_backend: true
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
-
 publish_mode: editorial_workflow
 locale: 'he'
 slug:
@@ -63,4 +63,3 @@ collections:
           - { label: "חיים בישראל", value: "life-in-israel" }
       - { label: "שנה", name: "year", widget: "string", required: false }
       - { label: "מיקום", name: "location", widget: "string", required: false }
-
