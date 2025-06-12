@@ -63,3 +63,4 @@ collections:
           - { label: "חיים בישראל", value: "life-in-israel" }
       - { label: "שנה", name: "year", widget: "string", required: false }
       - { label: "מיקום", name: "location", widget: "string", required: false }
+
