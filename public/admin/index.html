@@ -1,26 +1,12 @@
 <!DOCTYPE html>
-<html dir="rtl">
+<html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ניהול תוכן - מאפילה לאורה</title>
+  <title>Content Manager</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
   <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
-  <script>
-    // טעינת קובץ הקונפיג
-    fetch('/admin/config.yml')
-      .then(response => response.text())
-      .then(configText => {
-        // המרה מ-YAML ל-JSON נעשית אוטומטית על ידי Netlify CMS
-        CMS.init();
-      })
-      .catch(error => {
-        console.error('Error loading config:', error);
-        // במקרה של שגיאה, נסה לאתחל בלי קובץ config
-        CMS.init();
-      });
-  </script>
 </body>
 </html>
