@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Timeline from '../common/Timeline';
+import EditableText from '../editable/EditableText';
 import '../../styles/NewHomePage.css';
 
 const NewHomePage = () => {
@@ -12,7 +13,7 @@ const NewHomePage = () => {
       {/* Hero מדף הבית המקורי */}
       <section className="hero">
         <div className="hero-content">
-          <h1>מאפילה לאורה</h1>
+          <EditableText contentKey="home-main-title" defaultValue="מאפילה לאורה" as="h1" />
           <h2>סיפור חייה של סבתא מרים יעקובסון (אופנהיימר)</h2>
           <p className="hero-subtitle">
             ממסע של גבורה ואובדן בשואה אל חיים של תקווה ובניין בארץ ישראל

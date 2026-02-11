@@ -479,6 +479,99 @@ section {
   }
 }
 
+/* רכיב עריכת טקסט */
+.editable-container {
+  position: relative;
+  display: inline;
+}
+
+.editable-container.editing {
+  display: block;
+}
+
+.editable-edit-btn {
+  background: none;
+  border: none;
+  color: var(--gray-dark);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-xxs);
+  margin-right: var(--spacing-xs);
+  opacity: 0;
+  transition: opacity var(--transition-fast) ease;
+  vertical-align: middle;
+}
+
+.editable-container:hover .editable-edit-btn {
+  opacity: 0.6;
+}
+
+.editable-edit-btn:hover {
+  opacity: 1 !important;
+  color: var(--primary-color);
+}
+
+.editable-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--spacing-sm);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  border: 2px solid var(--primary-light);
+  border-radius: var(--border-radius-md);
+  resize: vertical;
+  direction: rtl;
+}
+
+.editable-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(46, 80, 119, 0.15);
+}
+
+.editable-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xs);
+}
+
+.editable-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  transition: background-color var(--transition-fast) ease;
+}
+
+.editable-btn.save-btn {
+  background-color: var(--success);
+  color: var(--white);
+}
+
+.editable-btn.save-btn:hover {
+  background-color: #43a047;
+}
+
+.editable-btn.cancel-btn {
+  background-color: var(--gray-light);
+  color: var(--text-color);
+}
+
+.editable-btn.cancel-btn:hover {
+  background-color: var(--gray);
+}
+
+.editable-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* תמיכה בדפדפנים ישנים */
 .legacy-browser .vertical-timeline {
   display: block !important;
