@@ -572,6 +572,64 @@ section {
   cursor: not-allowed;
 }
 
+/* רכיב עריכת תמונה */
+.editable-image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.editable-image-container img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.editable-image-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  background-color: rgba(0, 0, 0, 0.55);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius-full);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast) ease;
+}
+
+.editable-image-container:hover .editable-image-btn {
+  opacity: 1;
+}
+
+.editable-image-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  color: var(--white);
+  font-size: var(--font-size-sm);
+}
+
+.editable-image-spinner {
+  animation: spin 1s linear infinite;
+  font-size: var(--font-size-xl);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* תמיכה בדפדפנים ישנים */
 .legacy-browser .vertical-timeline {
   display: block !important;
