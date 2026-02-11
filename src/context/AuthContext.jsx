@@ -4,7 +4,7 @@ import { auth } from '../services/firebase';
 
 const AuthContext = createContext();
 
-const AUTHORIZED_EMAILS = ['uripl@gmail.com'];
+const AUTHORIZED_EMAILS = ['uripl@gmail.com', 'uriplesser@gmail.com'];
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
