@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import LoginButton from '../auth/LoginButton';
 
 /**
  * קומפוננטת הכותרת העליונה של האתר
@@ -62,6 +63,9 @@ const Header = () => {
               </NavLink>
             </li>
           </ul>
+          <div className="nav-login">
+            <LoginButton />
+          </div>
         </nav>
       </div>
     </header>

@@ -2,6 +2,9 @@
 import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
+// אימות
+import { AuthProvider } from './context/AuthContext';
+
 // קומפוננטת מבנה
 import Layout from './components/layout/Layout';
 
@@ -29,6 +32,7 @@ import AdminEditLink from './components/common/AdminEditLink';
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <Layout>
         <Routes>
@@ -54,6 +58,7 @@ function App() {
         <AdminEditLink />
       </Layout>
     </Router>
+    </AuthProvider>
   );
 }
 
