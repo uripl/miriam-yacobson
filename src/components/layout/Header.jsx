@@ -28,13 +28,6 @@ const Header = () => {
           <span className="site-title">מאפילה לאורה</span>
         </Link>
 
-        <button className="mobile-menu-button" 
-          onClick={toggleMenu}
-          aria-label={menuOpen ? "סגור תפריט" : "פתח תפריט"}
-        >
-          {menuOpen ? <FaTimes /> : <FaBars />}
-        </button>
-
         <nav className={`main-nav ${menuOpen ? 'open' : ''}`}>
           <ul>
             <li className="nav-item">
@@ -63,10 +56,17 @@ const Header = () => {
               </NavLink>
             </li>
           </ul>
-          <div className="nav-login">
-            <LoginButton />
-          </div>
         </nav>
+
+        <div className="header-actions">
+          <LoginButton />
+          <button className="mobile-menu-button"
+            onClick={toggleMenu}
+            aria-label={menuOpen ? "סגור תפריט" : "פתח תפריט"}
+          >
+            {menuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
       </div>
     </header>
   );
