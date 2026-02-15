@@ -754,8 +754,9 @@
   text-decoration: none;
 }
 
-.site-logo img {
+.site-logo .editable-image-container img {
   height: 50px;
+  width: auto;
   margin-left: var(--spacing-sm);
 }
 
