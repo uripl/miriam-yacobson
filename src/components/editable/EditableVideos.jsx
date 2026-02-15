@@ -1,0 +1,240 @@
+import { useState, useEffect } from 'react';
+import { collection, getDocs, addDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { db } from '../../services/firebase';
+import { useAuth } from '../../context/AuthContext';
+import { FaPlus, FaTrash, FaTimes, FaSpinner, FaPlay } from 'react-icons/fa';
+
+const extractVideoId = (url) => {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+};
+
+const EditableVideos = ({ collectionName = 'videos' }) => {
+  const { user, isAdmin } = useAuth();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [year, setYear] = useState('');
+  const [urlError, setUrlError] = useState('');
+  const [lightboxItem, setLightboxItem] = useState(null);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const q = query(collection(db, collectionName), orderBy('addedAt', 'desc'));
+        const snap = await getDocs(q);
+        setItems(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      } catch (err) {
+        console.error('Error fetching videos:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchItems();
+  }, [collectionName]);
+
+  const resetForm = () => {
+    setYoutubeUrl('');
+    setTitle('');
+    setDescription('');
+    setYear('');
+    setUrlError('');
+    setShowForm(false);
+  };
+
+  const handleUrlChange = (e) => {
+    const url = e.target.value;
+    setYoutubeUrl(url);
+    if (url && !extractVideoId(url)) {
+      setUrlError('קישור YouTube לא תקין');
+    } else {
+      setUrlError('');
+    }
+  };
+
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    const videoId = extractVideoId(youtubeUrl);
+    if (!videoId || !title.trim()) return;
+
+    setUploading(true);
+    try {
+      const newDoc = {
+        youtubeUrl: youtubeUrl.trim(),
+        videoId,
+        title: title.trim(),
+        description: description.trim(),
+        year: year.trim(),
+        addedBy: user.email,
+        addedAt: new Date().toISOString(),
+      };
+
+      const docRef = await addDoc(collection(db, collectionName), newDoc);
+      setItems(prev => [{ id: docRef.id, ...newDoc }, ...prev]);
+      resetForm();
+    } catch (err) {
+      console.error('Error adding video:', err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDelete = async (item) => {
+    if (!window.confirm(`למחוק את "${item.title}"?`)) return;
+
+    try {
+      await deleteDoc(doc(db, collectionName, item.id));
+      setItems(prev => prev.filter(i => i.id !== item.id));
+    } catch (err) {
+      console.error('Error deleting video:', err);
+    }
+  };
+
+  const closeLightbox = () => setLightboxItem(null);
+
+  if (loading) {
+    return (
+      <div className="eg-loading">
+        <FaSpinner className="editable-image-spinner" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="eg-wrapper">
+      <div className="eg-grid">
+        {items.map(item => (
+          <div key={item.id} className="eg-card" onClick={() => setLightboxItem(item)} style={{ cursor: 'pointer' }}>
+            <div className="ev-card-thumbnail">
+              <img src={`https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`} alt={item.title} />
+              <div className="ev-play-overlay">
+                <FaPlay />
+              </div>
+              {isAdmin && (
+                <button
+                  className="eg-delete-btn"
+                  onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
+                  aria-label="מחק"
+                >
+                  <FaTrash />
+                </button>
+              )}
+            </div>
+            <div className="eg-card-info">
+              <h4 className="eg-card-title">{item.title}</h4>
+              {item.year && <span className="eg-card-year">{item.year}</span>}
+              {item.description && <p className="eg-card-desc">{item.description}</p>}
+            </div>
+          </div>
+        ))}
+
+        {isAdmin && (
+          <button className="eg-add-card" onClick={() => setShowForm(true)}>
+            <FaPlus />
+            <span>הוסף סרטון</span>
+          </button>
+        )}
+      </div>
+
+      {showForm && (
+        <div className="eg-modal-overlay" onClick={resetForm}>
+          <form className="eg-modal" onClick={e => e.stopPropagation()} onSubmit={handleAdd}>
+            <div className="eg-modal-header">
+              <h3>הוספת סרטון</h3>
+              <button type="button" className="eg-modal-close" onClick={resetForm}>
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="eg-form-field">
+              <label>קישור YouTube *</label>
+              <input
+                type="url"
+                value={youtubeUrl}
+                onChange={handleUrlChange}
+                placeholder="https://www.youtube.com/watch?v=..."
+                required
+                style={{ direction: 'ltr', textAlign: 'left' }}
+              />
+              {urlError && <span style={{ color: 'var(--error)', fontSize: 'var(--font-size-xs)' }}>{urlError}</span>}
+            </div>
+
+            <div className="eg-form-field">
+              <label>כותרת *</label>
+              <input
+                type="text"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="eg-form-field">
+              <label>תיאור</label>
+              <textarea
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            <div className="eg-form-field">
+              <label>שנה</label>
+              <input
+                type="text"
+                value={year}
+                onChange={e => setYear(e.target.value)}
+                placeholder="לדוגמה: 1945"
+              />
+            </div>
+
+            <div className="eg-modal-actions">
+              <button type="submit" className="editable-btn save-btn" disabled={uploading || !!urlError}>
+                {uploading ? <><FaSpinner className="editable-image-spinner" /> מוסיף...</> : 'הוסף'}
+              </button>
+              <button type="button" className="editable-btn cancel-btn" onClick={resetForm} disabled={uploading}>
+                ביטול
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {lightboxItem && (
+        <div className="ev-lightbox-overlay" onClick={closeLightbox}>
+          <div className="ev-lightbox" onClick={e => e.stopPropagation()}>
+            <button className="eg-modal-close ev-lightbox-close" onClick={closeLightbox}>
+              <FaTimes />
+            </button>
+            <div className="ev-lightbox-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${lightboxItem.videoId}?autoplay=1`}
+                title={lightboxItem.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <div className="ev-lightbox-info">
+              <h3>{lightboxItem.title}</h3>
+              {lightboxItem.year && <span className="eg-card-year">{lightboxItem.year}</span>}
+              {lightboxItem.description && <p>{lightboxItem.description}</p>}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default EditableVideos;

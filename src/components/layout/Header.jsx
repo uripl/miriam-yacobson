@@ -52,6 +52,11 @@ const Header = () => {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink to="/videos" onClick={closeMenu}>
+                סרטונים
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink to="/documents" onClick={closeMenu}>
                 מסמכים
               </NavLink>

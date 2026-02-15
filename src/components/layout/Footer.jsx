@@ -34,6 +34,9 @@ const Footer = () => {
                 <Link to="/gallery">גלריה</Link>
               </li>
               <li>
+                <Link to="/videos">סרטונים</Link>
+              </li>
+              <li>
                 <Link to="/documents">מסמכים</Link>
               </li>
             </ul>

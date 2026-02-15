@@ -24,6 +24,7 @@ import IsraelPage from './components/pages/chapters/IsraelPage';
 import JourneyMapPage from './components/pages/JourneyMapPage';
 import GalleryPage from './components/pages/GalleryPage';
 import DocumentsPage from './components/pages/DocumentsPage';
+import VideosPage from './components/pages/VideosPage';
 
 // סגנונות
 
@@ -38,6 +39,7 @@ function App() {
           {/* דפים נוספים שנשמרים */}
           <Route path="/journey-map" element={<JourneyMapPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/videos" element={<VideosPage />} />
           <Route path="/documents" element={<DocumentsPage />} />
           
           {/* נתיבים לפרקים */}
