@@ -19,21 +19,17 @@ const NewHomePage = () => {
             defaultSrc="/images/family/miriam-portrait.jpg"
             alt="מרים יעקובסון"
           />
-          <EditableText contentKey="home-main-title" defaultValue="מאפילה לאורה" as="h1" />
-          <h2>סיפור חייה של סבתא מרים יעקובסון (אופנהיימר)</h2>
-          <p className="hero-subtitle">
-            ממסע של גבורה ואובדן בשואה אל חיים של תקווה ובניין בארץ ישראל
-          </p>
+          <EditableText contentKey="home-hero-title" defaultValue="מאפילה לאורה" as="h1" />
+          <EditableText contentKey="home-hero-subtitle" defaultValue="סיפור חייה של סבתא מרים יעקובסון (אופנהיימר)" as="h2" />
+          <EditableText contentKey="home-hero-text" defaultValue="ממסע של גבורה ואובדן בשואה אל חיים של תקווה ובניין בארץ ישראל" as="p" />
         </div>
       </section>
 
       {/* כותרת ציר הזמן כעת כותרת משנית */}
       <header className="page-header">
         <div className="container">
-          <h2>ציר זמן - נקודות ציון מרכזיות</h2>
-          <p className="subtitle"> ציר הזמן מציג את נקודות הציון המרכזיות בחייה של סבתא מרים,
-      מלידתה בגרמניה בשנת 1925, דרך התקופה הקשה של השואה, ועד לעלייתה לארץ ישראל והקמת משפחה.
-      ניתן לסנן את האירועים לפי תקופות חיים על ידי לחיצה על הקטגוריות למטה.</p>
+          <EditableText contentKey="home-timeline-title" defaultValue="ציר זמן - נקודות ציון מרכזיות" as="h2" />
+          <EditableText contentKey="home-timeline-text" defaultValue="ציר הזמן מציג את נקודות הציון המרכזיות בחייה של סבתא מרים, מלידתה בגרמניה בשנת 1925, דרך התקופה הקשה של השואה, ועד לעלייתה לארץ ישראל והקמת משפחה. ניתן לסנן את האירועים לפי תקופות חיים על ידי לחיצה על הקטגוריות למטה." as="p" />
         </div>
       </header>
 
