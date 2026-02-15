@@ -61,6 +61,14 @@
   color: var(--white);
 }
 
+.hero .editable-edit-btn {
+  color: var(--white);
+}
+
+.hero .editable-edit-btn:hover {
+  color: var(--cream);
+}
+
 /* תמונת hero */
 .hero .editable-image-container {
   margin-bottom: var(--spacing-lg);

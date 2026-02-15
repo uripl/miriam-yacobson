@@ -759,6 +759,23 @@
   margin-left: var(--spacing-sm);
 }
 
+.site-logo .editable-image-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-logo .editable-image-btn {
+  display: none;
+}
+
+.site-logo .editable-image-container:hover .editable-image-btn {
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: -24px;
+  transform: translateY(-50%);
+}
+
 .site-title {
   font-size: var(--font-size-lg);
   color: var(--primary-color);

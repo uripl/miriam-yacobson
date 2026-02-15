@@ -375,6 +375,14 @@ section {
   opacity: 0.9;
 }
 
+.page-header .editable-edit-btn {
+  color: var(--white);
+}
+
+.page-header .editable-edit-btn:hover {
+  color: var(--cream);
+}
+
 /* כפתור חזרה לראש הדף */
 .back-to-top {
   position: fixed;

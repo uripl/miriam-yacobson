@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import LoginButton from '../auth/LoginButton';
+import EditableImage from '../editable/EditableImage';
 
 /**
  * קומפוננטת הכותרת העליונה של האתר
@@ -24,7 +25,7 @@ const Header = () => {
     <header className="site-header">
       <div className="header-container container">
         <Link to="/" className="site-logo" onClick={closeMenu}>
-          <img src="/images/logo.png" alt="מאפילה לאורה - לוגו" />
+          <EditableImage contentKey="site-logo" defaultSrc="/images/logo.png" alt="מאפילה לאורה - לוגו" />
           <span className="site-title">מאפילה לאורה</span>
         </Link>
 

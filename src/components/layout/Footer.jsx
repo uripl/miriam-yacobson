@@ -69,8 +69,8 @@ const Footer = () => {
           <div className="footer-column">
             <h3>צרו קשר</h3>
             <p>
-              <a href="mailto:info@miriam-story.org.il">
-                <FaEnvelope /> info@miriam-story.org.il
+              <a href="mailto:uriplesser@gmail.com">
+                <FaEnvelope /> uriplesser@gmail.com
               </a>
             </p>
           </div>
