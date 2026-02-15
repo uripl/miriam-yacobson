@@ -630,6 +630,393 @@ section {
   to { transform: rotate(360deg); }
 }
 
+/* רכיב גלריה ניתנת לעריכה */
+.eg-wrapper {
+  width: 100%;
+}
+
+.eg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.eg-card {
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-fast) ease, box-shadow var(--transition-fast) ease;
+}
+
+.eg-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.eg-card-image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.eg-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.eg-delete-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  background-color: rgba(0, 0, 0, 0.55);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius-full);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast) ease, background-color var(--transition-fast) ease;
+}
+
+.eg-card:hover .eg-delete-btn {
+  opacity: 1;
+}
+
+.eg-delete-btn:hover {
+  background-color: var(--error);
+}
+
+.eg-card-info {
+  padding: var(--spacing-md);
+}
+
+.eg-card-title {
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-xs);
+  color: var(--primary-dark);
+}
+
+.eg-card-year {
+  font-size: var(--font-size-xs);
+  color: var(--text-light);
+}
+
+.eg-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+  margin-top: var(--spacing-xs);
+  margin-bottom: 0;
+}
+
+.eg-add-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  min-height: 200px;
+  background-color: var(--gray-light);
+  border: 2px dashed var(--gray);
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  color: var(--text-light);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  transition: border-color var(--transition-fast) ease, color var(--transition-fast) ease;
+}
+
+.eg-add-card:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.eg-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  font-size: var(--font-size-xl);
+  color: var(--primary-color);
+}
+
+/* מודל הוספת תמונה */
+.eg-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: var(--spacing-md);
+}
+
+.eg-modal {
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.eg-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.eg-modal-header h3 {
+  margin-bottom: 0;
+}
+
+.eg-modal-close {
+  background: none;
+  border: none;
+  font-size: var(--font-size-lg);
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.eg-modal-close:hover {
+  color: var(--text-color);
+}
+
+.eg-form-field {
+  margin-bottom: var(--spacing-md);
+}
+
+.eg-form-field label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.eg-form-field select,
+.eg-form-field input[type="text"],
+.eg-form-field textarea {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--gray);
+  border-radius: var(--border-radius-md);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  direction: rtl;
+}
+
+.eg-form-field select:focus,
+.eg-form-field input[type="text"]:focus,
+.eg-form-field textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(46, 80, 119, 0.15);
+}
+
+.eg-form-field textarea {
+  resize: vertical;
+}
+
+.eg-modal-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+}
+
+@media (max-width: 640px) {
+  .eg-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .eg-modal {
+    padding: var(--spacing-md);
+  }
+}
+
+/* רכיב מסמכים ניתן לעריכה */
+.ed-wrapper {
+  width: 100%;
+}
+
+.ed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.ed-card {
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: transform var(--transition-fast) ease, box-shadow var(--transition-fast) ease;
+}
+
+.ed-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.ed-card-thumb {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: var(--gray-light);
+}
+
+.ed-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ed-pdf-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 3rem;
+  color: var(--accent-color);
+}
+
+.ed-open-icon {
+  position: absolute;
+  bottom: var(--spacing-sm);
+  left: var(--spacing-sm);
+  background-color: rgba(0, 0, 0, 0.55);
+  color: var(--white);
+  border-radius: var(--border-radius-full);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  opacity: 0;
+  transition: opacity var(--transition-fast) ease;
+}
+
+.ed-card:hover .ed-open-icon {
+  opacity: 1;
+}
+
+.ed-card-info {
+  padding: var(--spacing-md);
+}
+
+.ed-card-title {
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-xs);
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.ed-title-icon {
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+
+.ed-card-meta {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.ed-card-type {
+  font-size: var(--font-size-xs);
+  background-color: var(--primary-light);
+  color: var(--white);
+  padding: 1px var(--spacing-sm);
+  border-radius: var(--border-radius-full);
+}
+
+.ed-card-year {
+  font-size: var(--font-size-xs);
+  color: var(--text-light);
+}
+
+.ed-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+  margin-bottom: 0;
+}
+
+/* תצוגה מוגדלת */
+.ed-preview-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: var(--spacing-lg);
+}
+
+.ed-preview-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ed-preview-content img {
+  max-width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: var(--border-radius-md);
+}
+
+.ed-preview-close {
+  position: absolute;
+  top: calc(-1 * var(--spacing-xl));
+  left: 0;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: var(--font-size-xl);
+  cursor: pointer;
+}
+
+.ed-preview-info {
+  text-align: center;
+  color: var(--white);
+  margin-top: var(--spacing-md);
+}
+
+.ed-preview-info h3 {
+  color: var(--white);
+  margin-bottom: var(--spacing-xs);
+}
+
+.ed-preview-info p {
+  color: var(--gray-light);
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 640px) {
+  .ed-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+  }
+}
+
 /* תמיכה בדפדפנים ישנים */
 .legacy-browser .vertical-timeline {
   display: block !important;
