@@ -1,0 +1,90 @@
+/* ChapterContent.css */
+
+.cc-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  font-size: var(--font-size-xl);
+  color: var(--primary-color);
+}
+
+.cc-wrapper {
+  width: 100%;
+}
+
+.cc-section {
+  position: relative;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.cc-section p {
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-loose);
+}
+
+.cc-delete-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius-full);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast) ease, background-color var(--transition-fast) ease;
+  z-index: 5;
+}
+
+.cc-section:hover .cc-delete-btn {
+  opacity: 1;
+}
+
+.cc-delete-btn:hover {
+  background-color: var(--error);
+}
+
+.cc-image-container {
+  margin: var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.cc-image-container img {
+  max-width: 100%;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.cc-image-container p {
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+}
+
+.cc-add-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-lg);
+  background-color: var(--gray-light);
+  border: 2px dashed var(--gray);
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  color: var(--text-light);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  transition: border-color var(--transition-fast) ease, color var(--transition-fast) ease;
+}
+
+.cc-add-section:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
