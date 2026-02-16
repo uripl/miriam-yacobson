@@ -34,13 +34,15 @@ const { getFirestore, collection, addDoc, setDoc, doc } = require('firebase/fire
 const fs = require('fs');
 const path = require('path');
 
+require('dotenv').config();
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCi0MA15VRt23xXLtFlo-zWbgr7D2z-Dfo",
-  authDomain: "miriam-yacobson.firebaseapp.com",
-  projectId: "miriam-yacobson",
-  storageBucket: "miriam-yacobson.firebasestorage.app",
-  messagingSenderId: "261583763715",
-  appId: "1:261583763715:web:b8de506a0381aef48e1136"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
