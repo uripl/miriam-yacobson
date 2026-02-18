@@ -5,6 +5,11 @@ import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaFilePdf, FaFileImage, FaExternalLinkAlt } from 'react-icons/fa';
 import ChapterFilter from '../common/ChapterFilter';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const DOC_TYPES = [
   { value: '', label: 'בחר סוג...' },
@@ -48,6 +53,40 @@ const formatItemChapters = (item) => {
 };
 
 const isPdf = (url) => url?.toLowerCase().includes('.pdf') || url?.includes('application%2Fpdf');
+
+const PdfThumbnail = ({ url }) => {
+  const [status, setStatus] = useState('loading');
+
+  return (
+    <div className="ed-pdf-thumb-wrapper">
+      {status === 'loading' && (
+        <div className="ed-pdf-loading">
+          <FaSpinner className="editable-image-spinner" />
+        </div>
+      )}
+      {status === 'error' && (
+        <div className="ed-pdf-icon"><FaFilePdf /></div>
+      )}
+      {status !== 'error' && (
+        <Document
+          file={url}
+          onLoadSuccess={() => setStatus('success')}
+          onLoadError={() => setStatus('error')}
+          loading={null}
+        >
+          {status === 'success' && (
+            <Page
+              pageNumber={1}
+              height={200}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+            />
+          )}
+        </Document>
+      )}
+    </div>
+  );
+};
 
 const EditableDocuments = ({ collectionName = 'documents' }) => {
   const { user, isAdmin } = useAuth();
@@ -176,7 +215,7 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
             <div key={item.id} className="ed-card" onClick={() => handleClick(item)}>
               <div className="ed-card-thumb">
                 {pdf ? (
-                  <div className="ed-pdf-icon"><FaFilePdf /></div>
+                  <PdfThumbnail url={item.fileUrl} />
                 ) : (
                   <img src={item.fileUrl} alt={item.title} />
                 )}
