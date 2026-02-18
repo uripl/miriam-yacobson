@@ -5,12 +5,13 @@ import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaPlay } from 'react-icons/fa';
 
 const CHAPTERS = [
-  { value: 'childhood', label: 'ילדות' },
-  { value: 'belgium', label: 'בלגיה' },
-  { value: 'france', label: 'צרפת' },
-  { value: 'holocaust', label: 'השואה' },
-  { value: 'immigration', label: 'עלייה לארץ' },
-  { value: 'israel', label: 'חיים בישראל' },
+  { value: 'childhood', label: 'ילדות בגרמניה' },
+  { value: 'belgium', label: 'החיים בבלגיה' },
+  { value: 'france', label: 'צרפת תחת הכיבוש' },
+  { value: 'holocaust', label: 'בעמק הבכא' },
+  { value: 'liberation', label: 'השחרור והחזרה לליון' },
+  { value: 'immigration', label: 'העלייה לישראל' },
+  { value: 'israel', label: 'החיים בישראל' },
 ];
 
 const MONTHS_HE = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];

@@ -46,7 +46,7 @@ const Footer = () => {
             <h3>פרקי חיים</h3>
             <ul>
               <li>
-                <Link to="/chapters/childhood">ילדות בלייפציג</Link>
+                <Link to="/chapters/childhood">ילדות בגרמניה</Link>
               </li>
               <li>
                 <Link to="/chapters/belgium">החיים בבלגיה</Link>
@@ -64,7 +64,7 @@ const Footer = () => {
                 <Link to="/chapters/immigration">העלייה לישראל</Link>
               </li>
               <li>
-                <Link to="/chapters/israel">חיים בארץ ישראל</Link>
+                <Link to="/chapters/israel">החיים בישראל</Link>
               </li>
             </ul>
           </div>

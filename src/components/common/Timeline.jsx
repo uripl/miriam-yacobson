@@ -207,7 +207,7 @@ const Timeline = ({ simplified = false }) => {
       location: 'קיבוץ חפץ חיים, ישראל',
       description: 'מרים עבדה במטבח, סייעה לעולי הנוער, וביקרה את משפחתה בכפר פינס, רמת גן וירושלים.',
       icon: <FaTree />,
-      category: 'life-in-israel',
+      category: 'israel',
       color: '#9900EF'
     },
     {
@@ -218,7 +218,7 @@ const Timeline = ({ simplified = false }) => {
       location: 'קיבוץ חפץ חיים, ישראל',
       description: 'מרים פגשה את ישעי יעקובסון, וזמן קצר לאחר מכן הם התחתנו. יחד הקימו בית בחפץ חיים.',
       icon: <FaHeart />,
-      category: 'life-in-israel',
+      category: 'israel',
       color: '#9900EF'
     },
     {
@@ -229,7 +229,7 @@ const Timeline = ({ simplified = false }) => {
       location: 'בית חלקיה, ישראל',
       description: 'המשפחה עברה לבית חלקיה, ובנתה בה את חייה. נולדו להם שני ילדים: מיכל ורפי.',
       icon: <FaHome />,
-      category: 'life-in-israel',
+      category: 'israel',
       color: '#9900EF'
     },
     {
@@ -240,7 +240,7 @@ const Timeline = ({ simplified = false }) => {
       location: 'ישראל',
       description: 'מרים ומשפחתה המשיכו לחיות בישראל, ראו בהקמת המשפחה, הילדים והנכדים את הניצחון האמיתי על הנאצים.',
       icon: <FaBook />,
-      category: 'life-in-israel',
+      category: 'israel',
       color: '#9900EF'
     }
   ];
@@ -248,12 +248,12 @@ const Timeline = ({ simplified = false }) => {
   // קטגוריות תקופות חיים לסינון
   const categories = [
     { id: 'childhood', name: 'ילדות בגרמניה', color: '#8ED1FC' },
-    { id: 'belgium', name: 'בלגיה', color: '#7BDCB5' },
-    { id: 'france', name: 'צרפת תחת כיבוש', color: '#ABB8C3' },
-    { id: 'holocaust', name: 'השואה', color: '#F78DA7' },
-    { id: 'liberation', name: 'השחרור', color: '#0693E3' },
-    { id: 'immigration', name: 'העלייה לארץ', color: '#FCB900' },
-    { id: 'life-in-israel', name: 'חיים בישראל', color: '#9900EF' }
+    { id: 'belgium', name: 'החיים בבלגיה', color: '#7BDCB5' },
+    { id: 'france', name: 'צרפת תחת הכיבוש', color: '#ABB8C3' },
+    { id: 'holocaust', name: 'בעמק הבכא', color: '#F78DA7' },
+    { id: 'liberation', name: 'השחרור והחזרה לליון', color: '#0693E3' },
+    { id: 'immigration', name: 'העלייה לישראל', color: '#FCB900' },
+    { id: 'israel', name: 'החיים בישראל', color: '#9900EF' }
   ];
 
   // סינון אירועים לפי קטגוריה נבחרת או תצוגת כל האירועים

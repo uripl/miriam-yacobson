@@ -187,7 +187,7 @@ export const galleryImages = [
     src: '/images/family/hefetz-haim-1949.jpg',
     alt: 'מרים בקיבוץ חפץ חיים',
     caption: 'מרים בקיבוץ חפץ חיים, 1949',
-    period: 'life-in-israel',
+    period: 'israel',
     year: '1949',
     location: 'קיבוץ חפץ חיים, ישראל'
   },
@@ -196,7 +196,7 @@ export const galleryImages = [
     src: '/images/family/wedding.jpg',
     alt: 'חתונת מרים וישעי',
     caption: 'חתונתם של מרים וישעי יעקובסון, 1951',
-    period: 'life-in-israel',
+    period: 'israel',
     year: '1951',
     location: 'ישראל'
   },
@@ -205,7 +205,7 @@ export const galleryImages = [
     src: '/images/family/beit-chilkiya.jpg',
     alt: 'בית המשפחה בבית חלקיה',
     caption: 'בית משפחת יעקובסון בבית חלקיה, שנות ה-50',
-    period: 'life-in-israel',
+    period: 'israel',
     year: '1955',
     location: 'בית חלקיה, ישראל'
   },
@@ -214,7 +214,7 @@ export const galleryImages = [
     src: '/images/family/family-portrait.jpg',
     alt: 'משפחת יעקובסון',
     caption: 'משפחת יעקובסון: מרים, ישעי, מיכל ורפי',
-    period: 'life-in-israel',
+    period: 'israel',
     year: '1960',
     location: 'בית חלקיה, ישראל'
   },
@@ -223,7 +223,7 @@ export const galleryImages = [
     src: '/images/family/miriam-elderly.jpg',
     alt: 'מרים בשנים מאוחרות',
     caption: 'מרים יעקובסון עם נכדיה, שנות ה-90',
-    period: 'life-in-israel',
+    period: 'israel',
     year: '1990',
     location: 'ישראל'
   }

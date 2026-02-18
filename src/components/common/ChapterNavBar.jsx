@@ -18,7 +18,7 @@ const ChapterNavBar = ({ position = 'top' }) => {
     { id: 4, title: 'בעמק הבכא', path: '/chapters/holocaust' },
     { id: 5, title: 'השחרור והחזרה לליון', path: '/chapters/liberation' },
     { id: 6, title: 'העלייה לישראל', path: '/chapters/immigration' },
-    { id: 7, title: 'חיים בארץ ישראל', path: '/chapters/israel' },
+    { id: 7, title: 'החיים בישראל', path: '/chapters/israel' },
   ];
 
   return (
