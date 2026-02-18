@@ -9,7 +9,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.js`;
 
 const DOC_TYPES = [
   { value: '', label: 'בחר סוג...' },
@@ -69,7 +69,7 @@ const PdfThumbnail = ({ url }) => {
       )}
       {status !== 'error' && (
         <Document
-          file={url}
+          file={{ url, withCredentials: false }}
           onLoadSuccess={() => setStatus('success')}
           onLoadError={() => setStatus('error')}
           loading={null}
