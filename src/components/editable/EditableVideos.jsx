@@ -4,6 +4,31 @@ import { db } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaPlay } from 'react-icons/fa';
 
+const CHAPTERS = [
+  { value: 'childhood', label: 'ילדות' },
+  { value: 'belgium', label: 'בלגיה' },
+  { value: 'france', label: 'צרפת' },
+  { value: 'holocaust', label: 'השואה' },
+  { value: 'immigration', label: 'עלייה לארץ' },
+  { value: 'israel', label: 'חיים בישראל' },
+];
+
+const MONTHS_HE = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+
+const formatItemDate = (item) => {
+  if (item.dateYear) {
+    if (item.dateMonth && item.dateDay) return `${item.dateDay} ${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
+    if (item.dateMonth) return `${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
+    return `${item.dateYear}`;
+  }
+  return item.year || '';
+};
+
+const formatItemChapters = (item) => {
+  if (!item.chapters?.length) return '';
+  return item.chapters.map(c => CHAPTERS.find(ch => ch.value === c)?.label || c).join(', ');
+};
+
 const extractVideoId = (url) => {
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
@@ -25,7 +50,10 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [year, setYear] = useState('');
+  const [selectedChapters, setSelectedChapters] = useState([]);
+  const [dateYear, setDateYear] = useState('');
+  const [dateMonth, setDateMonth] = useState('');
+  const [dateDay, setDateDay] = useState('');
   const [urlError, setUrlError] = useState('');
   const [lightboxItem, setLightboxItem] = useState(null);
 
@@ -48,9 +76,18 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
     setYoutubeUrl('');
     setTitle('');
     setDescription('');
-    setYear('');
+    setSelectedChapters([]);
+    setDateYear('');
+    setDateMonth('');
+    setDateDay('');
     setUrlError('');
     setShowForm(false);
+  };
+
+  const toggleChapter = (value) => {
+    setSelectedChapters(prev =>
+      prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value]
+    );
   };
 
   const handleUrlChange = (e) => {
@@ -66,7 +103,7 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
   const handleAdd = async (e) => {
     e.preventDefault();
     const videoId = extractVideoId(youtubeUrl);
-    if (!videoId || !title.trim()) return;
+    if (!videoId || !title.trim() || selectedChapters.length === 0) return;
 
     setUploading(true);
     try {
@@ -75,7 +112,10 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
         videoId,
         title: title.trim(),
         description: description.trim(),
-        year: year.trim(),
+        chapters: selectedChapters,
+        ...(dateYear && { dateYear: Number(dateYear) }),
+        ...(dateYear && dateMonth && { dateMonth: Number(dateMonth) }),
+        ...(dateYear && dateMonth && dateDay && { dateDay: Number(dateDay) }),
         addedBy: user.email,
         addedAt: new Date().toISOString(),
       };
@@ -133,7 +173,10 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
             </div>
             <div className="eg-card-info">
               <h4 className="eg-card-title">{item.title}</h4>
-              {item.year && <span className="eg-card-year">{item.year}</span>}
+              <div className="eg-card-meta">
+                {formatItemDate(item) && <span className="eg-card-year">{formatItemDate(item)}</span>}
+                {formatItemChapters(item) && <span className="eg-card-chapters">{formatItemChapters(item)}</span>}
+              </div>
               {item.description && <p className="eg-card-desc">{item.description}</p>}
             </div>
           </div>
@@ -190,17 +233,51 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
             </div>
 
             <div className="eg-form-field">
-              <label>שנה</label>
-              <input
-                type="text"
-                value={year}
-                onChange={e => setYear(e.target.value)}
-                placeholder="לדוגמה: 1945"
-              />
+              <label>פרקים * <span className="eg-required-note">(חובה לפחות אחד)</span></label>
+              <div className="eg-chapters-checkboxes">
+                {CHAPTERS.map(ch => (
+                  <label key={ch.value} className="eg-chapter-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={selectedChapters.includes(ch.value)}
+                      onChange={() => toggleChapter(ch.value)}
+                    />
+                    {ch.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="eg-form-field">
+              <label>תאריך</label>
+              <div className="eg-date-selects">
+                <select value={dateYear} onChange={e => { setDateYear(e.target.value); setDateMonth(''); setDateDay(''); }}>
+                  <option value="">-- שנה --</option>
+                  {Array.from({ length: 61 }, (_, i) => 1900 + i).map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+                {dateYear && (
+                  <select value={dateMonth} onChange={e => { setDateMonth(e.target.value); setDateDay(''); }}>
+                    <option value="">-- חודש --</option>
+                    {MONTHS_HE.map((m, i) => (
+                      <option key={i + 1} value={i + 1}>{m}</option>
+                    ))}
+                  </select>
+                )}
+                {dateYear && dateMonth && (
+                  <select value={dateDay} onChange={e => setDateDay(e.target.value)}>
+                    <option value="">-- יום --</option>
+                    {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
             </div>
 
             <div className="eg-modal-actions">
-              <button type="submit" className="editable-btn save-btn" disabled={uploading || !!urlError}>
+              <button type="submit" className="editable-btn save-btn" disabled={uploading || !!urlError || selectedChapters.length === 0}>
                 {uploading ? <><FaSpinner className="editable-image-spinner" /> מוסיף...</> : 'הוסף'}
               </button>
               <button type="button" className="editable-btn cancel-btn" onClick={resetForm} disabled={uploading}>
@@ -227,7 +304,10 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
             </div>
             <div className="ev-lightbox-info">
               <h3>{lightboxItem.title}</h3>
-              {lightboxItem.year && <span className="eg-card-year">{lightboxItem.year}</span>}
+              <div className="eg-card-meta">
+                {formatItemDate(lightboxItem) && <span className="eg-card-year">{formatItemDate(lightboxItem)}</span>}
+                {formatItemChapters(lightboxItem) && <span className="eg-card-chapters">{formatItemChapters(lightboxItem)}</span>}
+              </div>
               {lightboxItem.description && <p>{lightboxItem.description}</p>}
             </div>
           </div>
