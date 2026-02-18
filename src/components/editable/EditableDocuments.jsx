@@ -20,6 +20,31 @@ const DOC_TYPE_LABELS = {
   other: 'אחר',
 };
 
+const CHAPTERS = [
+  { value: 'childhood', label: 'ילדות' },
+  { value: 'belgium', label: 'בלגיה' },
+  { value: 'france', label: 'צרפת' },
+  { value: 'holocaust', label: 'השואה' },
+  { value: 'immigration', label: 'עלייה לארץ' },
+  { value: 'israel', label: 'חיים בישראל' },
+];
+
+const MONTHS_HE = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+
+const formatItemDate = (item) => {
+  if (item.dateYear) {
+    if (item.dateMonth && item.dateDay) return `${item.dateDay} ${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
+    if (item.dateMonth) return `${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
+    return `${item.dateYear}`;
+  }
+  return item.year || '';
+};
+
+const formatItemChapters = (item) => {
+  if (!item.chapters?.length) return '';
+  return item.chapters.map(c => CHAPTERS.find(ch => ch.value === c)?.label || c).join(', ');
+};
+
 const isPdf = (url) => url?.toLowerCase().includes('.pdf') || url?.includes('application%2Fpdf');
 
 const EditableDocuments = ({ collectionName = 'documents' }) => {
@@ -32,7 +57,10 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [docType, setDocType] = useState('');
-  const [year, setYear] = useState('');
+  const [selectedChapters, setSelectedChapters] = useState([]);
+  const [dateYear, setDateYear] = useState('');
+  const [dateMonth, setDateMonth] = useState('');
+  const [dateDay, setDateDay] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -55,15 +83,24 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
     setTitle('');
     setDescription('');
     setDocType('');
-    setYear('');
+    setSelectedChapters([]);
+    setDateYear('');
+    setDateMonth('');
+    setDateDay('');
     setSelectedFile(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
     setShowForm(false);
   };
 
+  const toggleChapter = (value) => {
+    setSelectedChapters(prev =>
+      prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value]
+    );
+  };
+
   const handleAdd = async (e) => {
     e.preventDefault();
-    if (!selectedFile || !title.trim()) return;
+    if (!selectedFile || !title.trim() || selectedChapters.length === 0) return;
 
     setUploading(true);
     try {
@@ -78,7 +115,10 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
         title: title.trim(),
         description: description.trim(),
         docType: docType || '',
-        year: year.trim(),
+        chapters: selectedChapters,
+        ...(dateYear && { dateYear: Number(dateYear) }),
+        ...(dateYear && dateMonth && { dateMonth: Number(dateMonth) }),
+        ...(dateYear && dateMonth && dateDay && { dateDay: Number(dateDay) }),
         addedBy: user.email,
         addedAt: new Date().toISOString(),
       };
@@ -95,7 +135,6 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
 
   const handleDelete = async (item) => {
     if (!window.confirm(`למחוק את "${item.title}"?`)) return;
-
     try {
       await deleteDoc(doc(db, collectionName, item.id));
       setItems(prev => prev.filter(i => i.id !== item.id));
@@ -151,7 +190,8 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
                 </h4>
                 <div className="ed-card-meta">
                   {item.docType && <span className="ed-card-type">{DOC_TYPE_LABELS[item.docType] || item.docType}</span>}
-                  {item.year && <span className="ed-card-year">{item.year}</span>}
+                  {formatItemDate(item) && <span className="ed-card-year">{formatItemDate(item)}</span>}
+                  {formatItemChapters(item) && <span className="ed-card-chapters">{formatItemChapters(item)}</span>}
                 </div>
                 {item.description && <p className="ed-card-desc">{item.description}</p>}
               </div>
@@ -218,17 +258,51 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
             </div>
 
             <div className="eg-form-field">
-              <label>שנה</label>
-              <input
-                type="text"
-                value={year}
-                onChange={e => setYear(e.target.value)}
-                placeholder="לדוגמה: 1945"
-              />
+              <label>פרקים * <span className="eg-required-note">(חובה לפחות אחד)</span></label>
+              <div className="eg-chapters-checkboxes">
+                {CHAPTERS.map(ch => (
+                  <label key={ch.value} className="eg-chapter-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={selectedChapters.includes(ch.value)}
+                      onChange={() => toggleChapter(ch.value)}
+                    />
+                    {ch.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="eg-form-field">
+              <label>תאריך</label>
+              <div className="eg-date-selects">
+                <select value={dateYear} onChange={e => { setDateYear(e.target.value); setDateMonth(''); setDateDay(''); }}>
+                  <option value="">-- שנה --</option>
+                  {Array.from({ length: 61 }, (_, i) => 1900 + i).map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+                {dateYear && (
+                  <select value={dateMonth} onChange={e => { setDateMonth(e.target.value); setDateDay(''); }}>
+                    <option value="">-- חודש --</option>
+                    {MONTHS_HE.map((m, i) => (
+                      <option key={i + 1} value={i + 1}>{m}</option>
+                    ))}
+                  </select>
+                )}
+                {dateYear && dateMonth && (
+                  <select value={dateDay} onChange={e => setDateDay(e.target.value)}>
+                    <option value="">-- יום --</option>
+                    {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
             </div>
 
             <div className="eg-modal-actions">
-              <button type="submit" className="editable-btn save-btn" disabled={uploading}>
+              <button type="submit" className="editable-btn save-btn" disabled={uploading || selectedChapters.length === 0}>
                 {uploading ? <><FaSpinner className="editable-image-spinner" /> מעלה...</> : 'הוסף'}
               </button>
               <button type="button" className="editable-btn cancel-btn" onClick={resetForm} disabled={uploading}>
