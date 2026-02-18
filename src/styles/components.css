@@ -455,7 +455,7 @@
   border: 2px solid var(--primary-color);
   color: var(--primary-color);
   padding: var(--spacing-xs) var(--spacing-md);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   border-radius: var(--border-radius-full);
   cursor: pointer;
   transition: all var(--transition-fast) ease;

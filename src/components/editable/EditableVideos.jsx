@@ -3,6 +3,7 @@ import { collection, getDocs, addDoc, deleteDoc, doc, query, orderBy } from 'fir
 import { db } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaPlay } from 'react-icons/fa';
+import ChapterFilter from '../common/ChapterFilter';
 
 const CHAPTERS = [
   { value: 'childhood', label: 'ילדות בגרמניה' },
@@ -57,6 +58,7 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
   const [dateDay, setDateDay] = useState('');
   const [urlError, setUrlError] = useState('');
   const [lightboxItem, setLightboxItem] = useState(null);
+  const [activeChapter, setActiveChapter] = useState(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -152,10 +154,15 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
     );
   }
 
+  const filteredItems = activeChapter
+    ? items.filter(item => item.chapters?.includes(activeChapter))
+    : items;
+
   return (
     <div className="eg-wrapper">
+      <ChapterFilter selected={activeChapter} onChange={setActiveChapter} />
       <div className="eg-grid">
-        {items.map(item => (
+        {filteredItems.map(item => (
           <div key={item.id} className="eg-card" onClick={() => setLightboxItem(item)} style={{ cursor: 'pointer' }}>
             <div className="ev-card-thumbnail">
               <img src={`https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`} alt={item.title} />

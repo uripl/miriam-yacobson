@@ -4,6 +4,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner } from 'react-icons/fa';
+import ChapterFilter from '../common/ChapterFilter';
 
 const CHAPTERS = [
   { value: 'childhood', label: 'ילדות בגרמניה' },
@@ -45,6 +46,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
   const [dateDay, setDateDay] = useState('');
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [activeChapter, setActiveChapter] = useState(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -129,10 +131,15 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
     );
   }
 
+  const filteredItems = activeChapter
+    ? items.filter(item => item.chapters?.includes(activeChapter))
+    : items;
+
   return (
     <div className="eg-wrapper">
+      <ChapterFilter selected={activeChapter} onChange={setActiveChapter} />
       <div className="eg-grid">
-        {items.map(item => (
+        {filteredItems.map(item => (
           <div key={item.id} className="eg-card">
             <div className="eg-card-image">
               <img src={item.imageUrl} alt={item.title} />

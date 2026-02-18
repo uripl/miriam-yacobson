@@ -4,6 +4,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaFilePdf, FaFileImage, FaExternalLinkAlt } from 'react-icons/fa';
+import ChapterFilter from '../common/ChapterFilter';
 
 const DOC_TYPES = [
   { value: '', label: 'בחר סוג...' },
@@ -64,6 +65,7 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
   const [dateDay, setDateDay] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
+  const [activeChapter, setActiveChapter] = useState(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -160,10 +162,15 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
     );
   }
 
+  const filteredItems = activeChapter
+    ? items.filter(item => item.chapters?.includes(activeChapter))
+    : items;
+
   return (
     <div className="ed-wrapper">
+      <ChapterFilter selected={activeChapter} onChange={setActiveChapter} />
       <div className="ed-grid">
-        {items.map(item => {
+        {filteredItems.map(item => {
           const pdf = isPdf(item.fileUrl) || item.fileType?.includes('pdf');
           return (
             <div key={item.id} className="ed-card" onClick={() => handleClick(item)}>

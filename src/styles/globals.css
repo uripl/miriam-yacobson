@@ -768,6 +768,36 @@ section {
   font-weight: normal;
 }
 
+/* ChapterFilter */
+.chapter-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xl);
+  justify-content: center;
+}
+
+.chapter-filter-btn {
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-base);
+  border-radius: var(--border-radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+}
+
+.chapter-filter-btn.active {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.chapter-filter-btn:hover {
+  background-color: var(--primary-light);
+  color: var(--white);
+}
+
 .eg-card-desc {
   font-size: var(--font-size-sm);
   color: var(--text-light);
