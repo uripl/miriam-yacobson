@@ -5,6 +5,7 @@ import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaEllipsisV, FaPen } from 'react-icons/fa';
 import ChapterFilter from '../common/ChapterFilter';
+import ImageLightbox from '../common/ImageLightbox';
 
 const CHAPTERS = [
   { value: 'childhood', label: 'ילדות בגרמניה' },
@@ -49,6 +50,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [activeChapter, setActiveChapter] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [lightboxItem, setLightboxItem] = useState(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -99,11 +101,11 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
   const handleAdd = async (e) => {
     e.preventDefault();
     if (!title.trim() || selectedChapters.length === 0) return;
+    if (!editItem && !selectedFile) return;
 
     setUploading(true);
     try {
       if (editItem) {
-        // עריכה
         const updated = {
           title: title.trim(),
           description: description.trim(),
@@ -115,8 +117,6 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
         await updateDoc(doc(db, collectionName, editItem.id), updated);
         setItems(prev => prev.map(i => i.id === editItem.id ? { ...i, ...updated } : i));
       } else {
-        // הוספה
-        if (!selectedFile) return;
         const storageRef = ref(storage, `${collectionName}/${Date.now()}_${selectedFile.name}`);
         await uploadBytes(storageRef, selectedFile);
         const url = await getDownloadURL(storageRef);
@@ -164,7 +164,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
       <ChapterFilter selected={activeChapter} onChange={setActiveChapter} />
       <div className="eg-grid">
         {filteredItems.map(item => (
-          <div key={item.id} className="eg-card">
+          <div key={item.id} className="eg-card" onClick={() => setLightboxItem(item)}>
             <div className="eg-card-image">
               <img src={item.imageUrl} alt={item.title} />
               {isAdmin && (
@@ -178,12 +178,8 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
                   </button>
                   {openMenuId === item.id && (
                     <div className="eg-menu-dropdown">
-                      <button onClick={() => openEdit(item)}>
-                        <FaPen /> עריכה
-                      </button>
-                      <button className="eg-menu-delete" onClick={() => handleDelete(item)}>
-                        <FaTrash /> מחיקה
-                      </button>
+                      <button onClick={() => openEdit(item)}><FaPen /> עריכה</button>
+                      <button className="eg-menu-delete" onClick={() => handleDelete(item)}><FaTrash /> מחיקה</button>
                     </div>
                   )}
                 </div>
@@ -201,7 +197,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
         ))}
 
         {isAdmin && (
-          <button className="eg-add-card" onClick={() => { setEditItem(null); setShowForm(true); }}>
+          <button className="eg-add-card" onClick={(e) => { e.stopPropagation(); setEditItem(null); setShowForm(true); }}>
             <FaPlus />
             <span>הוסף תמונה</span>
           </button>
@@ -275,6 +271,14 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
             </div>
           </form>
         </div>
+      )}
+
+      {lightboxItem && (
+        <ImageLightbox
+          src={lightboxItem.imageUrl}
+          alt={lightboxItem.title}
+          onClose={() => setLightboxItem(null)}
+        />
       )}
     </div>
   );
