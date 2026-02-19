@@ -56,9 +56,20 @@ const isPdf = (url) => url?.toLowerCase().includes('.pdf') || url?.includes('app
 
 const PdfThumbnail = ({ url }) => {
   const [status, setStatus] = useState('loading');
+  const containerRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver(entries => {
+      setContainerWidth(entries[0].contentRect.width);
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="ed-pdf-thumb-wrapper">
+    <div className="ed-pdf-thumb-wrapper" ref={containerRef}>
       {status === 'loading' && (
         <div className="ed-pdf-loading">
           <FaSpinner className="editable-image-spinner" />
@@ -67,7 +78,7 @@ const PdfThumbnail = ({ url }) => {
       {status === 'error' && (
         <div className="ed-pdf-icon"><FaFilePdf /></div>
       )}
-      {status !== 'error' && (
+      {status !== 'error' && containerWidth > 0 && (
         <Document
           file={{ url, withCredentials: false }}
           onLoadSuccess={() => setStatus('success')}
@@ -77,7 +88,7 @@ const PdfThumbnail = ({ url }) => {
           {status === 'success' && (
             <Page
               pageNumber={1}
-              height={200}
+              width={containerWidth}
               renderTextLayer={false}
               renderAnnotationLayer={false}
             />
