@@ -25,7 +25,7 @@ const Header = () => {
     <header className="site-header">
       <div className="header-container container">
         <Link to="/" className="site-logo" onClick={closeMenu}>
-          <EditableImage contentKey="site-logo" defaultSrc="/images/logo.png" alt="מאפילה לאורה - לוגו" />
+          <EditableImage contentKey="site-logo" defaultSrc={process.env.PUBLIC_URL + "/images/logo.png"} alt="מאפילה לאורה - לוגו" />
           <span className="site-title">מאפילה לאורה</span>
         </Link>
 
