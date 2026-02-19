@@ -26,6 +26,10 @@ import GalleryPage from './components/pages/GalleryPage';
 import DocumentsPage from './components/pages/DocumentsPage';
 import VideosPage from './components/pages/VideosPage';
 
+// אימות וחברות
+import MembershipGuard from './components/auth/MembershipGuard';
+import ApproveMemberPage from './components/auth/ApproveMemberPage';
+
 // סגנונות
 
 function App() {
@@ -35,12 +39,13 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<NewHomePage />} />
-          
+
           {/* דפים נוספים שנשמרים */}
           <Route path="/journey-map" element={<JourneyMapPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/videos" element={<VideosPage />} />
-          <Route path="/documents" element={<DocumentsPage />} />
+          <Route path="/gallery" element={<MembershipGuard><GalleryPage /></MembershipGuard>} />
+          <Route path="/videos" element={<MembershipGuard><VideosPage /></MembershipGuard>} />
+          <Route path="/documents" element={<MembershipGuard><DocumentsPage /></MembershipGuard>} />
+          <Route path="/approve" element={<ApproveMemberPage />} />
           
           {/* נתיבים לפרקים */}
           <Route path="/chapters/childhood" element={<ChildhoodPage />} />

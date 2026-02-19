@@ -1,0 +1,135 @@
+.membership-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  direction: rtl;
+}
+
+.membership-popup {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.membership-popup h2 {
+  color: var(--primary-dark);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 0.75rem;
+}
+
+.membership-popup p {
+  color: var(--text-light);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  margin-bottom: 0.5rem;
+}
+
+.membership-login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1.75rem;
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.membership-login-btn:hover {
+  background: var(--primary-dark);
+}
+
+.membership-logout-btn {
+  display: inline-block;
+  margin-top: 1.25rem;
+  padding: 0.6rem 1.5rem;
+  background: transparent;
+  color: var(--text-light);
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.membership-logout-btn:hover {
+  border-color: var(--gray-dark);
+  color: var(--text-color);
+}
+
+.membership-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  font-size: var(--font-size-lg);
+  color: var(--text-light);
+  direction: rtl;
+}
+
+.approve-page {
+  padding: 3rem 1.5rem;
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+  direction: rtl;
+}
+
+.approve-page h2 {
+  color: var(--primary-dark);
+  font-size: var(--font-size-2xl);
+  margin-bottom: 1rem;
+}
+
+.approve-page p {
+  color: var(--text-color);
+  font-size: var(--font-size-base);
+  margin-bottom: 0.5rem;
+  line-height: var(--line-height-normal);
+}
+
+.approve-btn {
+  margin-top: 1.25rem;
+  padding: 0.75rem 2rem;
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.approve-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.approve-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.approve-error {
+  color: var(--error);
+  margin-top: 1rem;
+  font-size: var(--font-size-sm);
+}
+
+.approve-success {
+  color: var(--success);
+}
