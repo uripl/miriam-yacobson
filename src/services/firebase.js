@@ -4,12 +4,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCi0MA15VRt23xXLtFlo-zWbgr7D2z-Dfo",
-  authDomain: "miriam-yacobson.firebaseapp.com",
-  projectId: "miriam-yacobson",
-  storageBucket: "miriam-yacobson.firebasestorage.app",
-  messagingSenderId: "261583763715",
-  appId: "1:261583763715:web:b8de506a0381aef48e1136"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyCi0MA15VRt23xXLtFlo-zWbgr7D2z-Dfo",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "miriam-yacobson.firebaseapp.com",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "miriam-yacobson",
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "miriam-yacobson.firebasestorage.app",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "261583763715",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:261583763715:web:b8de506a0381aef48e1136"
 };
 
 const app = initializeApp(firebaseConfig);
