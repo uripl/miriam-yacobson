@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Each authenticated user may read their own admin document (to check admin status)
+    match /admins/{email} {
+      allow read: if request.auth != null && request.auth.token.email == email;
+      allow write: if false;
+    }
+
+    // Members collection
+    match /members/{uid} {
+      // Users may read their own membership document
+      allow read: if request.auth != null && request.auth.uid == uid;
+      // Authenticated admins (email exists in /admins) may create/update membership docs
+      allow write: if request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+  }
+}

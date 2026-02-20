@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../services/firebase';
 import '../../styles/MembershipGuard.css';
@@ -14,13 +14,13 @@ const ApproveMemberPage = () => {
   const email = searchParams.get('email');
 
   const handleApprove = async () => {
-    if (!uid || !email) return;
+    if (!uid || !email || !user) return;
     setStatus('loading');
     try {
       await setDoc(doc(db, 'members', uid), {
         email,
         approvedBy: user.email,
-        approvedAt: new Date().toISOString(),
+        approvedAt: serverTimestamp(),
       });
       setStatus('success');
     } catch (err) {
