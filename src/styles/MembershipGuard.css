@@ -26,6 +26,13 @@
   margin-bottom: 0.75rem;
 }
 
+.membership-popup h2::after,
+.approve-page h2::after {
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .membership-popup p {
   color: var(--text-light);
   font-size: var(--font-size-base);
