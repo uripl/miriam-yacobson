@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import ChapterNavBar from '../../common/ChapterNavBar';
 import EditableText from '../../editable/EditableText';
 import ChapterContent from '../../chapters/ChapterContent';

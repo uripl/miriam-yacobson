@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import JourneyMap from '../common/JourneyMap'; // שינוי חזרה ל-JourneyMap המקורי
 import { journeyLocations } from '../../data/timelineData';
 import '../../styles/JourneyMapPage.css';

@@ -1,4 +1,3 @@
-import React from 'react';
 
 const CHAPTERS = [
   { value: 'childhood', label: 'ילדות בגרמניה' },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import emailjs from 'emailjs-com';
 import { FaGoogle } from 'react-icons/fa';

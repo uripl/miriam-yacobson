@@ -62,21 +62,3 @@ export function getImageSrc(imageSrc, category, width = 400, height = 300, fallb
   // לא נמצא מקור תקין, החזר דמה
   return getPlaceholderImage(category, width, height, fallbackText);
 }
-
-/**
- * פונקציה שבודקת האם קובץ תמונה קיים (שימוש בסביבת ייצור)
- * @param {string} imagePath נתיב לתמונה
- * @returns {boolean} האם התמונה קיימת
- */
-export function imageExists(imagePath) {
-  // בסביבת פיתוח תמיד נחזיר false כדי להשתמש בדמה
-  if (process.env.NODE_ENV === 'development') {
-    const devMode = process.env.REACT_APP_USE_REAL_IMAGES;
-    if (devMode !== 'true') {
-      return false;
-    }
-  }
-  
-  // בדיקה פשוטה - לא באמת בודקת קיום פיזי של הקובץ בצד הלקוח
-  return imagePath && typeof imagePath === 'string' && imagePath.length > 0;
-}

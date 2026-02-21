@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import Timeline from '../common/Timeline';
 import EditableText from '../editable/EditableText';
 import EditableImage from '../editable/EditableImage';

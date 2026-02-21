@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../styles/JourneyMap.css';
 
@@ -37,8 +37,6 @@ const JourneyMap = ({ locations }) => {
         
         newMap.on('load', () => {
           setMapLoaded(true);
-          console.log('מפת Mapbox נטענה בהצלחה');
-          
           // הוספת בקרי ניווט במפה (זום וסיבוב)
           newMap.addControl(new mapboxgl.NavigationControl(), 'top-left');
           

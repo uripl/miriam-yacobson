@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import EditableVideos from '../editable/EditableVideos';
-import '../../styles/GalleryPage.css';
 
 const VideosPage = () => {
   useEffect(() => {

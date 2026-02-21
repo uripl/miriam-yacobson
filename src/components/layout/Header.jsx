@@ -1,5 +1,5 @@
 // src/components/layout/Header.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import LoginButton from '../auth/LoginButton';

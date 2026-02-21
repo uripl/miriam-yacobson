@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import EditableGallery from '../editable/EditableGallery';
 import '../../styles/GalleryPage.css';
 
