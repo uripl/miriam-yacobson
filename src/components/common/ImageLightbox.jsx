@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FaTimes, FaSearchPlus, FaSearchMinus } from 'react-icons/fa';
 
-const ImageLightbox = ({ src, alt, onClose }) => {
+const ImageLightbox = ({ src, alt, caption, onClose }) => {
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -71,6 +71,11 @@ const ImageLightbox = ({ src, alt, onClose }) => {
           draggable={false}
         />
       </div>
+      {caption && (
+        <div className="lightbox-caption" onClick={e => e.stopPropagation()}>
+          {caption}
+        </div>
+      )}
     </div>
   );
 };

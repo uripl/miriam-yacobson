@@ -1389,7 +1389,22 @@ section {
 
 .lightbox-image-wrapper img {
   max-width: 90vw;
-  max-height: 90vh;
+  max-height: 80vh;
   object-fit: contain;
   user-select: none;
+}
+
+.lightbox-caption {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  text-align: center;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre-line;
+  z-index: 501;
 }

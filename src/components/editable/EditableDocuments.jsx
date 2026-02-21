@@ -5,6 +5,7 @@ import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaFilePdf, FaFileImage, FaExternalLinkAlt, FaEllipsisV, FaPen } from 'react-icons/fa';
 import ChapterFilter from '../common/ChapterFilter';
+import ImageLightbox from '../common/ImageLightbox';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -368,16 +369,12 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
       )}
 
       {preview && (
-        <div className="ed-preview-overlay" onClick={() => setPreview(null)}>
-          <div className="ed-preview-content" onClick={e => e.stopPropagation()}>
-            <button className="ed-preview-close" onClick={() => setPreview(null)}><FaTimes /></button>
-            <img src={preview.fileUrl} alt={preview.title} />
-            <div className="ed-preview-info">
-              <h3>{preview.title}</h3>
-              {preview.description && <p>{preview.description}</p>}
-            </div>
-          </div>
-        </div>
+        <ImageLightbox
+          src={preview.fileUrl}
+          alt={preview.title}
+          caption={[preview.title, preview.description].filter(Boolean).join('\n')}
+          onClose={() => setPreview(null)}
+        />
       )}
     </div>
   );

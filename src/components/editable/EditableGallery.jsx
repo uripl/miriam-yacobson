@@ -277,6 +277,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
         <ImageLightbox
           src={lightboxItem.imageUrl}
           alt={lightboxItem.title}
+          caption={lightboxItem.description}
           onClose={() => setLightboxItem(null)}
         />
       )}
