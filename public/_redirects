@@ -1,2 +1,0 @@
-# Netlify redirects
-/admin/*  /admin/index.html  200!

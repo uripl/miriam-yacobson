@@ -1,184 +1,77 @@
 # תכנית מעבר לדומיין מאפילה-לאורה.ישראל
 
-## מצב נוכחי
-
-| רכיב | מצב נוכחי |
-|-------|-----------|
-| **אירוח** | GitHub Pages (`uripl.github.io/miriam-yacobson`) |
-| **דומיין** | אין דומיין מותאם אישית |
-| **ניתוב (Router)** | HashRouter — כתובות עם `/#/` (למשל `/#/chapters/childhood`) |
-| **homepage ב-package.json** | `/miriam-yacobson` (נתיב משנה של GitHub Pages) |
-| **Firebase Auth Domain** | `uripl.github.io` |
-| **Netlify** | קיים קובץ `netlify.toml` אבל לא ברור אם פעיל |
-| **SSL** | מסופק אוטומטית דרך GitHub Pages |
-| **CNAME** | לא קיים |
-
 ## דומיין יעד
 
 - **דומיין:** `מאפילה-לאורה.ישראל`
-- **Punycode:** `xn----zhcbocfyyco1evc.xn--4dbrk0ce` (הייצוג הטכני של הדומיין)
+- **Punycode:** `xn----zhcbocfyyco1evc.xn--4dbrk0ce`
 - **שרתי DNS:** `ns1.sitedepot.com`, `ns2.sitedepot.com`
+- **פלטפורמת אירוח:** GitHub Pages
 
 ---
 
-## שלבי המעבר
+## שינויי קוד שבוצעו
 
-### שלב 1: בחירת פלטפורמת אירוח
-
-**המלצה: Netlify** (עדיפה על GitHub Pages לדומיין מותאם אישית)
-
-| | GitHub Pages | Netlify |
-|---|---|---|
-| דומיין IDN (עברית) | תמיכה חלקית | תמיכה מלאה |
-| SSL אוטומטי | כן | כן (Let's Encrypt) |
-| הפניות (Redirects) | לא | כן — חיוני ל-SPA |
-| Netlify CMS | לא רלוונטי | כבר מוגדר בפרויקט |
-| Build מותאם | מוגבל | מלא |
-
-> **GitHub Pages** דורש קובץ CNAME ותומך בדומיינים מותאמים, אבל ל-Netlify יש תמיכה טובה יותר בהפניות SPA ובניהול DNS. בנוסף, כבר קיימת תשתית Netlify בפרויקט.
+| קובץ | שינוי | סטטוס |
+|-------|-------|-------|
+| `package.json` | `homepage` עודכן לדומיין החדש | בוצע |
+| `src/services/firebase.js` | `authDomain` עודכן לדומיין החדש | בוצע |
+| `public/CNAME` | נוצר עם הדומיין ב-Punycode | בוצע |
+| `public/index.html` | הוסר Netlify Identity Widget | בוצע |
+| `netlify.toml` | נמחק | בוצע |
+| `public/_redirects` | נמחק | בוצע |
+| `public/admin/` | נמחקה תיקיית Netlify CMS | בוצע |
 
 ---
 
-### שלב 2: שינויי קוד בפרויקט
+## פעולות שנדרשות ממך (מחוץ לקוד)
 
-#### 2.1 — עדכון `package.json`
-```diff
-- "homepage": "/miriam-yacobson",
-+ "homepage": "https://xn----zhcbocfyyco1evc.xn--4dbrk0ce",
-```
-> או להסיר את השדה לגמרי (Netlify לא צריך אותו).
+### 1. הגדרת DNS ב-SiteDepot
 
-#### 2.2 — מעבר מ-HashRouter ל-BrowserRouter
-קובץ: `src/App.jsx`
-```diff
-- import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-+ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-```
-> **למה?** עם דומיין מותאם אישית, כתובות נקיות (`/chapters/childhood`) עדיפות על כתובות Hash (`/#/chapters/childhood`). זה גם טוב יותר ל-SEO.
+ב-ממשק הניהול של SiteDepot, הגדר את הרשומות הבאות:
 
-#### 2.3 — עדכון `public/_redirects` (עבור Netlify)
 ```
-# SPA fallback — כל הנתיבים מנותבים ל-index.html
-/*    /index.html   200
+סוג        שם       ערך
+────────────────────────────────────────
+A           @        185.199.108.153
+A           @        185.199.109.153
+A           @        185.199.110.153
+A           @        185.199.111.153
+CNAME       www      uripl.github.io
 ```
 
-#### 2.4 — הוספת קובץ `public/404.html` (גיבוי)
-העתקה של `index.html` כ-`404.html` לטיפול בנתיבי SPA.
+> אלה כתובות ה-IP של GitHub Pages. רשומת ה-CNAME עבור `www` מפנה לדומיין של GitHub.
 
----
+### 2. הגדרת דומיין מותאם ב-GitHub Pages
 
-### שלב 3: עדכון Firebase
+1. לך ל-GitHub → ריפו `miriam-yacobson` → **Settings** → **Pages**
+2. בשדה **Custom domain** הזן: `xn----zhcbocfyyco1evc.xn--4dbrk0ce`
+3. לחץ **Save**
+4. המתן לאימות DNS (יכול לקחת כמה דקות)
+5. סמן **Enforce HTTPS**
 
-#### 3.1 — עדכון Auth Domain
-קובץ: `src/services/firebase.js`
-```diff
-- authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "uripl.github.io",
-+ authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "xn----zhcbocfyyco1evc.xn--4dbrk0ce",
+### 3. הוספת דומיין מורשה ב-Firebase
+
+1. לך ל-[Firebase Console](https://console.firebase.google.com)
+2. פתח פרויקט **miriam-yacobson**
+3. לך ל-**Authentication** → **Settings** → **Authorized domains**
+4. לחץ **Add domain**
+5. הוסף: `xn----zhcbocfyyco1evc.xn--4dbrk0ce`
+
+### 4. עדכון GitHub Secrets
+
+ב-GitHub → ריפו → **Settings** → **Secrets and variables** → **Actions**:
+
+עדכן (או הוסף) את ה-Secret:
 ```
-
-#### 3.2 — הוספת הדומיין לרשימת הדומיינים המורשים ב-Firebase
-ב-Firebase Console:
-1. לך ל-**Authentication** → **Settings** → **Authorized domains**
-2. הוסף את `xn----zhcbocfyyco1evc.xn--4dbrk0ce`
-3. (אופציונלי) הוסף גם את `מאפילה-לאורה.ישראל`
-
----
-
-### שלב 4: הגדרת DNS ב-SiteDepot
-
-ב-ממשק הניהול של SiteDepot (שבו שרתי ה-DNS שלך), יש להגדיר:
-
-#### אפשרות א׳: אם משתמשים ב-Netlify
-```
-סוג        שם                  ערך
-──────────────────────────────────────────────────
-ALIAS/A     @                   כתובת IP של Netlify (ניתנת בהגדרות הדומיין ב-Netlify)
-CNAME       www                 [your-site].netlify.app
-```
-
-#### אפשרות ב׳: אם נשארים עם GitHub Pages
-```
-סוג        שם                  ערך
-──────────────────────────────────────────────────
-A           @                   185.199.108.153
-A           @                   185.199.109.153
-A           @                   185.199.110.153
-A           @                   185.199.111.153
-CNAME       www                 uripl.github.io
-```
-ובנוסף: יצירת קובץ `public/CNAME` עם התוכן:
-```
-xn----zhcbocfyyco1evc.xn--4dbrk0ce
+REACT_APP_FIREBASE_AUTH_DOMAIN = xn----zhcbocfyyco1evc.xn--4dbrk0ce
 ```
 
 ---
 
-### שלב 5: הגדרת הדומיין בפלטפורמת האירוח
+## הערות
 
-#### ב-Netlify:
-1. לך ל-**Site Settings** → **Domain management** → **Add custom domain**
-2. הזן: `xn----zhcbocfyyco1evc.xn--4dbrk0ce`
-3. Netlify יספק כתובות IP / CNAME להגדרת ה-DNS
-4. הפעל **HTTPS** (אוטומטי דרך Let's Encrypt)
+1. **Punycode:** הדומיין `מאפילה-לאורה.ישראל` הוא דומיין בינלאומי (IDN). שירותים טכניים דורשים את הייצוג ב-Punycode: `xn----zhcbocfyyco1evc.xn--4dbrk0ce`. מומלץ לוודא את הערך דרך כלי המרה מוסמך.
 
-#### ב-GitHub Pages (אם נבחר):
-1. לך ל-**Settings** → **Pages** → **Custom domain**
-2. הזן את הדומיין ב-Punycode
-3. סמן **Enforce HTTPS**
+2. **זמן התפשטות DNS:** לאחר הגדרת רשומות DNS, יכולות לעבור עד 48 שעות עד שהשינוי יתפשט.
 
----
-
-### שלב 6: עדכון משתני סביבה
-
-#### ב-Netlify (`netlify.toml` או ממשק הניהול):
-- `REACT_APP_FIREBASE_AUTH_DOMAIN` = `xn----zhcbocfyyco1evc.xn--4dbrk0ce`
-
-#### ב-GitHub Actions (אם ממשיכים להשתמש):
-- עדכן את ה-Secret `REACT_APP_FIREBASE_AUTH_DOMAIN`
-
----
-
-### שלב 7: עדכון Netlify CMS (אם רלוונטי)
-
-קובץ: `public/admin/config.yml`
-```yaml
-backend:
-  name: git-gateway
-  branch: main
-```
-> ההגדרה הנוכחית תקינה. יש לוודא ש-Netlify Identity מוגדר גם לדומיין החדש.
-
----
-
-## סיכום שינויים בקבצים
-
-| קובץ | שינוי |
-|-------|-------|
-| `package.json` | הסרת/עדכון `homepage` |
-| `src/App.jsx` | HashRouter → BrowserRouter |
-| `src/services/firebase.js` | עדכון authDomain לדומיין החדש |
-| `public/_redirects` | הוספת SPA fallback rule |
-| `netlify.toml` | (אופציונלי) הוספת משתני סביבה |
-| `public/CNAME` | (רק אם GitHub Pages) הוספת קובץ CNAME |
-
-## פעולות מחוץ לקוד
-
-| פעולה | איפה |
-|-------|------|
-| הגדרת רשומות DNS | ממשק ניהול SiteDepot |
-| הוספת דומיין מותאם | Netlify / GitHub Pages Settings |
-| הוספת דומיין מורשה | Firebase Console → Authentication |
-| הפעלת HTTPS | Netlify (אוטומטי) / GitHub Pages |
-| בדיקת Netlify Identity | Netlify Console (אם משתמשים ב-CMS) |
-
----
-
-## הערות חשובות
-
-1. **דומיין עברי (IDN):** הדומיין `מאפילה-לאורה.ישראל` הוא דומיין בינלאומי. מערכות טכניות רבות דורשות את הייצוג ב-Punycode: `xn----zhcbocfyyco1evc.xn--4dbrk0ce`. יש לוודא את הערך המדויק של ה-Punycode דרך כלי המרה מוסמך.
-
-2. **זמן התפשטות DNS:** לאחר שינוי רשומות DNS, יכולות לעבור עד 48 שעות עד שהשינוי יתפשט לכל העולם.
-
-3. **שמירת הגישה הישנה:** מומלץ להשאיר את GitHub Pages פעיל עם הפניה (redirect) לדומיין החדש לתקופת מעבר.
-
-4. **גיבוי:** לפני ביצוע שינויים, יש לוודא שכל הקוד מגובה ב-Git.
+3. **HashRouter:** הפרויקט משתמש ב-HashRouter (כתובות עם `/#/`). זה עובד מצוין עם GitHub Pages ללא צורך בהגדרות נוספות. אם בעתיד תרצה כתובות נקיות, תצטרך לעבור ל-BrowserRouter עם טריק של `404.html`.
