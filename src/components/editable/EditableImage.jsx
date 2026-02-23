@@ -53,7 +53,7 @@ const EditableImage = ({ contentKey, defaultSrc, alt }) => {
 
   return (
     <div className="editable-image-container">
-      <img src={src} alt={alt} />
+      <img src={src} alt={alt} onError={() => setSrc(defaultSrc)} />
       {uploading && (
         <div className="editable-image-overlay">
           <FaSpinner className="editable-image-spinner" />
