@@ -321,7 +321,7 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
               <div className="eg-date-selects">
                 <select value={dateYear} onChange={e => { setDateYear(e.target.value); setDateMonth(''); setDateDay(''); }}>
                   <option value="">-- שנה --</option>
-                  {Array.from({ length: 126 }, (_, i) => 1900 + i).map(y => <option key={y} value={y}>{y}</option>)}
+                  {Array.from({ length: new Date().getFullYear() - 1900 + 41 }, (_, i) => 1900 + i).map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
                 {dateYear && (
                   <select value={dateMonth} onChange={e => { setDateMonth(e.target.value); setDateDay(''); }}>
