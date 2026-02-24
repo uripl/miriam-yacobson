@@ -1,25 +1,37 @@
 // src/components/layout/Header.jsx
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes, FaPen, FaEye } from 'react-icons/fa';
 import LoginButton from '../auth/LoginButton';
 import EditableImage from '../editable/EditableImage';
+import { useAuth } from '../../context/AuthContext';
 
-/**
- * קומפוננטת הכותרת העליונה של האתר
- */
 const Header = () => {
+  const { isAdmin, editMode, toggleEditMode } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef(null);
+  const menuBtnRef = useRef(null);
 
-  // פתיחה/סגירה של התפריט הנייד
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
-  // סגירת התפריט הנייד בניווט
   const closeMenu = () => {
     setMenuOpen(false);
   };
+
+  // סגירת התפריט בלחיצה מחוץ לתפריט
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleClickOutside = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target) &&
+          menuBtnRef.current && !menuBtnRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [menuOpen]);
 
   return (
     <header className="site-header">
@@ -29,7 +41,7 @@ const Header = () => {
           <span className="site-title">מאפילה לאורה</span>
         </Link>
 
-        <nav className={`main-nav ${menuOpen ? 'open' : ''}`}>
+        <nav ref={navRef} className={`main-nav ${menuOpen ? 'open' : ''}`}>
           <ul>
             <li className="nav-item">
               <NavLink to="/" onClick={closeMenu} end>
@@ -65,8 +77,18 @@ const Header = () => {
         </nav>
 
         <div className="header-actions">
+          {isAdmin && (
+            <button
+              className={`edit-mode-toggle ${editMode ? 'active' : ''}`}
+              onClick={toggleEditMode}
+              aria-label={editMode ? 'מצב צפייה' : 'מצב עריכה'}
+              title={editMode ? 'עבור למצב צפייה' : 'עבור למצב עריכה'}
+            >
+              {editMode ? <FaPen /> : <FaEye />}
+            </button>
+          )}
           <LoginButton />
-          <button className="mobile-menu-button"
+          <button ref={menuBtnRef} className="mobile-menu-button"
             onClick={toggleMenu}
             aria-label={menuOpen ? "סגור תפריט" : "פתח תפריט"}
           >

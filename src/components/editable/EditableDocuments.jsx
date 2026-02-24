@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
@@ -9,6 +9,7 @@ import ImageLightbox from '../common/ImageLightbox';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+import { CHAPTERS, MONTHS_HE, formatItemDate, formatItemChapters } from '../../utils/constants';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.js`;
 
@@ -25,32 +26,6 @@ const DOC_TYPE_LABELS = {
   letter: 'מכתב',
   testimony: 'עדות',
   other: 'אחר',
-};
-
-const CHAPTERS = [
-  { value: 'childhood', label: 'ילדות בגרמניה' },
-  { value: 'belgium', label: 'החיים בבלגיה' },
-  { value: 'france', label: 'צרפת תחת הכיבוש' },
-  { value: 'holocaust', label: 'בעמק הבכא' },
-  { value: 'liberation', label: 'השחרור והחזרה לליון' },
-  { value: 'immigration', label: 'העלייה לישראל' },
-  { value: 'israel', label: 'החיים בישראל' },
-];
-
-const MONTHS_HE = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
-
-const formatItemDate = (item) => {
-  if (item.dateYear) {
-    if (item.dateMonth && item.dateDay) return `${item.dateDay} ${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
-    if (item.dateMonth) return `${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
-    return `${item.dateYear}`;
-  }
-  return item.year || '';
-};
-
-const formatItemChapters = (item) => {
-  if (!item.chapters?.length) return '';
-  return item.chapters.map(c => CHAPTERS.find(ch => ch.value === c)?.label || c).join(', ');
 };
 
 const isPdf = (url) => url?.toLowerCase().includes('.pdf') || url?.includes('application%2Fpdf');
@@ -99,7 +74,7 @@ const PdfThumbnail = ({ url }) => {
 };
 
 const EditableDocuments = ({ collectionName = 'documents' }) => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, editMode } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -171,6 +146,11 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
     if (!title.trim() || selectedChapters.length === 0) return;
     if (!editItem && !selectedFile) return;
 
+    if (selectedFile && selectedFile.size > 25 * 1024 * 1024) {
+      alert('הקובץ גדול מדי. גודל מקסימלי: 25MB');
+      return;
+    }
+
     setUploading(true);
     try {
       if (editItem) {
@@ -201,7 +181,7 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
           ...(dateYear && dateMonth && { dateMonth: Number(dateMonth) }),
           ...(dateYear && dateMonth && dateDay && { dateDay: Number(dateDay) }),
           addedBy: user.email,
-          addedAt: new Date().toISOString(),
+          addedAt: serverTimestamp(),
         };
         const docRef = await addDoc(collection(db, collectionName), newDoc);
         setItems(prev => [{ id: docRef.id, ...newDoc }, ...prev]);
@@ -249,7 +229,7 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
             <div key={item.id} className="ed-card" onClick={() => handleClick(item)}>
               <div className="ed-card-thumb">
                 {pdf ? <PdfThumbnail url={item.fileUrl} /> : <img src={item.fileUrl} alt={item.title} />}
-                {isAdmin && (
+                {isAdmin && editMode && (
                   <div className="eg-menu-wrapper" onClick={e => e.stopPropagation()}>
                     <button
                       className="eg-menu-btn"
@@ -284,7 +264,7 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
           );
         })}
 
-        {isAdmin && (
+        {isAdmin && editMode && (
           <button className="eg-add-card" onClick={() => { setEditItem(null); setShowForm(true); }}>
             <FaPlus />
             <span>הוסף מסמך</span>
@@ -341,7 +321,7 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
               <div className="eg-date-selects">
                 <select value={dateYear} onChange={e => { setDateYear(e.target.value); setDateMonth(''); setDateDay(''); }}>
                   <option value="">-- שנה --</option>
-                  {Array.from({ length: 61 }, (_, i) => 1900 + i).map(y => <option key={y} value={y}>{y}</option>)}
+                  {Array.from({ length: new Date().getFullYear() - 1900 + 41 }, (_, i) => 1900 + i).map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
                 {dateYear && (
                   <select value={dateMonth} onChange={e => { setDateMonth(e.target.value); setDateDay(''); }}>

@@ -28,14 +28,15 @@ import VideosPage from './components/pages/VideosPage';
 // אימות וחברות
 import MembershipGuard from './components/auth/MembershipGuard';
 import ApproveMemberPage from './components/auth/ApproveMemberPage';
-
-// סגנונות
+import NotFoundPage from './components/pages/NotFoundPage';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 function App() {
   return (
     <AuthProvider>
     <Router>
       <Layout>
+        <ErrorBoundary>
         <Routes>
           <Route path="/" element={<NewHomePage />} />
 
@@ -56,8 +57,9 @@ function App() {
           <Route path="/chapters/israel" element={<IsraelPage />} />
           
           {/* במקרה של נתיב לא קיים */}
-          <Route path="*" element={<NewHomePage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </ErrorBoundary>
       </Layout>
     </Router>
     </AuthProvider>

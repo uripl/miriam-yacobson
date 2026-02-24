@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPen, FaSpinner } from 'react-icons/fa';
 
 const EditableImage = ({ contentKey, defaultSrc, alt }) => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, editMode } = useAuth();
   const [src, setSrc] = useState(defaultSrc);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
@@ -29,6 +29,12 @@ const EditableImage = ({ contentKey, defaultSrc, alt }) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (file.size > 10 * 1024 * 1024) {
+      alert('הקובץ גדול מדי. גודל מקסימלי: 10MB');
+      e.target.value = '';
+      return;
+    }
+
     setUploading(true);
     try {
       const storageRef = ref(storage, `content/${contentKey}/${file.name}`);
@@ -39,7 +45,7 @@ const EditableImage = ({ contentKey, defaultSrc, alt }) => {
         value: url,
         previousValue: src,
         editedBy: user.email,
-        editedAt: new Date().toISOString(),
+        editedAt: serverTimestamp(),
       });
 
       setSrc(url);
@@ -60,7 +66,7 @@ const EditableImage = ({ contentKey, defaultSrc, alt }) => {
           <span>מעלה תמונה...</span>
         </div>
       )}
-      {isAdmin && !uploading && (
+      {isAdmin && editMode && !uploading && (
         <button
           className="editable-image-btn"
           onClick={() => fileInputRef.current.click()}

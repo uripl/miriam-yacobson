@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { FaArrowUp } from 'react-icons/fa';
@@ -11,23 +11,20 @@ import { FaArrowUp } from 'react-icons/fa';
 const Layout = ({ children }) => {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // מעקב אחר גלילה להצגת כפתור חזרה לראש הדף
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    
-    // ניקוי האזנה לאירוע בעת פירוק הקומפוננטה
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+  const ticking = useRef(false);
+  const handleScroll = useCallback(() => {
+    if (ticking.current) return;
+    ticking.current = true;
+    requestAnimationFrame(() => {
+      setShowScrollTop(window.scrollY > 300);
+      ticking.current = false;
+    });
   }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   // חזרה לראש הדף בלחיצה על כפתור
   const scrollToTop = () => {

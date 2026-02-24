@@ -417,6 +417,33 @@ section {
 
 /* בקובץ src/styles/globals.css */
 
+/* כפתור מעבר בין מצב עריכה/צפייה */
+.edit-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--gray);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: all var(--transition-fast) ease;
+}
+
+.edit-mode-toggle.active {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+  background: rgba(215, 165, 91, 0.1);
+}
+
+.edit-mode-toggle:hover {
+  border-color: var(--secondary-dark);
+  color: var(--secondary-dark);
+}
+
 /* כפתורי התחברות */
 .login-btn {
   display: inline-flex;

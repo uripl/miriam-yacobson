@@ -1,40 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaEllipsisV, FaPen } from 'react-icons/fa';
 import ChapterFilter from '../common/ChapterFilter';
 import ImageLightbox from '../common/ImageLightbox';
-
-const CHAPTERS = [
-  { value: 'childhood', label: 'ילדות בגרמניה' },
-  { value: 'belgium', label: 'החיים בבלגיה' },
-  { value: 'france', label: 'צרפת תחת הכיבוש' },
-  { value: 'holocaust', label: 'בעמק הבכא' },
-  { value: 'liberation', label: 'השחרור והחזרה לליון' },
-  { value: 'immigration', label: 'העלייה לישראל' },
-  { value: 'israel', label: 'החיים בישראל' },
-];
-
-const MONTHS_HE = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
-
-const formatItemDate = (item) => {
-  if (item.dateYear) {
-    if (item.dateMonth && item.dateDay) return `${item.dateDay} ${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
-    if (item.dateMonth) return `${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
-    return `${item.dateYear}`;
-  }
-  return item.year || '';
-};
-
-const formatItemChapters = (item) => {
-  if (!item.chapters?.length) return '';
-  return item.chapters.map(c => CHAPTERS.find(ch => ch.value === c)?.label || c).join(', ');
-};
+import { CHAPTERS, MONTHS_HE, formatItemDate, formatItemChapters } from '../../utils/constants';
 
 const EditableGallery = ({ collectionName = 'gallery' }) => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, editMode } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -103,6 +78,11 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
     if (!title.trim() || selectedChapters.length === 0) return;
     if (!editItem && !selectedFile) return;
 
+    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
+      alert('הקובץ גדול מדי. גודל מקסימלי: 10MB');
+      return;
+    }
+
     setUploading(true);
     try {
       if (editItem) {
@@ -129,7 +109,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
           ...(dateYear && dateMonth && { dateMonth: Number(dateMonth) }),
           ...(dateYear && dateMonth && dateDay && { dateDay: Number(dateDay) }),
           addedBy: user.email,
-          addedAt: new Date().toISOString(),
+          addedAt: serverTimestamp(),
         };
         const docRef = await addDoc(collection(db, collectionName), newDoc);
         setItems(prev => [{ id: docRef.id, ...newDoc }, ...prev]);
@@ -167,7 +147,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
           <div key={item.id} className="eg-card" onClick={() => setLightboxItem(item)}>
             <div className="eg-card-image">
               <img src={item.imageUrl} alt={item.title} />
-              {isAdmin && (
+              {isAdmin && editMode && (
                 <div className="eg-menu-wrapper" onClick={e => e.stopPropagation()}>
                   <button
                     className="eg-menu-btn"
@@ -196,7 +176,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
           </div>
         ))}
 
-        {isAdmin && (
+        {isAdmin && editMode && (
           <button className="eg-add-card" onClick={(e) => { e.stopPropagation(); setEditItem(null); setShowForm(true); }}>
             <FaPlus />
             <span>הוסף תמונה</span>
@@ -246,7 +226,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
               <div className="eg-date-selects">
                 <select value={dateYear} onChange={e => { setDateYear(e.target.value); setDateMonth(''); setDateDay(''); }}>
                   <option value="">-- שנה --</option>
-                  {Array.from({ length: 61 }, (_, i) => 1900 + i).map(y => <option key={y} value={y}>{y}</option>)}
+                  {Array.from({ length: new Date().getFullYear() - 1900 + 41 }, (_, i) => 1900 + i).map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
                 {dateYear && (
                   <select value={dateMonth} onChange={e => { setDateMonth(e.target.value); setDateDay(''); }}>

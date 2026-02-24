@@ -9,6 +9,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(() => {
+    return localStorage.getItem('editMode') !== 'false';
+  });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -38,8 +41,16 @@ export const AuthProvider = ({ children }) => {
     await signOut(auth);
   };
 
+  const toggleEditMode = () => {
+    setEditMode(prev => {
+      const next = !prev;
+      localStorage.setItem('editMode', String(next));
+      return next;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isAdmin, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, isAdmin, loading, login, logout, editMode, toggleEditMode }}>
       {children}
     </AuthContext.Provider>
   );

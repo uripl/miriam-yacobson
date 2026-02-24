@@ -322,7 +322,7 @@ const Timeline = ({ simplified = false }) => {
             <p className="timeline-description">{event.description}</p>
             
             {!simplified && (
-              <Link to={`/chapters/${event.category}#${event.id}`} className="timeline-link">
+              <Link to={`/chapters/${event.category}`} className="timeline-link">
                 קרא עוד
               </Link>
             )}
