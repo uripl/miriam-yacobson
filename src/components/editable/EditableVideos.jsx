@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaPlay, FaEllipsisV, FaPen } from 'react-icons/fa';
 import ChapterFilter from '../common/ChapterFilter';
 import { CHAPTERS, MONTHS_HE, formatItemDate, formatItemChapters } from '../../utils/constants';
+import HebrewDateTooltip from '../common/HebrewDateTooltip';
 
 const extractVideoId = (url) => {
   const patterns = [
@@ -186,7 +187,7 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
             <div className="eg-card-info">
               <h4 className="eg-card-title">{item.title}</h4>
               <div className="eg-card-meta">
-                {formatItemDate(item) && <span className="eg-card-year">{formatItemDate(item)}</span>}
+                {formatItemDate(item) && <HebrewDateTooltip item={item}><span className="eg-card-year">{formatItemDate(item)}</span></HebrewDateTooltip>}
                 {formatItemChapters(item) && <span className="eg-card-chapters">{formatItemChapters(item)}</span>}
               </div>
               {item.description && <p className="eg-card-desc">{item.description}</p>}
@@ -294,7 +295,7 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
             <div className="ev-lightbox-info">
               <h3>{lightboxItem.title}</h3>
               <div className="eg-card-meta">
-                {formatItemDate(lightboxItem) && <span className="eg-card-year">{formatItemDate(lightboxItem)}</span>}
+                {formatItemDate(lightboxItem) && <HebrewDateTooltip item={lightboxItem}><span className="eg-card-year">{formatItemDate(lightboxItem)}</span></HebrewDateTooltip>}
                 {formatItemChapters(lightboxItem) && <span className="eg-card-chapters">{formatItemChapters(lightboxItem)}</span>}
               </div>
               {lightboxItem.description && <p>{lightboxItem.description}</p>}
