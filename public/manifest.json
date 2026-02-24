@@ -1,0 +1,17 @@
+{
+  "short_name": "מאפילה לאורה",
+  "name": "מאפילה לאורה - סיפור חייה של מרים אופנהיימר (יעקובסון)",
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2e5077",
+  "background_color": "#ffffff",
+  "dir": "rtl",
+  "lang": "he"
+}

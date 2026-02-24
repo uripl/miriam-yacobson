@@ -302,11 +302,10 @@ const JourneyMap = ({ locations }) => {
         </div>
 
         {/* מכל המפה - בצד שמאל */}
-        <div 
-          className="journey-map-view" 
-          ref={mapContainerRef}
-          style={{ 
-            flex: isMobile ? 'none' : '0 0 66.666%', 
+        <div
+          className="journey-map-view"
+          style={{
+            flex: isMobile ? 'none' : '0 0 66.666%',
             width: isMobile ? '100%' : '66.666%',
             height: isMobile ? '400px' : 'auto',
             minHeight: isMobile ? '400px' : 'auto',
@@ -314,8 +313,18 @@ const JourneyMap = ({ locations }) => {
             order: isMobile ? 2 : 2
           }}
         >
+          <div
+            ref={mapContainerRef}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0
+            }}
+          />
           {!mapLoaded && (
-            <div 
+            <div
               style={{
                 position: 'absolute',
                 top: 0,
@@ -326,7 +335,8 @@ const JourneyMap = ({ locations }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 background: '#f5f5f5',
-                zIndex: 5
+                zIndex: 5,
+                pointerEvents: 'none'
               }}
             >
               טוען מפה...
