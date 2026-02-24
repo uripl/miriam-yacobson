@@ -1,0 +1,11 @@
+[
+  {
+    "origin": [
+      "https://xn----zhcbocfyyco1evc.xn--4dbrk0ce",
+      "http://localhost:3000"
+    ],
+    "method": ["GET", "HEAD"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": ["Content-Type", "Content-Range"]
+  }
+]
