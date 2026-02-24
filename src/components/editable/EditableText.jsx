@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPen, FaSave, FaTimes } from 'react-icons/fa';
 
 const EditableText = ({ contentKey, defaultValue, as: Tag = 'p' }) => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, editMode } = useAuth();
   const [text, setText] = useState(defaultValue);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
@@ -46,7 +46,7 @@ const EditableText = ({ contentKey, defaultValue, as: Tag = 'p' }) => {
         value: draft,
         previousValue: text,
         editedBy: user.email,
-        editedAt: new Date().toISOString(),
+        editedAt: serverTimestamp(),
       });
       setText(draft);
       setEditing(false);
@@ -81,7 +81,7 @@ const EditableText = ({ contentKey, defaultValue, as: Tag = 'p' }) => {
   return (
     <div className="editable-container">
       <Tag>{text}</Tag>
-      {isAdmin && (
+      {isAdmin && editMode && (
         <button className="editable-edit-btn" onClick={startEditing} aria-label="ערוך">
           <FaPen />
         </button>

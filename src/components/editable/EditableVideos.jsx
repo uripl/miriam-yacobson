@@ -1,35 +1,10 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPlus, FaTrash, FaTimes, FaSpinner, FaPlay, FaEllipsisV, FaPen } from 'react-icons/fa';
 import ChapterFilter from '../common/ChapterFilter';
-
-const CHAPTERS = [
-  { value: 'childhood', label: 'ילדות בגרמניה' },
-  { value: 'belgium', label: 'החיים בבלגיה' },
-  { value: 'france', label: 'צרפת תחת הכיבוש' },
-  { value: 'holocaust', label: 'בעמק הבכא' },
-  { value: 'liberation', label: 'השחרור והחזרה לליון' },
-  { value: 'immigration', label: 'העלייה לישראל' },
-  { value: 'israel', label: 'החיים בישראל' },
-];
-
-const MONTHS_HE = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
-
-const formatItemDate = (item) => {
-  if (item.dateYear) {
-    if (item.dateMonth && item.dateDay) return `${item.dateDay} ${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
-    if (item.dateMonth) return `${MONTHS_HE[item.dateMonth - 1]} ${item.dateYear}`;
-    return `${item.dateYear}`;
-  }
-  return item.year || '';
-};
-
-const formatItemChapters = (item) => {
-  if (!item.chapters?.length) return '';
-  return item.chapters.map(c => CHAPTERS.find(ch => ch.value === c)?.label || c).join(', ');
-};
+import { CHAPTERS, MONTHS_HE, formatItemDate, formatItemChapters } from '../../utils/constants';
 
 const extractVideoId = (url) => {
   const patterns = [
@@ -44,7 +19,7 @@ const extractVideoId = (url) => {
 };
 
 const EditableVideos = ({ collectionName = 'videos' }) => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, editMode } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -149,7 +124,7 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
           ...(dateYear && dateMonth && { dateMonth: Number(dateMonth) }),
           ...(dateYear && dateMonth && dateDay && { dateDay: Number(dateDay) }),
           addedBy: user.email,
-          addedAt: new Date().toISOString(),
+          addedAt: serverTimestamp(),
         };
         const docRef = await addDoc(collection(db, collectionName), newDoc);
         setItems(prev => [{ id: docRef.id, ...newDoc }, ...prev]);
@@ -190,7 +165,7 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
             <div className="ev-card-thumbnail">
               <img src={`https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`} alt={item.title} />
               <div className="ev-play-overlay"><FaPlay /></div>
-              {isAdmin && (
+              {isAdmin && editMode && (
                 <div className="eg-menu-wrapper" onClick={e => e.stopPropagation()}>
                   <button
                     className="eg-menu-btn"
@@ -219,7 +194,7 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
           </div>
         ))}
 
-        {isAdmin && (
+        {isAdmin && editMode && (
           <button className="eg-add-card" onClick={() => { setEditItem(null); setShowForm(true); }}>
             <FaPlus />
             <span>הוסף סרטון</span>
@@ -277,7 +252,7 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
               <div className="eg-date-selects">
                 <select value={dateYear} onChange={e => { setDateYear(e.target.value); setDateMonth(''); setDateDay(''); }}>
                   <option value="">-- שנה --</option>
-                  {Array.from({ length: 61 }, (_, i) => 1900 + i).map(y => <option key={y} value={y}>{y}</option>)}
+                  {Array.from({ length: 126 }, (_, i) => 1900 + i).map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
                 {dateYear && (
                   <select value={dateMonth} onChange={e => { setDateMonth(e.target.value); setDateDay(''); }}>
@@ -310,7 +285,7 @@ const EditableVideos = ({ collectionName = 'videos' }) => {
             <button className="eg-modal-close ev-lightbox-close" onClick={closeLightbox}><FaTimes /></button>
             <div className="ev-lightbox-video">
               <iframe
-                src={`https://www.youtube.com/embed/${lightboxItem.videoId}?autoplay=1`}
+                src={`https://www.youtube.com/embed/${lightboxItem.videoId}`}
                 title={lightboxItem.title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

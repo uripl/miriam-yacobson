@@ -1,13 +1,4 @@
-
-const CHAPTERS = [
-  { value: 'childhood', label: 'ילדות בגרמניה' },
-  { value: 'belgium', label: 'החיים בבלגיה' },
-  { value: 'france', label: 'צרפת תחת הכיבוש' },
-  { value: 'holocaust', label: 'בעמק הבכא' },
-  { value: 'liberation', label: 'השחרור והחזרה לליון' },
-  { value: 'immigration', label: 'העלייה לישראל' },
-  { value: 'israel', label: 'החיים בישראל' },
-];
+import { CHAPTERS } from '../../utils/constants';
 
 const ChapterFilter = ({ selected, onChange }) => {
   return (

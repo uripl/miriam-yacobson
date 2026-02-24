@@ -15,21 +15,9 @@ const LoginButton = () => {
     );
   }
 
-  if (!isAdmin) {
-    return (
-      <div className="login-status">
-        <span className="login-unauthorized">אין הרשאת עריכה</span>
-        <button className="login-btn logout-btn" onClick={logout}>
-          <FaSignOutAlt />
-          <span>התנתק</span>
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="login-status">
-      <span className="login-user-name">{user.displayName}</span>
+      <span className="login-user-name">{user.displayName || user.email}</span>
       <button className="login-btn logout-btn" onClick={logout}>
         <FaSignOutAlt />
         <span>התנתק</span>

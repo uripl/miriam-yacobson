@@ -8,7 +8,7 @@ import { FaPlus, FaTrash, FaSpinner } from 'react-icons/fa';
 import '../../styles/ChapterContent.css';
 
 const ChapterContent = ({ chapterId }) => {
-  const { isAdmin } = useAuth();
+  const { isAdmin, editMode } = useAuth();
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +70,7 @@ const ChapterContent = ({ chapterId }) => {
     <div className="cc-wrapper">
       {sections.map((section) => (
         <section key={section.id} className="cc-section">
-          {isAdmin && (
+          {isAdmin && editMode && (
             <button
               className="cc-delete-btn"
               onClick={() => handleDeleteSection(section)}
@@ -112,7 +112,7 @@ const ChapterContent = ({ chapterId }) => {
         </section>
       ))}
 
-      {isAdmin && (
+      {isAdmin && editMode && (
         <button className="cc-add-section" onClick={handleAddSection}>
           <FaPlus />
           <span>הוסף סעיף</span>
