@@ -884,9 +884,16 @@
   }
   
   .mobile-menu-button {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--spacing-xs);
+    z-index: 101;
+    position: relative;
   }
-  
+
   .main-nav {
     position: fixed;
     top: 60px;
@@ -898,10 +905,13 @@
     transform: translateX(100%);
     transition: transform var(--transition-normal) ease;
     z-index: 99;
+    pointer-events: none;
+    overflow-y: auto;
   }
-  
+
   .main-nav.open {
     transform: translateX(0);
+    pointer-events: auto;
   }
   
   .main-nav ul {
@@ -912,14 +922,6 @@
   .nav-item {
     margin-bottom: var(--spacing-md);
   }
-margin-bottom: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  opacity: 0;
-  transition: opacity var(--transition-normal) ease;
-}
-
-.gallery-item:hover .gallery-caption {
-  opacity: 1;
 }
 
 /* Modal */

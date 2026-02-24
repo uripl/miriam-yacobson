@@ -514,6 +514,37 @@ section {
   }
 }
 
+/* Hebrew Date Tooltip */
+.hebrew-date-trigger {
+  cursor: pointer;
+  position: relative;
+  border-bottom: 1px dashed var(--primary-color);
+}
+
+.hebrew-date-tooltip {
+  position: fixed;
+  z-index: 9999;
+  background: var(--primary-dark);
+  color: var(--white);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  direction: rtl;
+  animation: tooltipFadeIn 0.2s ease;
+}
+
+.hebrew-date-tooltip-icon {
+  margin-left: var(--spacing-xs);
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* רכיב עריכת טקסט */
 .editable-container {
   position: relative;

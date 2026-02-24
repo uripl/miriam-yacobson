@@ -7,6 +7,7 @@ import { FaPlus, FaTrash, FaTimes, FaSpinner, FaEllipsisV, FaPen } from 'react-i
 import ChapterFilter from '../common/ChapterFilter';
 import ImageLightbox from '../common/ImageLightbox';
 import { CHAPTERS, MONTHS_HE, formatItemDate, formatItemChapters } from '../../utils/constants';
+import HebrewDateTooltip from '../common/HebrewDateTooltip';
 
 const EditableGallery = ({ collectionName = 'gallery' }) => {
   const { user, isAdmin, editMode } = useAuth();
@@ -168,7 +169,7 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
             <div className="eg-card-info">
               <h4 className="eg-card-title">{item.title}</h4>
               <div className="eg-card-meta">
-                {formatItemDate(item) && <span className="eg-card-year">{formatItemDate(item)}</span>}
+                {formatItemDate(item) && <HebrewDateTooltip item={item}><span className="eg-card-year">{formatItemDate(item)}</span></HebrewDateTooltip>}
                 {formatItemChapters(item) && <span className="eg-card-chapters">{formatItemChapters(item)}</span>}
               </div>
               {item.description && <p className="eg-card-desc">{item.description}</p>}

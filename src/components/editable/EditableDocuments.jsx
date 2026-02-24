@@ -10,6 +10,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { CHAPTERS, MONTHS_HE, formatItemDate, formatItemChapters } from '../../utils/constants';
+import HebrewDateTooltip from '../common/HebrewDateTooltip';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.js`;
 
@@ -255,7 +256,7 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
                 </h4>
                 <div className="ed-card-meta">
                   {item.docType && <span className="ed-card-type">{DOC_TYPE_LABELS[item.docType] || item.docType}</span>}
-                  {formatItemDate(item) && <span className="ed-card-year">{formatItemDate(item)}</span>}
+                  {formatItemDate(item) && <HebrewDateTooltip item={item}><span className="ed-card-year">{formatItemDate(item)}</span></HebrewDateTooltip>}
                   {formatItemChapters(item) && <span className="ed-card-chapters">{formatItemChapters(item)}</span>}
                 </div>
                 {item.description && <p className="ed-card-desc">{item.description}</p>}
