@@ -2,7 +2,7 @@ import { useAuth } from '../../context/AuthContext';
 import { FaGoogle, FaSignOutAlt } from 'react-icons/fa';
 
 const LoginButton = () => {
-  const { user, isAdmin, loading, login, logout } = useAuth();
+  const { user, loading, login, logout } = useAuth();
 
   if (loading) return null;
 
