@@ -1,5 +1,16 @@
 /* globals.css */
 
+/* Lazy loading spinner */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
 /* ייבוא גופנים */
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@300;400;500;700&display=swap');
 
