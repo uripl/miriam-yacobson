@@ -13,7 +13,7 @@ const Header = () => {
   const menuBtnRef = useRef(null);
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+    setMenuOpen(prev => !prev);
   };
 
   const closeMenu = () => {
@@ -29,8 +29,13 @@ const Header = () => {
         setMenuOpen(false);
       }
     };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    // touchstart + mousedown — מגיבים מיד, לפני click
+    document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [menuOpen]);
 
   return (
@@ -90,6 +95,7 @@ const Header = () => {
           <LoginButton />
           <button ref={menuBtnRef} className="mobile-menu-button"
             onClick={toggleMenu}
+            onTouchEnd={(e) => { e.preventDefault(); toggleMenu(); }}
             aria-label={menuOpen ? "סגור תפריט" : "פתח תפריט"}
           >
             {menuOpen ? <FaTimes /> : <FaBars />}
