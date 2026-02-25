@@ -1,35 +1,30 @@
 // src/App.jsx
+import { lazy, Suspense } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
 // אימות
 import { AuthProvider } from './context/AuthContext';
 
-// קומפוננטת מבנה
+// קומפוננטות שנטענות תמיד (מבנה + דף הבית)
 import Layout from './components/layout/Layout';
-
-// דף הבית החדש (ציר הזמן)
 import NewHomePage from './components/pages/NewHomePage';
-
-// פרקי חיים
-import ChildhoodPage from './components/pages/chapters/ChildhoodPage';
-import BelgiumPage from './components/pages/chapters/BelgiumPage';
-import FrancePage from './components/pages/chapters/FrancePage';
-import HolocaustPage from './components/pages/chapters/HolocaustPage';
-import LiberationPage from './components/pages/chapters/LiberationPage';
-import ImmigrationPage from './components/pages/chapters/ImmigrationPage';
-import IsraelPage from './components/pages/chapters/IsraelPage';
-
-// דפים נוספים שעדיין רוצים לשמור
-import JourneyMapPage from './components/pages/JourneyMapPage';
-import GalleryPage from './components/pages/GalleryPage';
-import DocumentsPage from './components/pages/DocumentsPage';
-import VideosPage from './components/pages/VideosPage';
-
-// אימות וחברות
-import MembershipGuard from './components/auth/MembershipGuard';
-import ApproveMemberPage from './components/auth/ApproveMemberPage';
-import NotFoundPage from './components/pages/NotFoundPage';
 import ErrorBoundary from './components/common/ErrorBoundary';
+
+// Lazy-loaded pages
+const ChildhoodPage = lazy(() => import('./components/pages/chapters/ChildhoodPage'));
+const BelgiumPage = lazy(() => import('./components/pages/chapters/BelgiumPage'));
+const FrancePage = lazy(() => import('./components/pages/chapters/FrancePage'));
+const HolocaustPage = lazy(() => import('./components/pages/chapters/HolocaustPage'));
+const LiberationPage = lazy(() => import('./components/pages/chapters/LiberationPage'));
+const ImmigrationPage = lazy(() => import('./components/pages/chapters/ImmigrationPage'));
+const IsraelPage = lazy(() => import('./components/pages/chapters/IsraelPage'));
+const JourneyMapPage = lazy(() => import('./components/pages/JourneyMapPage'));
+const GalleryPage = lazy(() => import('./components/pages/GalleryPage'));
+const DocumentsPage = lazy(() => import('./components/pages/DocumentsPage'));
+const VideosPage = lazy(() => import('./components/pages/VideosPage'));
+const MembershipGuard = lazy(() => import('./components/auth/MembershipGuard'));
+const ApproveMemberPage = lazy(() => import('./components/auth/ApproveMemberPage'));
+const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage'));
 
 function App() {
   return (
@@ -37,6 +32,7 @@ function App() {
     <Router>
       <Layout>
         <ErrorBoundary>
+        <Suspense fallback={<div className="loading-spinner">טוען...</div>}>
         <Routes>
           <Route path="/" element={<NewHomePage />} />
 
@@ -46,7 +42,7 @@ function App() {
           <Route path="/videos" element={<MembershipGuard><VideosPage /></MembershipGuard>} />
           <Route path="/documents" element={<MembershipGuard><DocumentsPage /></MembershipGuard>} />
           <Route path="/approve" element={<ApproveMemberPage />} />
-          
+
           {/* נתיבים לפרקים */}
           <Route path="/chapters/childhood" element={<ChildhoodPage />} />
           <Route path="/chapters/belgium" element={<BelgiumPage />} />
@@ -55,10 +51,11 @@ function App() {
           <Route path="/chapters/liberation" element={<LiberationPage />} />
           <Route path="/chapters/immigration" element={<ImmigrationPage />} />
           <Route path="/chapters/israel" element={<IsraelPage />} />
-          
+
           {/* במקרה של נתיב לא קיים */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </Suspense>
         </ErrorBoundary>
       </Layout>
     </Router>
