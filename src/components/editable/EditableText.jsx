@@ -3,8 +3,9 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPen, FaSave, FaTimes } from 'react-icons/fa';
+import DateHighlighter from '../common/DateHighlighter';
 
-const EditableText = ({ contentKey, defaultValue, as: Tag = 'p' }) => {
+const EditableText = ({ contentKey, defaultValue, as: Tag = 'p', highlightDates = true }) => {
   const { user, isAdmin, editMode } = useAuth();
   const [text, setText] = useState(defaultValue);
   const [editing, setEditing] = useState(false);
@@ -80,7 +81,7 @@ const EditableText = ({ contentKey, defaultValue, as: Tag = 'p' }) => {
 
   return (
     <div className="editable-container">
-      <Tag>{text}</Tag>
+      <Tag>{highlightDates ? <DateHighlighter text={text} /> : text}</Tag>
       {isAdmin && editMode && (
         <button className="editable-edit-btn" onClick={startEditing} aria-label="ערוך">
           <FaPen />

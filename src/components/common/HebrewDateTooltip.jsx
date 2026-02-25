@@ -28,6 +28,28 @@ const HebrewDateTooltip = ({ item, children }) => {
     }
   }, [show]);
 
+  const handleClick = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setShow(prev => !prev);
+  };
+
+  // סגירת tooltip בלחיצה במקום אחר (מובייל)
+  useEffect(() => {
+    if (!show) return;
+    const handleOutside = (e) => {
+      if (triggerRef.current && !triggerRef.current.contains(e.target)) {
+        setShow(false);
+      }
+    };
+    document.addEventListener('touchstart', handleOutside);
+    document.addEventListener('mousedown', handleOutside);
+    return () => {
+      document.removeEventListener('touchstart', handleOutside);
+      document.removeEventListener('mousedown', handleOutside);
+    };
+  }, [show]);
+
   if (!hebrewDate) return children;
 
   return (
@@ -36,7 +58,10 @@ const HebrewDateTooltip = ({ item, children }) => {
       className="hebrew-date-trigger"
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
-      onClick={() => setShow(prev => !prev)}
+      onClick={handleClick}
+      onTouchEnd={handleClick}
+      role="button"
+      tabIndex={0}
     >
       {children}
       {show && (
