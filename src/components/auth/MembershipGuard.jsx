@@ -6,9 +6,9 @@ import { useAuth } from '../../context/AuthContext';
 import { db } from '../../services/firebase';
 import '../../styles/MembershipGuard.css';
 
-const EMAILJS_SERVICE_ID = 'service_f50jxvs';
-const EMAILJS_TEMPLATE_ID = 'template_qoofvkg';
-const EMAILJS_PUBLIC_KEY = '7cR1q8Kjhf5Cc8hKi';
+const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
 
 const MembershipGuard = ({ children }) => {
   const { user, isAdmin, loading, login, logout } = useAuth();
