@@ -11,6 +11,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { CHAPTERS, MONTHS_HE, formatItemDate, formatItemChapters } from '../../utils/constants';
 import HebrewDateTooltip from '../common/HebrewDateTooltip';
+import { compressImage } from '../../utils/compressImage';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.js`;
 
@@ -167,8 +168,9 @@ const EditableDocuments = ({ collectionName = 'documents' }) => {
         await updateDoc(doc(db, collectionName, editItem.id), updated);
         setItems(prev => prev.map(i => i.id === editItem.id ? { ...i, ...updated } : i));
       } else {
-        const storageRef = ref(storage, `${collectionName}/${Date.now()}_${selectedFile.name}`);
-        await uploadBytes(storageRef, selectedFile);
+        const compressed = await compressImage(selectedFile);
+        const storageRef = ref(storage, `${collectionName}/${Date.now()}_${compressed.name}`);
+        await uploadBytes(storageRef, compressed);
         const url = await getDownloadURL(storageRef);
         const newDoc = {
           fileUrl: url,

@@ -8,6 +8,7 @@ import ChapterFilter from '../common/ChapterFilter';
 import ImageLightbox from '../common/ImageLightbox';
 import { CHAPTERS, MONTHS_HE, formatItemDate, formatItemChapters } from '../../utils/constants';
 import HebrewDateTooltip from '../common/HebrewDateTooltip';
+import { compressImage } from '../../utils/compressImage';
 
 const EditableGallery = ({ collectionName = 'gallery' }) => {
   const { user, isAdmin, editMode } = useAuth();
@@ -98,8 +99,9 @@ const EditableGallery = ({ collectionName = 'gallery' }) => {
         await updateDoc(doc(db, collectionName, editItem.id), updated);
         setItems(prev => prev.map(i => i.id === editItem.id ? { ...i, ...updated } : i));
       } else {
-        const storageRef = ref(storage, `${collectionName}/${Date.now()}_${selectedFile.name}`);
-        await uploadBytes(storageRef, selectedFile);
+        const compressed = await compressImage(selectedFile);
+        const storageRef = ref(storage, `${collectionName}/${Date.now()}_${compressed.name}`);
+        await uploadBytes(storageRef, compressed);
         const url = await getDownloadURL(storageRef);
         const newDoc = {
           imageUrl: url,

@@ -4,6 +4,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPen, FaSpinner } from 'react-icons/fa';
+import { compressImage } from '../../utils/compressImage';
 
 const EditableImage = ({ contentKey, defaultSrc, alt }) => {
   const { user, isAdmin, editMode } = useAuth();
@@ -37,8 +38,9 @@ const EditableImage = ({ contentKey, defaultSrc, alt }) => {
 
     setUploading(true);
     try {
-      const storageRef = ref(storage, `content/${contentKey}/${file.name}`);
-      await uploadBytes(storageRef, file);
+      const compressed = await compressImage(file);
+      const storageRef = ref(storage, `content/${contentKey}/${compressed.name}`);
+      await uploadBytes(storageRef, compressed);
       const url = await getDownloadURL(storageRef);
 
       await setDoc(doc(db, 'content', contentKey), {
