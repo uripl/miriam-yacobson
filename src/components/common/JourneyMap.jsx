@@ -20,7 +20,7 @@ const JourneyMap = ({ locations }) => {
         
         const mapboxgl = mapboxglLib.default;
         // שימוש במפתח API מהסביבה או ערך ברירת מחדל
-        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || 'pk.eyJ1IjoidXJpcGxlc3NlciIsImEiOiJjbWEzdzc2emwwMG5kMmtxejAzdWtya3ZqIn0.Ipxq0bDQtuY82BO883EbeA';
+        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
         
         // בדיקה אם WebGL נתמך
         if (!mapboxgl.supported()) {
@@ -75,7 +75,7 @@ const JourneyMap = ({ locations }) => {
             // יצירת אלמנט HTML מותאם לסמן
             const el = document.createElement('div');
             el.className = 'journey-map-marker';
-            el.innerHTML = index + 1;
+            el.textContent = index + 1;
             el.addEventListener('click', () => {
               setSelectedLocation(location);
               
