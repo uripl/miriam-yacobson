@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { getHebrewDateForItem } from '../../utils/hebrewDate';
 
 const HebrewDateTooltip = ({ item, children }) => {
@@ -64,7 +65,7 @@ const HebrewDateTooltip = ({ item, children }) => {
       tabIndex={0}
     >
       {children}
-      {show && (
+      {show && createPortal(
         <span
           ref={tooltipRef}
           className="hebrew-date-tooltip"
@@ -72,7 +73,8 @@ const HebrewDateTooltip = ({ item, children }) => {
         >
           <span className="hebrew-date-tooltip-icon">📅</span>
           {hebrewDate}
-        </span>
+        </span>,
+        document.body
       )}
     </span>
   );
