@@ -20,7 +20,7 @@ const JourneyMap = ({ locations }) => {
         
         const mapboxgl = mapboxglLib.default;
         // שימוש במפתח API מהסביבה או ערך ברירת מחדל
-        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
+        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || 'pk.eyJ1IjoidXJpcGxlc3NlciIsImEiOiJjbWEzdzc2emwwMG5kMmtxejAzdWtya3ZqIn0.Ipxq0bDQtuY82BO883EbeA';
         
         // בדיקה אם WebGL נתמך
         if (!mapboxgl.supported()) {

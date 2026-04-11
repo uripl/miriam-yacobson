@@ -6,9 +6,9 @@ import { useAuth } from '../../context/AuthContext';
 import { db } from '../../services/firebase';
 import '../../styles/MembershipGuard.css';
 
-const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
-const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_f50jxvs';
+const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_qoofvkg';
+const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || '7cR1q8Kjhf5Cc8hKi';
 
 const MembershipGuard = ({ children }) => {
   const { user, isAdmin, loading, login, logout } = useAuth();
@@ -48,21 +48,25 @@ const MembershipGuard = ({ children }) => {
 
     const approvalLink = `${window.location.origin}${window.location.pathname}#/approve?uid=${user.uid}&email=${encodeURIComponent(user.email)}`;
 
-    emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_TEMPLATE_ID,
-      {
-        user_name: user.displayName || user.email,
-        user_email: user.email,
-        approval_link: approvalLink,
-      },
-      EMAILJS_PUBLIC_KEY
-    ).then(() => {
-      localStorage.setItem(sentKey, 'true');
-      setEmailSent(true);
-    }).catch((err) => {
+    try {
+      emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          user_name: user.displayName || user.email,
+          user_email: user.email,
+          approval_link: approvalLink,
+        },
+        EMAILJS_PUBLIC_KEY
+      ).then(() => {
+        localStorage.setItem(sentKey, 'true');
+        setEmailSent(true);
+      }).catch((err) => {
+        console.error('Failed to send membership request email:', err);
+      });
+    } catch (err) {
       console.error('Failed to send membership request email:', err);
-    });
+    }
   }, [user, isAdmin, isMember, checkingMembership]);
 
   if (loading || checkingMembership) {
