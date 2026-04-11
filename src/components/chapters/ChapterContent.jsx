@@ -70,45 +70,48 @@ const ChapterContent = ({ chapterId }) => {
     <div className="cc-wrapper">
       {sections.map((section) => (
         <section key={section.id} className="cc-section">
-          {isAdmin && editMode && (
-            <button
-              className="cc-delete-btn"
-              onClick={() => handleDeleteSection(section)}
-              aria-label="מחק סעיף"
-            >
-              <FaTrash />
-            </button>
-          )}
-
-          <EditableText
-            contentKey={`${chapterId}-section-${section.id}-title`}
-            defaultValue="כותרת סעיף"
-            as="h2"
-          />
-
-          {Array.from({ length: section.paragraphCount || 1 }).map((_, i) => (
+          <div className="cc-section-title">
+            {isAdmin && editMode && (
+              <button
+                className="cc-delete-btn"
+                onClick={() => handleDeleteSection(section)}
+                aria-label="מחק סעיף"
+              >
+                <FaTrash />
+              </button>
+            )}
             <EditableText
-              key={i}
-              contentKey={`${chapterId}-section-${section.id}-p${i}`}
-              defaultValue="טקסט פסקה"
-              as="p"
+              contentKey={`${chapterId}-section-${section.id}-title`}
+              defaultValue="כותרת סעיף"
+              as="h2"
             />
-          ))}
+          </div>
 
-          {section.hasImage && (
-            <div className="cc-image-container">
-              <EditableImage
-                contentKey={`${chapterId}-section-${section.id}-image`}
-                defaultSrc="/images/placeholder.jpg"
-                alt=""
-              />
+          <div className="cc-section-body">
+            {Array.from({ length: section.paragraphCount || 1 }).map((_, i) => (
               <EditableText
-                contentKey={`${chapterId}-section-${section.id}-caption`}
-                defaultValue="כיתוב לתמונה"
+                key={i}
+                contentKey={`${chapterId}-section-${section.id}-p${i}`}
+                defaultValue="טקסט פסקה"
                 as="p"
               />
-            </div>
-          )}
+            ))}
+
+            {section.hasImage && (
+              <div className="cc-image-container">
+                <EditableImage
+                  contentKey={`${chapterId}-section-${section.id}-image`}
+                  defaultSrc="/images/placeholder.jpg"
+                  alt=""
+                />
+                <EditableText
+                  contentKey={`${chapterId}-section-${section.id}-caption`}
+                  defaultValue="כיתוב לתמונה"
+                  as="p"
+                />
+              </div>
+            )}
+          </div>
         </section>
       ))}
 
