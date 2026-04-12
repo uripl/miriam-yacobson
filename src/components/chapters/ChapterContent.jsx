@@ -70,16 +70,17 @@ const ChapterContent = ({ chapterId }) => {
     <div className="cc-wrapper">
       {sections.map((section) => (
         <section key={section.id} className="cc-section">
+          {isAdmin && editMode && (
+            <button
+              className="cc-delete-btn"
+              onClick={() => handleDeleteSection(section)}
+              aria-label="מחק סעיף"
+            >
+              <FaTrash /> מחק סעיף
+            </button>
+          )}
+
           <div className="cc-section-title">
-            {isAdmin && editMode && (
-              <button
-                className="cc-delete-btn"
-                onClick={() => handleDeleteSection(section)}
-                aria-label="מחק סעיף"
-              >
-                <FaTrash />
-              </button>
-            )}
             <EditableText
               contentKey={`${chapterId}-section-${section.id}-title`}
               defaultValue="כותרת סעיף"
