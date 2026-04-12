@@ -86,14 +86,14 @@
        ============================================ */
 
     .cc-wrapper {
+      width: 100%;
+    }
+
+    /* כל section הוא grid עצמאי - ככה ה-sticky מוגבל לסעיף שלו */
+    .cc-section {
       display: grid;
       grid-template-columns: 200px 1fr;
       gap: 0 var(--spacing-2xl);
-    }
-
-    /* כל section משתמש ב-display:contents כדי ש"ילדיה" ישבו ישירות בגריד */
-    .cc-section {
-      display: contents;
     }
 
     /* === עמודת הכותרת (ימין ב-RTL) === */
@@ -156,7 +156,7 @@
 
     /* === רספונסיבי - במובייל חוזרים לעמודה אחת === */
     @media (max-width: 768px) {
-      .cc-wrapper {
+      .cc-section {
         grid-template-columns: 1fr;
       }
 
