@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>דמו - לייאוט פרק עם כותרות בצד</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* === משתנים מהאתר === */
+    :root {
+      --primary-color: #2e5077;
+      --primary-dark: #1a3047;
+      --primary-light: #4b77a9;
+      --secondary-color: #d7a55b;
+      --secondary-dark: #b88b3d;
+      --secondary-light: #e5be7f;
+      --accent-color: #af4154;
+      --background-color: #f9f7f4;
+      --text-color: #333333;
+      --text-light: #666666;
+      --white: #ffffff;
+      --gray-light: #f2f2f2;
+      --gray: #cccccc;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --spacing-2xl: 3rem;
+      --spacing-3xl: 4rem;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.25rem;
+      --font-size-xl: 1.5rem;
+      --font-size-3xl: 2.25rem;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-bold: 700;
+      --line-height-loose: 1.75;
+      --border-radius-md: 8px;
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --max-width-xl: 1200px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Heebo', 'Rubik', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      direction: rtl;
+      text-align: right;
+      line-height: var(--line-height-loose);
+    }
+
+    /* === Header === */
+    .page-header {
+      background-color: var(--primary-light);
+      color: var(--white);
+      padding: var(--spacing-3xl) var(--spacing-lg);
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: var(--font-size-3xl);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .page-header p {
+      opacity: 0.9;
+      font-size: var(--font-size-lg);
+    }
+
+    /* === Container === */
+    .container {
+      max-width: var(--max-width-xl);
+      margin: 0 auto;
+      padding: var(--spacing-2xl) var(--spacing-lg);
+    }
+
+    /* ============================================
+       הלייאוט החדש - Grid מקבילי + Sticky
+       ============================================ */
+
+    .cc-wrapper {
+      width: 100%;
+    }
+
+    /* כל section הוא grid עצמאי - ככה ה-sticky מוגבל לסעיף שלו */
+    .cc-section {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0 var(--spacing-2xl);
+    }
+
+    /* === עמודת הכותרת (ימין ב-RTL) === */
+    .cc-section-title {
+      position: sticky;
+      top: var(--spacing-xl);
+      align-self: start;
+      padding: var(--spacing-md) 0;
+      padding-left: var(--spacing-lg);
+      border-left: 3px solid var(--secondary-color);
+      transition: color 0.3s ease;
+    }
+
+    .cc-section-title h2 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--primary-color);
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    /* === עמודת התוכן (שמאל ב-RTL) === */
+    .cc-section-body {
+      padding: var(--spacing-md) 0;
+      padding-bottom: var(--spacing-3xl);
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .cc-section:last-of-type .cc-section-body {
+      border-bottom: none;
+    }
+
+    .cc-section-body p {
+      margin-bottom: var(--spacing-md);
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-loose);
+    }
+
+    .cc-section-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* === תמונה בתוך סעיף === */
+    .cc-image-container {
+      margin: var(--spacing-lg) 0;
+      text-align: center;
+    }
+
+    .cc-image-container img {
+      max-width: 100%;
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md);
+    }
+
+    .cc-image-container .caption {
+      margin-top: var(--spacing-sm);
+      font-size: var(--font-size-sm);
+      color: var(--text-light);
+    }
+
+    /* === רספונסיבי - במובייל חוזרים לעמודה אחת === */
+    @media (max-width: 768px) {
+      .cc-section {
+        grid-template-columns: 1fr;
+      }
+
+      .cc-section-title {
+        position: relative;
+        top: auto;
+        border-left: none;
+        border-bottom: 3px solid var(--secondary-color);
+        padding: var(--spacing-sm) 0;
+        padding-left: 0;
+        margin-top: var(--spacing-xl);
+      }
+
+      .cc-section:first-of-type .cc-section-title {
+        margin-top: 0;
+      }
+
+      .cc-section-body {
+        padding-bottom: var(--spacing-xl);
+      }
+    }
+
+    /* === כפתור מעבר בין מצבים === */
+    .mode-toggle {
+      position: fixed;
+      bottom: var(--spacing-xl);
+      left: var(--spacing-xl);
+      z-index: 100;
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+
+    .mode-toggle button {
+      padding: var(--spacing-sm) var(--spacing-lg);
+      border: 2px solid var(--primary-color);
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      transition: all 0.3s ease;
+      background-color: var(--white);
+      color: var(--primary-color);
+    }
+
+    .mode-toggle button.active {
+      background-color: var(--primary-color);
+      color: var(--white);
+    }
+
+    .mode-toggle button:hover {
+      background-color: var(--primary-light);
+      color: var(--white);
+    }
+
+    /* === מצב "לפני" - הלייאוט הישן === */
+    .cc-wrapper.old-layout {
+      display: block;
+    }
+
+    .cc-wrapper.old-layout .cc-section {
+      display: block;
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .cc-wrapper.old-layout .cc-section-title {
+      position: relative;
+      top: auto;
+      border-left: none;
+      padding: 0;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .cc-wrapper.old-layout .cc-section-title h2 {
+      font-size: var(--font-size-3xl);
+      position: relative;
+    }
+
+    .cc-wrapper.old-layout .cc-section-title h2::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 3px;
+      background-color: var(--secondary-color);
+      position: absolute;
+      bottom: -10px;
+      right: 0;
+    }
+
+    .cc-wrapper.old-layout .cc-section-body {
+      padding: 0;
+      padding-top: var(--spacing-lg);
+      border-bottom: none;
+    }
+
+    /* Label */
+    .layout-label {
+      text-align: center;
+      padding: var(--spacing-md);
+      font-size: var(--font-size-sm);
+      color: var(--text-light);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <h1>ילדות וצעירות בגרמניה</h1>
+    <p>לייפציג 1925-1938</p>
+  </header>
+
+  <div class="container">
+    <p class="layout-label" id="layout-label">לייאוט חדש - Grid מקבילי + Sticky</p>
+
+    <div class="cc-wrapper" id="chapterWrapper">
+
+      <!-- סעיף 1 -->
+      <section class="cc-section">
+        <div class="cc-section-title">
+          <h2>משפחת יעקובסון</h2>
+        </div>
+        <div class="cc-section-body">
+          <p>מרים יעקובסון נולדה בשנת 1925 בעיר לייפציג שבגרמניה, לאביה הרב דוד יעקובסון ולאמה שרה. המשפחה התגוררה בשכונה יהודית ותיקה במרכז העיר, בבית דו-קומתי שבקומה התחתונה שלו פעל בית הכנסת של הקהילה.</p>
+          <p>אביה של מרים שימש כרב הקהילה במשך שנים רבות והיה ידוע כאדם חכם ואוהב שלום. הוא הקפיד לחנך את ילדיו לאהבת תורה ולכבוד הבריות, ובד בבד דאג שיקבלו השכלה כללית מעולה. אמה של מרים ניהלה את משק הבית בחוכמה ובחום, והייתה ידועה בקהילה כאישה נדיבה שתמיד פתחה את ביתה לאורחים.</p>
+          <p>למרים היו שלושה אחים ושתי אחיות. הם גדלו יחד באווירה חמה ואוהבת, בבית שבו שולחן השבת היה תמיד עמוס באורחים מהקהילה. הילדים למדו בבית הספר היהודי המקומי, שם רכשו ידע הן בלימודי קודש והן בלימודים כלליים.</p>
+        </div>
+      </section>
+
+      <!-- סעיף 2 -->
+      <section class="cc-section">
+        <div class="cc-section-title">
+          <h2>ילדות בלייפציג</h2>
+        </div>
+        <div class="cc-section-body">
+          <p>לייפציג של שנות העשרים הייתה עיר תוססת ומגוונת. הקהילה היהודית השתלבה היטב בחיי העיר והייתה חלק בלתי נפרד מהמרקם התרבותי והכלכלי שלה. יהודי לייפציג עסקו במסחר, בתעשייה ובמקצועות החופשיים, ורבים מהם תרמו רבות לחיי התרבות והמדע בעיר.</p>
+          <p>מרים זוכרת את ילדותה כתקופה מאושרת. היא נהגה לשחק עם חברותיה בפארק הגדול שליד הבית, ואחר הצהריים היו מתאספים כל הילדים בחצר בית הכנסת למשחקים ולפעילויות. בשבתות היו יוצאים לטיולים משפחתיים ביערות שמסביב לעיר, ובחגים הייתה הקהילה כולה מתכנסת לחגיגות משותפות.</p>
+          <p>בבית הספר הצטיינה מרים במיוחד בלימודי שפות וספרות. היא אהבה לקרוא ספרים בגרמנית ובעברית, והייתה כותבת סיפורים קצרים שהיו מוקראים בפני הכיתה. המורים זיהו את כישרונה והעניקו לה עידוד מיוחד.</p>
+        </div>
+      </section>
+
+      <!-- סעיף 3 -->
+      <section class="cc-section">
+        <div class="cc-section-title">
+          <h2>עליית הנאצים לשלטון</h2>
+        </div>
+        <div class="cc-section-body">
+          <p>בשנת 1933, כשהנאצים עלו לשלטון, החלו השינויים להרגיש גם בלייפציג. בהתחלה היו אלה שינויים קטנים - שלטים חדשים שהופיעו בחנויות, מבטים עוינים ברחוב, חברים גרמנים שפתאום הפסיקו לדבר. אבל במהרה הפכו הדברים לחמורים יותר.</p>
+          <p>חוקי נירנברג של 1935 שינו את חיי המשפחה מן היסוד. מרים, שהייתה אז בת עשר, נאלצה לעזוב את בית הספר הכללי ולעבור לבית ספר יהודי. חברותיה הגרמניות קיבלו הוראה להתנתק ממנה, ומרחב החיים של המשפחה הלך והצטמצם. אביה הודח מתפקידים ציבוריים שמילא, והעסקים של בני הקהילה החלו לסבול מחרמות.</p>
+          <p>למרות הקשיים, המשפחה שמרה על שגרת חיים ככל שניתן. אביה של מרים המשיך להוביל את הקהילה, ואמה דאגה שהבית ישמור על אווירה חמה ומגנה. "אבא תמיד אמר שלא ניתן להם לשבור אותנו," מספרת מרים, "הוא האמין שהתקופה הזאת תעבור."</p>
+          <p>אך התקופה לא עברה. ליל הבדולח בנובמבר 1938 היה נקודת המפנה הסופית. בית הכנסת שבקומה התחתונה של ביתם הוצת, חלונות נופצו, ואביה נעצר ונלקח למקום לא ידוע. המשפחה הבינה שאין עוד עתיד בגרמניה, והחלה לחפש דרכי מילוט.</p>
+        </div>
+      </section>
+
+      <!-- סעיף 4 -->
+      <section class="cc-section">
+        <div class="cc-section-title">
+          <h2>ההכנות לבריחה</h2>
+        </div>
+        <div class="cc-section-body">
+          <p>אחרי ליל הבדולח החלה המשפחה בהכנות נמרצות לעזוב את גרמניה. האם, שרה, נטלה על עצמה את המשימה הקשה של ארגון הבריחה. היא יצרה קשרים עם ארגוני סיוע יהודיים ועם מבריחים שהכירו את מעברות הגבול.</p>
+          <p>התהליך היה מורכב ומסוכן. היה צריך להשיג מסמכים מזויפים, לארוז את מעט החפצים שניתן היה לקחת, ולתכנן את המסלול בקפידה. כל יום שעבר הגביר את הסכנה, שכן הנאצים הידקו את הפיקוח על יהודים שניסו לעזוב.</p>
+          <p>מרים, שהייתה אז בת שלוש עשרה, זוכרת את הלילות הארוכים שבהם ישבה האם ליד השולחן וכתבה מכתבים, את השיחות הלחושות עם אנשים זרים שהגיעו לבית, ואת התחושה שהעולם שהכירה הולך ונעלם. "ידעתי שאנחנו עוזבים את הבית," היא מספרת, "אבל לא הבנתי שאנחנו עוזבים את החיים שלנו."</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- כפתורי מעבר -->
+  <div class="mode-toggle">
+    <button id="btnNew" class="active" onclick="setLayout('new')">לייאוט חדש</button>
+    <button id="btnOld" onclick="setLayout('old')">לייאוט ישן</button>
+  </div>
+
+  <script>
+    function setLayout(mode) {
+      const wrapper = document.getElementById('chapterWrapper');
+      const label = document.getElementById('layout-label');
+      const btnNew = document.getElementById('btnNew');
+      const btnOld = document.getElementById('btnOld');
+
+      if (mode === 'old') {
+        wrapper.classList.add('old-layout');
+        label.textContent = 'לייאוט ישן - כותרות חוצות את הטקסט';
+        btnOld.classList.add('active');
+        btnNew.classList.remove('active');
+      } else {
+        wrapper.classList.remove('old-layout');
+        label.textContent = 'לייאוט חדש - Grid מקבילי + Sticky';
+        btnNew.classList.add('active');
+        btnOld.classList.remove('active');
+      }
+    }
+  </script>
+
+</body>
+</html>
