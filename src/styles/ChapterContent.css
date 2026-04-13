@@ -55,13 +55,12 @@
   border-bottom: none;
 }
 
-/* הפסקאות עטופות ב-div.editable-container > p - נבטל את כל הרווחים */
-.cc-section-body .editable-container {
-  display: inline;
+/* הפסקאות עטופות ב-div.editable-container > p - נסיר את ה-wrapper מהלייאוט */
+.cc-section-body > .editable-container {
+  display: contents;
 }
 
 .cc-section-body p {
-  display: inline;
   margin: 0;
   line-height: var(--line-height-loose);
 }
