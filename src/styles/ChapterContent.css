@@ -55,8 +55,14 @@
   border-bottom: none;
 }
 
+/* הפסקאות עטופות ב-div.editable-container > p - נבטל את כל הרווחים */
+.cc-section-body .editable-container {
+  display: inline;
+}
+
 .cc-section-body p {
-  margin-bottom: 0;
+  display: inline;
+  margin: 0;
   line-height: var(--line-height-loose);
 }
 
