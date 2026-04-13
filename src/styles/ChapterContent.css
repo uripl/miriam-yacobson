@@ -46,18 +46,20 @@
 
 /* === עמודת התוכן (שמאל ב-RTL) === */
 .cc-section-body {
-  padding: var(--spacing-md) 0;
-  padding-bottom: var(--spacing-3xl);
+  padding: 0;
+  margin-bottom: var(--spacing-2xl);
   border-bottom: 1px solid var(--gray-light);
 }
 
 .cc-section:last-of-type .cc-section-body {
   border-bottom: none;
+  margin-bottom: 0;
 }
 
-/* דריסת ה-wrapper והפסקאות - הסרת כל הרווחים */
+/* editable-container עוטף כל פסקה - flex מונע anonymous line boxes */
 .cc-section-body > .editable-container {
-  display: block;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
 }
