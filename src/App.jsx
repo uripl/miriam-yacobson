@@ -1,6 +1,8 @@
 // src/App.jsx
-import { lazy, Suspense } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from './services/firebase';
 
 // אימות
 import { AuthProvider } from './context/AuthContext';
@@ -26,10 +28,28 @@ const MembershipGuard = lazy(() => import('./components/auth/MembershipGuard'));
 const ApproveMemberPage = lazy(() => import('./components/auth/ApproveMemberPage'));
 const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage'));
 
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    analytics.then(a => {
+      if (a) {
+        logEvent(a, 'page_view', {
+          page_path: location.pathname,
+          page_title: document.title,
+        });
+      }
+    });
+  }, [location]);
+
+  return null;
+}
+
 function App() {
   return (
     <AuthProvider>
     <Router>
+      <AnalyticsTracker />
       <Layout>
         <ErrorBoundary>
         <Suspense fallback={<div className="loading-spinner">טוען...</div>}>
