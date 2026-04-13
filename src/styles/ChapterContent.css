@@ -47,13 +47,6 @@
 /* === עמודת התוכן (שמאל ב-RTL) === */
 .cc-section-body {
   padding: 0;
-  margin-bottom: var(--spacing-2xl);
-  border-bottom: 1px solid var(--gray-light);
-}
-
-.cc-section:last-of-type .cc-section-body {
-  border-bottom: none;
-  margin-bottom: 0;
 }
 
 /* editable-container עוטף כל פסקה */
@@ -72,11 +65,6 @@
   padding: 0 !important;
   font-size: var(--font-size-base);
   line-height: var(--line-height-loose);
-}
-
-/* DEBUG: גבול אדום זמני - למחוק אחרי אימות */
-.cc-section-body > .editable-container {
-  outline: 1px solid red;
 }
 
 /* כפתור העריכה - הוצאה מהזרימה + הגדלה */
