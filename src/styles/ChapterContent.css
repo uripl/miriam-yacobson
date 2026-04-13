@@ -55,13 +55,17 @@
   border-bottom: none;
 }
 
-/* הפסקאות עטופות ב-div.editable-container > p - נסיר את ה-wrapper מהלייאוט */
+/* דריסת ה-wrapper והפסקאות - הסרת כל הרווחים */
 .cc-section-body > .editable-container {
-  display: contents;
+  display: block;
+  position: static;
+  margin: 0;
+  padding: 0;
 }
 
-.cc-section-body p {
+.cc-section-body > .editable-container > p {
   margin: 0;
+  padding: 0;
   line-height: var(--line-height-loose);
 }
 
