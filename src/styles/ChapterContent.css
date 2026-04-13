@@ -58,7 +58,6 @@
 /* דריסת ה-wrapper והפסקאות - הסרת כל הרווחים */
 .cc-section-body > .editable-container {
   display: block;
-  position: static;
   margin: 0;
   padding: 0;
 }
@@ -67,6 +66,13 @@
   margin: 0;
   padding: 0;
   line-height: var(--line-height-loose);
+}
+
+/* כפתור העריכה (opacity:0) תופס מקום בזרימה - נוציא אותו מהזרימה */
+.cc-section-body > .editable-container > .editable-edit-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* === כפתור מחיקה - ברמת הסעיף, חופף את שתי העמודות === */
