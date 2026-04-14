@@ -21,6 +21,7 @@ export const parseContentKey = (contentKey) => {
     const field = match[2];
     let fieldLabel;
     if (field === 'title') fieldLabel = 'כותרת';
+    else if (field === 'body') fieldLabel = 'טקסט';
     else if (field === 'caption') fieldLabel = 'כיתוב תמונה';
     else if (field === 'image') fieldLabel = 'תמונה';
     else if (field.startsWith('p')) {

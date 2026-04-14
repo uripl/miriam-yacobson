@@ -4,6 +4,7 @@ import { db } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import EditableText from '../editable/EditableText';
 import EditableImage from '../editable/EditableImage';
+import EditableSectionBody from '../editable/EditableSectionBody';
 import { FaPlus, FaTrash, FaSpinner } from 'react-icons/fa';
 import '../../styles/ChapterContent.css';
 
@@ -88,14 +89,11 @@ const ChapterContent = ({ chapterId }) => {
           </div>
 
           <div className="cc-section-body">
-            {Array.from({ length: section.paragraphCount || 1 }).map((_, i) => (
-              <EditableText
-                key={i}
-                contentKey={`${chapterId}-section-${section.id}-p${i}`}
-                defaultValue="טקסט פסקה"
-                as="p"
-              />
-            ))}
+            <EditableSectionBody
+              chapterId={chapterId}
+              sectionId={section.id}
+              paragraphCount={section.paragraphCount || 1}
+            />
 
             {section.hasImage && (
               <div className="cc-image-container">
