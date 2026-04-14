@@ -49,22 +49,13 @@
   padding: 0;
 }
 
-/* editable-container עוטף כל פסקה */
+/* editable-container עוטף את גוף המקטע */
 .cc-section-body > .editable-container {
   display: block !important;
   position: static !important;
   margin: 0 !important;
   padding: 0 !important;
   border: none !important;
-  font-size: 0;
-  line-height: 0;
-}
-
-.cc-section-body > .editable-container > p {
-  margin: 0 !important;
-  padding: 0 !important;
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-loose);
 }
 
 /* כפתור העריכה - הוצאה מהזרימה + הגדלה */

@@ -455,6 +455,27 @@ section {
   color: var(--secondary-dark);
 }
 
+/* קישור היסטוריית עריכות */
+.edit-history-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--gray);
+  border-radius: 50%;
+  color: var(--text-light);
+  font-size: var(--font-size-base);
+  transition: all var(--transition-fast) ease;
+  text-decoration: none;
+}
+
+.edit-history-link:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: rgba(46, 80, 119, 0.1);
+}
+
 /* כפתורי התחברות */
 .login-btn {
   display: inline-flex;
@@ -605,6 +626,27 @@ section {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(46, 80, 119, 0.15);
+}
+
+.editable-textarea-body {
+  min-height: 200px;
+}
+
+/* Section body: multiple paragraphs rendered from single source */
+.editable-section-body {
+  display: block !important;
+}
+
+.editable-section-paragraphs p {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-loose);
+  text-indent: 1.5em;
+}
+
+.editable-section-paragraphs p:first-child {
+  text-indent: 0;
 }
 
 .editable-actions {

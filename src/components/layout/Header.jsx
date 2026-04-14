@@ -1,7 +1,7 @@
 // src/components/layout/Header.jsx
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { FaBars, FaTimes, FaPen, FaEye } from 'react-icons/fa';
+import { FaBars, FaTimes, FaPen, FaEye, FaHistory } from 'react-icons/fa';
 import LoginButton from '../auth/LoginButton';
 import EditableImage from '../editable/EditableImage';
 import { useAuth } from '../../context/AuthContext';
@@ -82,6 +82,16 @@ const Header = () => {
         </nav>
 
         <div className="header-actions">
+          {isAdmin && editMode && (
+            <Link
+              to="/edit-history"
+              className="edit-history-link"
+              onClick={closeMenu}
+              title="היסטוריית עריכות"
+            >
+              <FaHistory />
+            </Link>
+          )}
           {isAdmin && (
             <button
               className={`edit-mode-toggle ${editMode ? 'active' : ''}`}

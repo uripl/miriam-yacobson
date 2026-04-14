@@ -68,7 +68,7 @@ async function uploadChapter(chapterId, jsonPath) {
     const hasImage = !!section.image;
     const paragraphCount = section.paragraphs ? section.paragraphs.length : 0;
 
-    // 1. Create section doc
+    // 1. Create section doc (paragraphCount kept for backward compat)
     const sectionDoc = {
       order: i,
       hasImage,
@@ -88,15 +88,14 @@ async function uploadChapter(chapterId, jsonPath) {
       });
     }
 
-    // 3. Write paragraphs
-    if (section.paragraphs) {
-      for (let j = 0; j < section.paragraphs.length; j++) {
-        await setDoc(doc(db, 'content', `${chapterId}-section-${sectionId}-p${j}`), {
-          value: section.paragraphs[j],
-          editedBy: 'upload-script',
-          editedAt: new Date().toISOString(),
-        });
-      }
+    // 3. Write paragraphs as unified body (joined with double newline)
+    if (section.paragraphs && section.paragraphs.length > 0) {
+      const bodyValue = section.paragraphs.join('\n\n');
+      await setDoc(doc(db, 'content', `${chapterId}-section-${sectionId}-body`), {
+        value: bodyValue,
+        editedBy: 'upload-script',
+        editedAt: new Date().toISOString(),
+      });
     }
 
     // 4. Write image URL (if provided)
