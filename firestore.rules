@@ -30,6 +30,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Edit history: admin read/write for tracking changes
+    match /editHistory/{document=**} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
     match /documents/{document=**} {
       allow read: if true;
       allow write: if isAdmin();

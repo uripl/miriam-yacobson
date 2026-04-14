@@ -5,6 +5,7 @@ import { db, storage } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPen, FaSpinner } from 'react-icons/fa';
 import { compressImage } from '../../utils/compressImage';
+import { saveEditHistory } from '../../utils/editHistory';
 
 const EditableImage = ({ contentKey, defaultSrc, alt }) => {
   const { user, isAdmin, editMode } = useAuth();
@@ -48,6 +49,13 @@ const EditableImage = ({ contentKey, defaultSrc, alt }) => {
         previousValue: src,
         editedBy: user.email,
         editedAt: serverTimestamp(),
+      });
+      await saveEditHistory({
+        contentKey,
+        type: 'image',
+        previousValue: src,
+        newValue: url,
+        editedBy: user.email,
       });
 
       setSrc(url);

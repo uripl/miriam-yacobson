@@ -4,6 +4,7 @@ import { db } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { FaPen, FaSave, FaTimes } from 'react-icons/fa';
 import DateHighlighter from '../common/DateHighlighter';
+import { saveEditHistory } from '../../utils/editHistory';
 
 const EditableText = ({ contentKey, defaultValue, as: Tag = 'p', highlightDates = true }) => {
   const { user, isAdmin, editMode } = useAuth();
@@ -48,6 +49,13 @@ const EditableText = ({ contentKey, defaultValue, as: Tag = 'p', highlightDates 
         previousValue: text,
         editedBy: user.email,
         editedAt: serverTimestamp(),
+      });
+      await saveEditHistory({
+        contentKey,
+        type: 'text',
+        previousValue: text,
+        newValue: draft,
+        editedBy: user.email,
       });
       setText(draft);
       setEditing(false);

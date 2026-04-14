@@ -26,6 +26,7 @@ const DocumentsPage = lazy(() => import('./components/pages/DocumentsPage'));
 const VideosPage = lazy(() => import('./components/pages/VideosPage'));
 const MembershipGuard = lazy(() => import('./components/auth/MembershipGuard'));
 const ApproveMemberPage = lazy(() => import('./components/auth/ApproveMemberPage'));
+const EditHistoryPage = lazy(() => import('./components/pages/EditHistoryPage'));
 const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage'));
 
 function AnalyticsTracker() {
@@ -62,6 +63,7 @@ function App() {
           <Route path="/videos" element={<MembershipGuard><VideosPage /></MembershipGuard>} />
           <Route path="/documents" element={<MembershipGuard><DocumentsPage /></MembershipGuard>} />
           <Route path="/approve" element={<ApproveMemberPage />} />
+          <Route path="/edit-history" element={<EditHistoryPage />} />
 
           {/* נתיבים לפרקים */}
           <Route path="/chapters/childhood" element={<ChildhoodPage />} />
